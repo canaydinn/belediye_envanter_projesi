@@ -1,9 +1,14 @@
-// server.js (proje kökünde)
 require('dotenv').config();
-const app = require('./src/app');
+const path = require('path');
 
-const PORT = process.env.PORT;
+// Debug: Node hangi yola bakıyor, loglayalım
+const appPath = path.join(__dirname, 'src', 'app.js');
+console.log('App path:', appPath);
+
+const app = require(appPath);
+
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`API http://localhost:${PORT} üzerinde çalışıyor`);
 });
