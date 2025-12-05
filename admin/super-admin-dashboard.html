@@ -82,12 +82,6 @@
               </a>
             </li>
             <li class="menu-item">
-              <a href="../admin/super-admin-municipalities.html" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-building"></i>
-                <div>Belediyeler</div>
-              </a>
-            </li>
-            <li class="menu-item">
               <a href="../admin/super-admin-users.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-users"></i>
                 <div>Kullanıcılar</div>
@@ -299,15 +293,20 @@
                         <div class="col-12 col-md-4">
                           <label for="statusFilter" class="form-label">Durum</label>
                           <select id="statusFilter" class="form-select">
-                            <option selected>Tümü</option>
-                            <option>Aktif</option>
-                            <option>Pasif</option>
-                            <option>Beklemede</option>
+                            <option value="all" selected>Tümü</option>
+                            <option value="active">Aktif</option>
+                            <option value="suspended">Pasif</option>
+                            <option value="pending">Beklemede</option>
                           </select>
                         </div>
                         <div class="col-12 col-md-3 d-grid">
-                          <button class="btn btn-primary">Filtrele</button>
-                        </div>
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            data-role="municipality-filter"
+                          >
+                            Filtrele
+                          </button>                        </div>
                       </div>
                       <div class="table-responsive">
                         <table class="table table-striped table-hover align-middle">
@@ -351,6 +350,27 @@
                       </ul>
                     </div>
                   </div>
+                  <div class="card mb-4">
+                    <div class="card-header">
+                      <h6 class="mb-0">Durum Dağılımı</h6>
+                      <small class="text-muted">Belediye durumlarına göre özet</small>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Aktif</span>
+                        <span class="badge bg-success">18</span>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Pasif</span>
+                        <span class="badge bg-secondary">3</span>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Beklemede</span>
+                        <span class="badge bg-warning text-dark">3</span>
+                      </li>
+                    </ul>
+                  </div>
+                    
                   <div class="card">
                     <div class="card-header">
                       <h5 class="mb-0">Son Aktiviteler</h5>
@@ -360,7 +380,9 @@
                         <div class="list-group-item text-center text-muted">Son aktiviteler yükleniyor...</div>
                     </div>
                   </div>
+                  
                 </div>
+                
               </div>
             </div>
             <!-- / Content -->
@@ -394,6 +416,9 @@
     <script src="../admin/assets/vendor/js/menu.js"></script>
     <script src="../admin/assets/js/main.js"></script>
     <script src="../admin/assets/js/app/super-admin-dashboard.js"></script>
+    <script src="../admin/assets/js/app/super-admin-filter-table.js"></script>
+    <script src="../admin/assets/js/app/super-admin-municipality-detail.js"></script>
+
 
   </body>
 </html>

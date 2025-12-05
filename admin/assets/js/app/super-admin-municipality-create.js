@@ -88,60 +88,6 @@
 
 //////////////////////
 ///tablo filtreleme
- const municipalitySearchInput = document.getElementById('municipalitySearch');
-  const municipalityStatusFilter = document.getElementById('statusFilter');
-  const municipalityFilterButton = document.querySelector('[data-role="municipality-filter"]');
-
-
-const normalizeStatusForFilter = (status) => {
-    const normalized = (status || '').toString().toLowerCase();
-
-    if (['active', 'pending', 'suspended'].includes(normalized)) {
-      return normalized;
-    }
-
-    return normalized;
-  };
-
-  const filterMunicipalities = (municipalities) => {
-    let filteredList = Array.isArray(municipalities) ? [...municipalities] : [];
-
-    const searchTerm = (municipalitySearchInput?.value || '').trim().toLowerCase();
-    const selectedStatus = (municipalityStatusFilter?.value || 'all').toLowerCase();
-
-    if (searchTerm) {
-      filteredList = filteredList.filter((municipality) => {
-        const name = (municipality?.name || '').toString().toLowerCase();
-        return name.includes(searchTerm);
-      });
-    }
-
-    if (selectedStatus !== 'all') {
-      filteredList = filteredList.filter((municipality) => {
-        const municipalityStatus = normalizeStatusForFilter(municipality?.status);
-        const isActive = Boolean(municipality?.is_active);
-
-        if (selectedStatus === 'active') {
-          return municipalityStatus === 'active' || isActive;
-        }
-
-        if (selectedStatus === 'pending') {
-          return municipalityStatus === 'pending';
-        }
-
-        if (selectedStatus === 'suspended') {
-          return municipalityStatus === 'suspended' || (!isActive && municipalityStatus !== 'active');
-        }
-
-        return true;
-      });
-    }
-
-    return filteredList;
-  };
-
-  let municipalityCache = [];
-
 
 ///////
 

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="tr" class="light-style layout-navbar-fixed layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../admin/assets/" data-template="vertical-menu-template">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>Yeni Kullanıcı Oluştur | Süperadmin | Envanter360</title>
+    <meta name="description" content="Süperadmin panelinden yeni kullanıcı oluşturun" />
+
+    <link rel="icon" type="image/x-icon" href="../admin/assets/img/favicon/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/tabler-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/flag-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../admin/assets/css/demo.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/node-waves/node-waves.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/typeahead-js/typeahead.css" />
+  </head>
+  <body>
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+            <a href="index.html" class="app-brand-link">
+              <span class="app-brand-logo demo"></span>
+              <span class="app-brand-text demo menu-text fw-bold">Envanter360</span>
+            </a>
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+              <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+              <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
+            </a>
+          </div>
+          <div class="menu-inner-shadow"></div>
+          <ul class="menu-inner py-1 navigation navigation-main">
+            <li class="menu-item">
+              <a href="../admin/super-admin-dashboard.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                <div>Superadmin Dashboard</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/super-admin-municipalities.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-building"></i>
+                <div>Belediyeler</div>
+              </a>
+            </li>
+            <li class="menu-item active">
+              <a href="../admin/super-admin-users.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-users"></i>
+                <div>Kullanıcılar</div>
+              </a>
+            </li>
+            <li class="menu-item ">
+              <a href="../admin/super-admin-plans.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-layers-intersect"></i>
+                <div>Abonelik Planları</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/super-admin-logs.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-clipboard-text"></i>
+                <div>Sistem Logları</div>
+              </a>
+            </li>
+          </ul>
+        </aside>
+
+        <div class="layout-page">
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+              <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                <i class="ti ti-menu-2 ti-sm"></i>
+              </a>
+            </div>
+            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <li class="nav-item lh-1 me-3 text-muted">Süperadmin</li>
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                      <img src="../admin/assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="javascript:void(0);">Profil</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0);">Ayarlar</a></li>
+                    <li><div class="dropdown-divider"></div></li>
+                    <li><a class="dropdown-item" href="javascript:void(0);">Çıkış</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+
+          <div class="content-wrapper">
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+                <div>
+                  <h4 class="fw-bold mb-1">Yeni Kullanıcı Oluştur</h4>
+                  <p class="text-muted mb-0">Yeni kullanıcı bilgilerini girip rolünü ve belediyesini belirleyin.</p>
+                </div>
+                
+              </div>
+
+              <div class="row">
+                <div class="col-12 col-xl-8">
+                  <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <div>
+                        <h5 class="mb-1">Kullanıcı Bilgileri</h5>
+                        <small class="text-muted">Ad, kullanıcı adı ve iletişim bilgilerini doldurun.</small>
+                      </div>
+                      <span class="badge bg-label-primary">Zorunlu alanlar *</span>
+                    </div>
+                    <div class="card-body">
+                      <form class="row g-3">
+                        <div class="col-md-6">
+                          <label class="form-label" for="full-name">Ad Soyad *</label>
+                          <input type="text" class="form-control" id="full-name" placeholder="Örn: Ahmet Yılmaz" required />
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="username">Kullanıcı Adı *</label>
+                          <input type="text" class="form-control" id="username" placeholder="Örn: ahmet.yilmaz" required />
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="email">E-posta *</label>
+                          <input type="email" class="form-control" id="email" placeholder="ornek@belediye.gov.tr" required />
+                          <div class="form-text">Giriş ve bildirimler için kullanılacak.</div>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="phone">Telefon</label>
+                          <input type="tel" class="form-control" id="phone" placeholder="05xx xxx xx xx" />
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="municipality">Belediye</label>
+                          <select id="municipality" class="form-select">
+                            <option value="">Seçiniz</option>
+                            <option value="urla">Urla Belediyesi</option>
+                            <option value="konak">Konak Belediyesi</option>
+                            <option value="yenisehir">Yenişehir Belediyesi</option>
+                            <option value="bornova">Bornova Belediyesi</option>
+                          </select>
+                          <div class="form-text">Superadmin kullanıcılar için boş bırakılabilir.</div>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="role">Rol *</label>
+                          <select id="role" class="form-select" required>
+                            <option value="" disabled selected>Rol seçin</option>
+                            <option value="superadmin">Superadmin</option>
+                            <option value="manager">Belediye Yöneticisi</option>
+                            <option value="unit">Birim Sorumlusu</option>
+                            <option value="staff">Personel</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="password">Şifre *</label>
+                          <input type="password" class="form-control" id="password" placeholder="En az 10 karakter" required />
+                          <div class="form-text">Büyük/küçük harf, sayı ve özel karakter içermelidir.</div>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="password-confirm">Şifre (Tekrar) *</label>
+                          <input type="password" class="form-control" id="password-confirm" placeholder="Şifreyi tekrar girin" required />
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="status">Durum</label>
+                          <div class="d-flex align-items-center gap-2">
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="status" checked />
+                              <label class="form-check-label" for="status">Aktif</label>
+                            </div>
+                            <small class="text-muted">Pasif kullanıcılar giriş yapamaz.</small>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="email-verified">E-posta Doğrulaması</label>
+                          <div class="d-flex align-items-center gap-2">
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="email-verified" />
+                              <label class="form-check-label" for="email-verified">Doğrulandı</label>
+                            </div>
+                            <small class="text-muted">İlk girişte doğrulama iste.</small>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <div>
+                        <h5 class="mb-1">Güvenlik &amp; Yetkilendirme</h5>
+                        <small class="text-muted">Giriş kısıtları, şifre politikası ve varsayılan izinler.</small>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="row g-3">
+                        <div class="col-md-4">
+                          <label class="form-label" for="failed-attempts">Başarısız Giriş Sınırı</label>
+                          <input type="number" class="form-control" id="failed-attempts" value="5" min="0" />
+                          <div class="form-text">0 değeri sınır uygulamaz.</div>
+                        </div>
+                        <div class="col-md-4">
+                          <label class="form-label" for="lock-duration">Kilitleme Süresi</label>
+                          <select id="lock-duration" class="form-select">
+                            <option value="15">15 dakika</option>
+                            <option value="30">30 dakika</option>
+                            <option value="60">1 saat</option>
+                            <option value="">Süre yok</option>
+                          </select>
+                        </div>
+                        <div class="col-md-4">
+                          <label class="form-label" for="last-login-ip">Son Giriş IP</label>
+                          <input type="text" class="form-control" id="last-login-ip" placeholder="Opsiyonel" />
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="force-password-change" checked />
+                            <label class="form-check-label" for="force-password-change">İlk girişte şifre değişikliği zorunlu</label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="send-welcome" checked />
+                            <label class="form-check-label" for="send-welcome">Hoş geldin e-postası gönder</label>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                           <button class="btn btn-primary" type="button"><i class="ti ti-send me-1"></i>Kaydet ve Bilgilendir</button>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                
+                </div>
+
+                
+              </div>
+            </div>
+
+            <footer class="content-footer footer bg-footer-theme">
+              <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                <div class="mb-2 mb-md-0">© 2024 Envanter360</div>
+                <div class="d-none d-lg-inline-block"><a href="javascript:void(0);" class="footer-link me-3">Gizlilik</a><a href="javascript:void(0);" class="footer-link">Şartlar</a></div>
+              </div>
+            </footer>
+            <div class="content-backdrop fade"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    (() => {
+      const municipalitySelect = document.getElementById('municipality');
+      if (!municipalitySelect) return;
+
+      const setOptions = (options = []) => {
+        municipalitySelect.innerHTML = '';
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Seçiniz';
+        municipalitySelect.appendChild(defaultOption);
+
+        options.forEach(({ id, name }) => {
+          const option = document.createElement('option');
+          option.value = id;
+          option.textContent = name;
+          municipalitySelect.appendChild(option);
+        });
+
+        if (options.length === 0) {
+          const emptyOption = document.createElement('option');
+          emptyOption.disabled = true;
+          emptyOption.textContent = 'Kayıtlı belediye bulunamadı';
+          municipalitySelect.appendChild(emptyOption);
+        }
+      };
+
+      const showError = message => {
+        municipalitySelect.innerHTML = '';
+        const errorOption = document.createElement('option');
+        errorOption.disabled = true;
+        errorOption.selected = true;
+        errorOption.textContent = message || 'Belediyeler yüklenemedi';
+        municipalitySelect.appendChild(errorOption);
+      };
+
+      const loadMunicipalities = async () => {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch('http://localhost:4000/api/superadmin/municipalities', {
+            headers: token
+              ? {
+                  Authorization: `Bearer ${token}`,
+                }
+              : {},
+          });
+
+          if (!response.ok) {
+            throw new Error('API isteği başarısız');
+          }
+
+          const data = await response.json();
+          const municipalities = Array.isArray(data)
+            ? data.filter(item => item?.is_active !== false)
+            : [];
+
+          setOptions(municipalities);
+        } catch (err) {
+          console.error('Belediyeler yüklenirken hata oluştu:', err);
+          showError('Belediyeler yüklenemedi');
+        }
+      };
+
+      loadMunicipalities();
+    })();
+  </script>
+</html>

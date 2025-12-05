@@ -5,20 +5,7 @@ exports.listMunicipalities = async (req, res) => {
   try {
     const municipalities = await knex('municipalities')
       .select(
-        'id',
-        'code',
-        'name',
-        'province',
-        'district',
-        'contact_email',
-        'contact_phone',
-        'contact_person',
-        'status',
-        'is_active',
-        'license_start_date',
-        'license_end_date',
-        'quota_end_date',
-        'created_at'
+        '*'
       )
       .orderBy('created_at', 'desc');
 
@@ -171,7 +158,7 @@ exports.createMunicipality = async (req, res) => {
         license_start_date: license_start_date ? new Date(license_start_date) : null,
         license_end_date: license_end_date ? new Date(license_end_date) : null,
         quota_end_date: quota_end_date ? new Date(quota_end_date) : null,
-        plan_type: plan_type || null,
+        plan_type: plan_type || 'standard',
         logo_url: logo_url || null,
         domain_url: domain_url || null,
         api_key: api_key || null,
@@ -222,13 +209,7 @@ exports.getMunicipalityById = async (req, res) => {
 
     const municipality = await knex('municipalities')
       .select(
-        'id',
-        'name',
-        'status',
-        'license_end_date',
-        'is_active',
-        'created_at',
-        'updated_at'
+        '*'
       )
       .where({ id })
       .first();
@@ -382,6 +363,134 @@ exports.getTotalCount = async (_req, res) => {
     return res.json({ totalUsers });
   } catch (err) {
     console.error('getTotalCount user hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+// Belediye bilgilerini güncelle
+exports.updateMunicipality = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      name,
+      province,
+      district,
+      tax_number,
+      address,
+      contact_email,
+      contact_phone,
+      contact_person,
+      status,
+      is_active,
+      license_start_date,
+      license_end_date,
+      quota_end_date,
+      plan_type,
+      logo_url,
+      domain_url,
+      api_key,
+      max_users,
+      max_assets,
+      notes,
+    } = req.body;
+
+    if (!name || !province || !district) {
+      return res.status(400).json({ message: 'name, province ve district zorunludur' });
+    }
+
+    if (status && !['pending', 'active', 'suspended'].includes(status)) {
+      return res.status(400).json({ message: 'Geçersiz status değeri' });
+    }
+
+    const updateData = {
+      name,
+      province,
+      district,
+      tax_number: tax_number || null,
+      address: address || null,
+      contact_email: contact_email || null,
+      contact_phone: contact_phone || null,
+      contact_person: contact_person || null,
+      license_start_date: license_start_date || null,
+      license_end_date: license_end_date || null,
+      quota_end_date: quota_end_date || null,
+      plan_type: plan_type || 'standard',
+      logo_url: logo_url || null,
+      domain_url: domain_url || null,
+      api_key: api_key || null,
+      max_users: max_users ?? null,
+      max_assets: max_assets ?? null,
+      notes: notes || null,
+      updated_at: knex.fn.now(),
+    };
+
+    if (status) {
+      updateData.status = status;
+      updateData.is_active = status === 'active';
+    } else if (is_active !== undefined) {
+      updateData.is_active = is_active;
+    }
+
+    const [updated] = await knex('municipalities')
+      .where({ id })
+      .update(updateData, [
+        'id',
+        'code',
+        'name',
+        'province',
+        'district',
+        'tax_number',
+        'address',
+        'contact_email',
+        'contact_phone',
+        'contact_person',
+        'status',
+        'is_active',
+        'license_start_date',
+        'license_end_date',
+        'quota_end_date',
+        'plan_type',
+        'logo_url',
+        'domain_url',
+        'api_key',
+        'max_users',
+        'max_assets',
+        'notes',
+        'updated_at',
+      ]);
+
+    if (!updated) {
+      return res.status(404).json({ message: 'Belediye bulunamadı' });
+    }
+
+    return res.json(updated);
+  } catch (err) {
+    console.error('superadmin.updateMunicipality hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+  
+};
+exports.deactivateMunicipality = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [updated] = await knex('municipalities')
+      .where({ id })
+      .update(
+        {
+          is_active: false,
+          status: 'suspended',
+          updated_at: knex.fn.now(),
+        },
+        ['id', 'name', 'status', 'is_active', 'updated_at']
+      );
+
+    if (!updated) {
+      return res.status(404).json({ message: 'Belediye bulunamadı' });
+    }
+
+    return res.json(updated);
+  } catch (err) {
+    console.error('superadmin.deactivateMunicipality hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };

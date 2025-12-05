@@ -61,7 +61,12 @@ function createStatusBadge(status, isActive) {
     return '<span class="badge bg-label-secondary">Bilinmiyor</span>';
   }
 function renderMunicipalityRows(municipalities) {
-    if (!municipalityTableBody) return;
+    console.log('renderMunicipalityRows çağrıldı, gelen kayıt sayısı:', municipalities?.length);
+
+if (!municipalityTableBody) {
+    console.warn('municipalityTableBody bulunamadı');
+    return;
+  }
 
     if (!municipalities?.length) {
       municipalityTableBody.innerHTML = `
@@ -87,17 +92,13 @@ function renderMunicipalityRows(municipalities) {
         } = municipality;
 
         const location = [province, district].filter(Boolean).join(' / ') || '-';
-
+const detailHref = `http://localhost:5500/admin/super-admin-municipalities-detail.html?id=${id}`;
+      console.log('Detay linki:', detailHref);
         const detailLink = id
-          ? `<a href="/superadmin-municipalities.html?id=${id}" class="btn btn-sm btn-outline-primary">Detay</a>`
-          : '';
-
-        const usersLink = id
-          ? `<a href="/superadmin-users.html?municipality_id=${id}" class="btn btn-sm btn-outline-info">Kullanıcılar</a>`
-          : '';
-
+        ? `<a href="${detailHref}" class="btn btn-sm btn-outline-primary">Detay</a>`
+        : '';
         const editLink = id
-          ? `<a href="/superadmin-municipality-edit.html?id=${id}" class="btn btn-sm btn-outline-secondary">Düzenle</a>`
+          ? `<a href="/super-admin-municipality-edit.html?id=${id}" class="btn btn-sm btn-outline-secondary">Düzenle</a>`
           : '';
 
         const deactivateButton = id
@@ -371,7 +372,37 @@ function renderMunicipalityRows(municipalities) {
     console.warn('Son aktiviteler bölümü bulunamadı');
   }
 
+ // 🔴 BURASI YENİ EKLEDİĞİMİZ KISIM: "Pasif Yap" butonu handler’ı
+  document.addEventListener('click', async function (e) {
+    const btn = e.target.closest('[data-role="municipality-deactivate"]');
+    if (!btn) return;
 
+    const municipalityId = btn.getAttribute('data-municipality-id');
+    if (!municipalityId) return;
+
+    if (!confirm('Belediyeyi pasif yapmak istediğinize emin misiniz?')) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/superadmin/municipalities/${municipalityId}/deactivate`,
+        {
+          method: 'PATCH',
+          headers,
+          credentials: 'include',
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Sunucu hatası: ${response.status}`);
+      }
+
+      alert('Belediye başarıyla pasif yapıldı.');
+      window.location.reload();
+    } catch (err) {
+      console.error('Pasif yap hatası:', err);
+      alert('İşlem sırasında bir hata oluştu.');
+    }
+  });
 
 
 })();

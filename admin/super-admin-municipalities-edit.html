@@ -12,11 +12,10 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Yeni Belediye Ekle | Envanter360</title>
+    <title>Belediye Güncelle | Envantor</title>
 
-    <meta name="description" content="Süperadmin paneli ile yeni belediye ekleyin." />
+    <meta name="description" content="Süperadmin paneli ile belediye bilgilerini güncelleyin." />
 
-    <!-- Include Vuexy core CSS and vendor CSS here -->
     <link rel="icon" type="image/x-icon" href="../admin/assets/img/favicon/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -35,10 +34,8 @@
   </head>
 
   <body>
-    <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
-        <!-- Superadmin Sidebar Navigation -->
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
             <a href="/super-admin-dashboard.html" class="app-brand-link">
@@ -106,11 +103,8 @@
             </li>
           </ul>
         </aside>
-        <!-- / Sidebar -->
 
-        <!-- Layout container -->
         <div class="layout-page">
-          <!-- Navbar -->
           <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
             <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
               <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
@@ -119,12 +113,8 @@
             </div>
 
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-              <div class="navbar-nav align-items-center">
-               
-              </div>
-
+              <div class="navbar-nav align-items-center"></div>
               <ul class="navbar-nav flex-row align-items-center ms-auto">
-                <!-- User -->
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
@@ -141,8 +131,8 @@
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-semibold d-block">Süperadmin</span>
-                            <small class="text-muted">Yönetici</small>
+                            <span class="fw-semibold d-block">Süper Admin</span>
+                            <small class="text-muted">Envantor</small>
                           </div>
                         </div>
                       </a>
@@ -150,150 +140,135 @@
                     <li><div class="dropdown-divider"></div></li>
                     <li>
                       <a class="dropdown-item" href="javascript:void(0);">
-                        <i class="ti ti-user-check me-2 ti-sm"></i>
-                        <span class="align-middle">Profilim</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="javascript:void(0);">
-                        <i class="ti ti-settings me-2 ti-sm"></i>
-                        <span class="align-middle">Ayarlar</span>
-                      </a>
-                    </li>
-                    <li><div class="dropdown-divider"></div></li>
-                    <li>
-                      <a class="dropdown-item" href="/login.html">
                         <i class="ti ti-logout me-2 ti-sm"></i>
-                        <span class="align-middle">Çıkış Yap</span>
+                        <span class="align-middle">Çıkış</span>
                       </a>
                     </li>
                   </ul>
                 </li>
-                <!--/ User -->
               </ul>
             </div>
           </nav>
-          <!-- / Navbar -->
 
-          <!-- Content wrapper -->
           <div class="content-wrapper">
-            <!-- Content -->
             <div class="container-xxl flex-grow-1 container-p-y">
               <div class="row">
                 <div class="col-12">
                   <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                      <h4 class="fw-bold mb-1">Yeni Belediye Ekle</h4>
-                      <p class="text-muted mb-0">Belediye bilgilerini doldurup kaydedin.</p>
+                      <h4 class="fw-bold mb-1">Belediye Bilgilerini Güncelle</h4>
+                      <p class="text-muted mb-0">Düzenleme yapmak için formu doldurun.</p>
                     </div>
+                    <a href="/admin/super-admin-dashboard.html" class="btn btn-outline-secondary">Listeye Dön</a>
                   </div>
                 </div>
               </div>
 
               <div class="row">
                 <div class="col-12">
+                  <div class="alert d-none" role="alert" data-role="feedback"></div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12">
                   <div class="card">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                       <h5 class="mb-0">Belediye Bilgileri</h5>
-                      <small class="text-muted">Plan ve kota bilgileri ile birlikte tüm alanları doldurun.</small>
+                      <span class="badge bg-label-info" data-role="municipality-code">-</span>
                     </div>
                     <div class="card-body">
-                      <form   id="municipality-create-form" data-role="municipality-create-form" class="row g-3">
+                      <form id="municipalityUpdateForm" class="row g-3">
                         <div class="col-md-6">
-                          <label class="form-label" for="name">Belediye Adı</label>
-                          <input type="text" id="name" name="name" class="form-control" placeholder="Örn: Konak Belediyesi" required />
+                          <label for="name" class="form-label">Belediye Adı *</label>
+                          <input type="text" id="name" class="form-control" required />
                         </div>
                         <div class="col-md-3">
-                          <label class="form-label" for="province">İl</label>
-                          <input type="text" id="province" name="province" class="form-control" placeholder="İzmir" required />
+                          <label for="province" class="form-label">İl *</label>
+                          <input type="text" id="province" class="form-control" required />
                         </div>
                         <div class="col-md-3">
-                          <label class="form-label" for="district">İlçe</label>
-                          <input type="text" id="district" name="district" class="form-control" placeholder="Konak" required />
+                          <label for="district" class="form-label">İlçe *</label>
+                          <input type="text" id="district" class="form-control" required />
                         </div>
 
                         <div class="col-md-4">
-                          <label class="form-label" for="tax_number">Vergi Numarası</label>
-                          <input type="text" id="tax_number" name="tax_number" class="form-control" placeholder="1234567890" />
+                          <label for="tax_number" class="form-label">Vergi Numarası</label>
+                          <input type="text" id="tax_number" class="form-control" />
                         </div>
-                        <div class="col-md-4">
-                          <label class="form-label" for="contact_email">İletişim E-posta</label>
-                          <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="iletisim@belediye.gov.tr" />
-                        </div>
-                        <div class="col-md-4">
-                          <label class="form-label" for="contact_phone">İletişim Telefon</label>
-                          <input type="tel" id="contact_phone" name="contact_phone" class="form-control" placeholder="0 (232) 000 00 00" />
-                        </div>
-
-                        <div class="col-md-6">
-                          <label class="form-label" for="contact_person">Yetkili Kişi</label>
-                          <input type="text" id="contact_person" name="contact_person" class="form-control" placeholder="İlgili kişi adı" />
-                        </div>
-                        <div class="col-md-6">
-                          <label class="form-label" for="address">Adres</label>
-                          <input type="text" id="address" name="address" class="form-control" placeholder="Adres bilgisi" />
+                        <div class="col-md-8">
+                          <label for="address" class="form-label">Adres</label>
+                          <input type="text" id="address" class="form-control" />
                         </div>
 
                         <div class="col-md-4">
-                          <label class="form-label" for="license_start_date">Lisans Başlangıç</label>
-                          <input type="date" id="license_start_date" name="license_start_date" class="form-control" />
+                          <label for="contact_person" class="form-label">İletişim Kişisi</label>
+                          <input type="text" id="contact_person" class="form-control" />
                         </div>
                         <div class="col-md-4">
-                          <label class="form-label" for="license_end_date">Lisans Bitiş</label>
-                          <input type="date" id="license_end_date" name="license_end_date" class="form-control" />
+                          <label for="contact_email" class="form-label">E-posta</label>
+                          <input type="email" id="contact_email" class="form-control" />
                         </div>
                         <div class="col-md-4">
-                          <label class="form-label" for="quota_end_date">Kota Bitiş</label>
-                          <input type="date" id="quota_end_date" name="quota_end_date" class="form-control" />
+                          <label for="contact_phone" class="form-label">Telefon</label>
+                          <input type="text" id="contact_phone" class="form-control" />
                         </div>
 
                         <div class="col-md-4">
-                          <label class="form-label" for="plan_type">Plan Türü</label>
-                          <select id="plan_type" name="plan_type" class="form-select">
-                            <option value="trial">Deneme</option>
-                            <option value="standard">Standart</option>
-                            <option value="pro">Pro</option>
+                          <label for="status" class="form-label">Durum</label>
+                          <select id="status" class="form-select">
+                            <option value="pending">Beklemede</option>
+                            <option value="active">Aktif</option>
+                            <option value="suspended">Pasif</option>
                           </select>
                         </div>
                         <div class="col-md-4">
-                          <label class="form-label" for="max_users">Maksimum Kullanıcı</label>
-                          <input type="number" id="max_users" name="max_users" class="form-control" min="0" placeholder="Sayı girin" />
+                          <label for="plan_type" class="form-label">Plan Türü</label>
+                          <select id="plan_type" name="plan_type" class="form-select">
+                            <option value="">Seçiniz</option>
+                            <option value="standard">Standart</option>
+                            <option value="pro">Pro</option>
+                            <option value="deneme">Deneme</option>
+                          </select>
                         </div>
                         <div class="col-md-4">
-                          <label class="form-label" for="max_assets">Maksimum Envanter</label>
-                          <input type="number" id="max_assets" name="max_assets" class="form-control" min="0" placeholder="Sayı girin" />
+                          <label for="domain_url" class="form-label">Alan Adı</label>
+                          <input type="text" id="domain_url" class="form-control" placeholder="https://..." />
                         </div>
 
-                        <div class="col-md-6">
-                          <label class="form-label" for="logo_url">Logo URL</label>
-                          <input type="url" id="logo_url" name="logo_url" class="form-control" placeholder="https://..." />
+                        <div class="col-md-4">
+                          <label for="license_start_date" class="form-label">Lisans Başlangıç</label>
+                          <input type="date" id="license_start_date" class="form-control" />
                         </div>
-                        <div class="col-md-6">
-                          <label class="form-label" for="domain_url">Alan Adı</label>
-                          <input type="url" id="domain_url" name="domain_url" class="form-control" placeholder="https://belediye.gov.tr" />
+                        <div class="col-md-4">
+                          <label for="license_end_date" class="form-label">Lisans Bitiş</label>
+                          <input type="date" id="license_end_date" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                          <label for="quota_end_date" class="form-label">Kota Bitiş</label>
+                          <input type="date" id="quota_end_date" class="form-control" />
                         </div>
 
-                        <div class="col-md-6">
-                          <label class="form-label" for="api_key">API Anahtarı</label>
-                          <input type="text" id="api_key" name="api_key" class="form-control" placeholder="Otomatik veya manuel anahtar" />
+                        <div class="col-md-4">
+                          <label for="max_users" class="form-label">Kullanıcı Kotası</label>
+                          <input type="number" id="max_users" class="form-control" min="0" />
                         </div>
-                        <div class="col-md-6">
-                          <label class="form-label" for="activation_token">Aktivasyon Token</label>
-                          <input type="text" id="activation_token" name="activation_token" class="form-control" placeholder="Gerekirse aktivasyon token" />
+                        <div class="col-md-4">
+                          <label for="max_assets" class="form-label">Varlık Kotası</label>
+                          <input type="number" id="max_assets" class="form-control" min="0" />
+                        </div>
+                        <div class="col-md-4">
+                          <label for="logo_url" class="form-label">Logo URL</label>
+                          <input type="text" id="logo_url" class="form-control" />
                         </div>
 
                         <div class="col-12">
-                          <label class="form-label" for="notes">Notlar</label>
-                          <textarea id="notes" name="notes" class="form-control" rows="3" placeholder="İç notlar"></textarea>
+                          <label for="notes" class="form-label">Notlar</label>
+                          <textarea id="notes" rows="3" class="form-control"></textarea>
                         </div>
-                        <div
-                          class="col-12 d-none alert"
-                          role="alert"
-                          data-role="municipality-create-feedback"
-                        ></div>
-                        <div class="col-12 d-flex justify-content-end gap-2">
-                          <a class="btn btn-outline-secondary" href="/super-admin-municipalities.html">Vazgeç</a>
-                          <button type="submit" class="btn btn-primary" data-role="municipality-create-submit">Kaydet</button>
+
+                        <div class="col-12 d-flex justify-content-end">
+                          <button type="submit" class="btn btn-primary" data-role="update-button">Güncelle</button>
                         </div>
                       </form>
                     </div>
@@ -301,27 +276,17 @@
                 </div>
               </div>
             </div>
-            <!-- / Content -->
 
-            <!-- Footer -->
             <footer class="content-footer footer bg-footer-theme">
               <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-                <div class="mb-2 mb-md-0">© 2024 Envanter360</div>
-                <div class="d-none d-lg-inline-block">Süperadmin Paneli</div>
+                <div class="mb-2 mb-md-0">© 2025 Envantor</div>
               </div>
             </footer>
-            <!-- / Footer -->
           </div>
-          <!-- Content wrapper -->
         </div>
-        <!-- / Layout page -->
       </div>
-      <!-- / Layout container -->
     </div>
-    <!-- / Layout wrapper -->
 
-    <!-- Core JS -->
-    <!-- Include Vuexy core JS files -->
     <script src="../admin/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="../admin/assets/vendor/libs/popper/popper.js"></script>
     <script src="../admin/assets/vendor/js/bootstrap.js"></script>
@@ -332,7 +297,6 @@
     <script src="../admin/assets/vendor/libs/typeahead-js/typeahead.js"></script>
     <script src="../admin/assets/vendor/js/menu.js"></script>
     <script src="../admin/assets/js/main.js"></script>
-    <script src="../admin/assets/js/app/super-admin-municipality-create.js"></script>
-
+    <script src="../admin/assets/js/app/super-admin-municipality-update.js"></script>
   </body>
 </html>
