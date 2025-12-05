@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="tr" class="light-style layout-navbar-fixed layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../admin/assets/" data-template="vertical-menu-template">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Varlıklar | Envanter360</title>
+
+    <link rel="icon" type="image/x-icon" href="../admin/assets/img/favicon/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/tabler-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/flag-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../admin/assets/css/demo.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/node-waves/node-waves.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/typeahead-js/typeahead.css" />
+  
+  </head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Sidebar Navigation -->
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+            <a href="index.html" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                <!-- Logo Placeholder -->
+              </span>
+              <span class="app-brand-text demo menu-text fw-bold">Envanter360</span>
+            </a>
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+              <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+              <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
+            </a>
+          </div>
+
+          <div class="menu-inner-shadow"></div>
+
+          <ul class="menu-inner py-1">
+            <li class="menu-item">
+              <a href="../admin/dashboard.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                <div>Dashboard</div>
+              </a>
+            </li>
+            <li class="menu-item active">
+              <a href="../admin/assets.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-archive"></i>
+                <div>Varlıklar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/assets-movements.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-arrows-left-right"></i>
+                <div>Varlık Hareketleri</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/locations.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-map-pin"></i>
+                <div>Lokasyonlar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/categories.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-folders"></i>
+                <div>Kategoriler</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/users.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-users"></i>
+                <div>Kullanıcılar</div>
+              </a>
+            </li>
+          </ul>
+        </aside>
+        <!-- /Sidebar Navigation -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <li class="nav-item lh-1 me-3">
+                  <span class="fw-semibold">Belediye Yöneticisi</span>
+                </li>
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                      <img src="../admin/assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="pages-account-settings-account.html">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar avatar-online">
+                              <img src="../admin/assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <span class="fw-semibold d-block">Ahmet Kaya</span>
+                            <small class="text-muted">Belediye Yöneticisi</small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="dropdown-divider"></div>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="auth-login-cover.html">
+                        <i class="ti ti-logout me-2 ti-sm"></i>
+                        <span class="align-middle">Çıkış Yap</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <!-- /Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Page Header -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                  <h4 class="fw-bold mb-1">Varlıklar</h4>
+                  <p class="text-muted mb-0">Belediyenize ait tüm envanter varlıklarını görüntüleyin ve yönetin.</p>
+                </div>
+                <div class="d-none d-md-block">
+                  <ol class="breadcrumb breadcrumb-style1 m-0">
+                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Varlıklar</li>
+                  </ol>
+                </div>
+              </div>
+
+              <!-- Filters & Actions Card -->
+              <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5 class="card-title mb-0">Varlık Filtreleri</h5>
+                  </div>
+                  <div class="d-flex flex-wrap gap-2">
+                    <a href="assets-create.html" class="btn btn-primary btn-sm">
+                      <i class="ti ti-plus me-1"></i>Yeni Varlık Ekle
+                    </a>
+                    <a href="#" class="btn btn-outline-secondary btn-sm">
+                      <i class="ti ti-download me-1"></i>Dışa Aktar (Excel)
+                    </a>
+                    <a href="#" class="btn btn-outline-secondary btn-sm">
+                      <i class="ti ti-printer me-1"></i>QR Etiket Yazdır
+                    </a>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <form class="row g-3">
+                    <div class="col-12 col-md-3">
+                      <label for="filterName" class="form-label">Varlık Adı / Kod</label>
+                      <input type="text" class="form-control" id="filterName" placeholder="Ad veya kod ile ara" />
+                    </div>
+                    <div class="col-12 col-md-3">
+                      <label for="filterCategory" class="form-label">Kategori</label>
+                      <select id="filterCategory" class="form-select">
+                        <option>Tümü</option>
+                        <option>Büro Mobilyaları</option>
+                        <option>Bilgi Teknolojileri</option>
+                        <option>Araçlar</option>
+                        <option>Makine / Ekipman</option>
+                        <option>Diğer</option>
+                      </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                      <label for="filterDepartment" class="form-label">Birim</label>
+                      <select id="filterDepartment" class="form-select">
+                        <option>Tümü</option>
+                        <option>Mali Hizmetler</option>
+                        <option>Fen İşleri</option>
+                        <option>İnsan Kaynakları</option>
+                        <option>Temizlik İşleri</option>
+                      </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                      <label for="filterLocation" class="form-label">Lokasyon</label>
+                      <select id="filterLocation" class="form-select">
+                        <option>Tümü</option>
+                        <option>Merkez Bina</option>
+                        <option>Depo 1</option>
+                        <option>Depo 2</option>
+                        <option>Saha Ofisi</option>
+                      </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                      <label for="filterStatus" class="form-label">Durum</label>
+                      <select id="filterStatus" class="form-select">
+                        <option>Tümü</option>
+                        <option>Aktif</option>
+                        <option>Pasif</option>
+                        <option>Hurda</option>
+                        <option>Bakımda</option>
+                      </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                      <label class="form-label">Oluşturulma Tarihi</label>
+                      <div class="row g-2">
+                        <div class="col-6">
+                          <input type="date" class="form-control" placeholder="Başlangıç" />
+                        </div>
+                        <div class="col-6">
+                          <input type="date" class="form-control" placeholder="Bitiş" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 d-flex align-items-end gap-2">
+                      <button type="button" class="btn btn-primary">Filtrele</button>
+                      <button type="reset" class="btn btn-outline-secondary">Temizle</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-8 col-xl-9">
+                  <!-- Assets Table Card -->
+                  <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                      <div>
+                        <h5 class="card-title mb-0">Varlık Listesi</h5>
+                        <small class="text-muted">Gösterilen: 1–25 / 4.328</small>
+                      </div>
+                      <div class="d-flex align-items-center gap-2">
+                        <label for="pageSize" class="form-label mb-0 small text-muted">Sayfa Boyutu</label>
+                        <select id="pageSize" class="form-select form-select-sm w-auto">
+                          <option>25</option>
+                          <option>50</option>
+                          <option>100</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table table-hover table-striped mb-0">
+                        <thead class="table-light">
+                          <tr>
+                            <th>Kod</th>
+                            <th>Varlık Adı</th>
+                            <th>Kategori</th>
+                            <th>Birim</th>
+                            <th>Lokasyon</th>
+                            <th>Sorumlu Kullanıcı</th>
+                            <th>Durum</th>
+                            <th>Son Güncelleme</th>
+                            <th class="text-center">İşlemler</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr data-asset-id="123">
+                            <td>VRL-000123</td>
+                            <td>Ofis Masası</td>
+                            <td>Büro Mobilyaları</td>
+                            <td>Mali Hizmetler</td>
+                            <td>Merkez Bina - 3. Kat</td>
+                            <td>Zeynep Demir</td>
+                            <td><span class="badge bg-label-success badge-sm">Aktif</span></td>
+                            <td>2025-03-10 14:22</td>
+                            <td class="text-center">
+                              <div class="d-inline-flex gap-1">
+                                <a href="asset-detail.html?id=123" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
+                                <a href="asset-edit.html?id=123" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
+                                <a href="asset-movement-create.html?asset_id=123" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
+                                <a href="asset-qr.html?id=123" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr data-asset-id="124">
+                            <td>VRL-000124</td>
+                            <td>Dizüstü Bilgisayar</td>
+                            <td>Bilgi Teknolojileri</td>
+                            <td>Bilgi Teknolojileri</td>
+                            <td>Merkez Bina - 2. Kat</td>
+                            <td>Burak Yılmaz</td>
+                            <td><span class="badge bg-label-success badge-sm">Aktif</span></td>
+                            <td>2025-03-11 09:15</td>
+                            <td class="text-center">
+                              <div class="d-inline-flex gap-1">
+                                <a href="asset-detail.html?id=124" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
+                                <a href="asset-edit.html?id=124" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
+                                <a href="asset-movement-create.html?asset_id=124" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
+                                <a href="asset-qr.html?id=124" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr data-asset-id="125">
+                            <td>VRL-000125</td>
+                            <td>Hizmet Aracı</td>
+                            <td>Araçlar</td>
+                            <td>Fen İşleri</td>
+                            <td>Depo 1</td>
+                            <td>Elif Koç</td>
+                            <td><span class="badge bg-label-warning badge-sm">Bakımda</span></td>
+                            <td>2025-03-09 17:40</td>
+                            <td class="text-center">
+                              <div class="d-inline-flex gap-1">
+                                <a href="asset-detail.html?id=125" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
+                                <a href="asset-edit.html?id=125" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
+                                <a href="asset-movement-create.html?asset_id=125" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
+                                <a href="asset-qr.html?id=125" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr data-asset-id="126">
+                            <td>VRL-000126</td>
+                            <td>Forklift</td>
+                            <td>Makine / Ekipman</td>
+                            <td>Lojistik</td>
+                            <td>Depo 2</td>
+                            <td>Mert Öz</td>
+                            <td><span class="badge bg-label-success badge-sm">Aktif</span></td>
+                            <td>2025-03-08 11:05</td>
+                            <td class="text-center">
+                              <div class="d-inline-flex gap-1">
+                                <a href="asset-detail.html?id=126" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
+                                <a href="asset-edit.html?id=126" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
+                                <a href="asset-movement-create.html?asset_id=126" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
+                                <a href="asset-qr.html?id=126" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr data-asset-id="127">
+                            <td>VRL-000127</td>
+                            <td>Arşiv Dolabı</td>
+                            <td>Büro Mobilyaları</td>
+                            <td>Mali Hizmetler</td>
+                            <td>Merkez Bina - 1. Kat</td>
+                            <td>Ayşe Şahin</td>
+                            <td><span class="badge bg-label-secondary badge-sm">Pasif</span></td>
+                            <td>2025-03-07 08:30</td>
+                            <td class="text-center">
+                              <div class="d-inline-flex gap-1">
+                                <a href="asset-detail.html?id=127" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
+                                <a href="asset-edit.html?id=127" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
+                                <a href="asset-movement-create.html?asset_id=127" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
+                                <a href="asset-qr.html?id=127" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr data-asset-id="128">
+                            <td>VRL-000128</td>
+                            <td>Yazıcı</td>
+                            <td>Bilgi Teknolojileri</td>
+                            <td>İnsan Kaynakları</td>
+                            <td>Merkez Bina - 4. Kat</td>
+                            <td>Selin Aksoy</td>
+                            <td><span class="badge bg-label-danger badge-sm">Hurda</span></td>
+                            <td>2025-03-06 15:12</td>
+                            <td class="text-center">
+                              <div class="d-inline-flex gap-1">
+                                <a href="asset-detail.html?id=128" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
+                                <a href="asset-edit.html?id=128" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
+                                <a href="asset-movement-create.html?asset_id=128" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
+                                <a href="asset-qr.html?id=128" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr data-asset-id="129">
+                            <td>VRL-000129</td>
+                            <td>Temizlik Otomatı</td>
+                            <td>Makine / Ekipman</td>
+                            <td>Temizlik İşleri</td>
+                            <td>Saha Ofisi</td>
+                            <td>Fatma Çelik</td>
+                            <td><span class="badge bg-label-warning badge-sm">Bakımda</span></td>
+                            <td>2025-03-05 12:47</td>
+                            <td class="text-center">
+                              <div class="d-inline-flex gap-1">
+                                <a href="asset-detail.html?id=129" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
+                                <a href="asset-edit.html?id=129" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
+                                <a href="asset-movement-create.html?asset_id=129" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
+                                <a href="asset-qr.html?id=129" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="card-footer d-flex flex-wrap justify-content-between align-items-center gap-2">
+                      <div class="text-muted">Sayfa 1 / 174</div>
+                      <nav aria-label="Varlık listesi sayfaları">
+                        <ul class="pagination pagination-sm mb-0">
+                          <li class="page-item disabled"><a class="page-link" href="#">Önceki</a></li>
+                          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                          <li class="page-item"><a class="page-link" href="#">2</a></li>
+                          <li class="page-item"><a class="page-link" href="#">3</a></li>
+                          <li class="page-item"><a class="page-link" href="#">4</a></li>
+                          <li class="page-item"><a class="page-link" href="#">5</a></li>
+                          <li class="page-item"><a class="page-link" href="#">Sonraki</a></li>
+                        </ul>
+                      </nav>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right Column Statistics (Optional) -->
+                <div class="col-lg-4 col-xl-3">
+                  <div class="card mb-4">
+                    <div class="card-header">
+                      <h6 class="card-title mb-0">Duruma Göre Varlık Dağılımı</h6>
+                    </div>
+                    <div class="card-body">
+                      <ul class="list-unstyled mb-0">
+                        <li class="d-flex justify-content-between align-items-center mb-2">
+                          <div><span class="badge bg-label-success me-2">&nbsp;</span>Aktif</div>
+                          <span class="fw-semibold">3.920</span>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center mb-2">
+                          <div><span class="badge bg-label-warning me-2">&nbsp;</span>Bakımda</div>
+                          <span class="fw-semibold">78</span>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center mb-2">
+                          <div><span class="badge bg-label-danger me-2">&nbsp;</span>Hurda</div>
+                          <span class="fw-semibold">45</span>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center">
+                          <div><span class="badge bg-label-secondary me-2">&nbsp;</span>Pasif</div>
+                          <span class="fw-semibold">285</span>
+                        </li>
+                      </ul>
+                      <!-- Placeholder for status distribution chart -->
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <h6 class="card-title mb-0">Son Eklenen Varlıklar</h6>
+                      <a href="assets.html?sort=created_desc" class="small">Tümünü görüntüle</a>
+                    </div>
+                    <div class="card-body p-0">
+                      <div class="table-responsive">
+                        <table class="table table-sm table-borderless mb-0">
+                          <thead class="table-light">
+                            <tr>
+                              <th>Varlık Adı</th>
+                              <th>Tarih</th>
+                              <th>Birim</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Dizüstü Bilgisayar</td>
+                              <td>2025-03-12</td>
+                              <td>Bilgi Teknolojileri</td>
+                            </tr>
+                            <tr>
+                              <td>Hizmet Aracı</td>
+                              <td>2025-03-11</td>
+                              <td>Fen İşleri</td>
+                            </tr>
+                            <tr>
+                              <td>Projeksiyon Cihazı</td>
+                              <td>2025-03-10</td>
+                              <td>Eğitim Birimi</td>
+                            </tr>
+                            <tr>
+                              <td>Ofis Sandalyesi</td>
+                              <td>2025-03-09</td>
+                              <td>Mali Hizmetler</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /Page Header -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!--/ Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    <!-- Include Vuexy core JS and vendor JS here -->
+  </body>
+</html>

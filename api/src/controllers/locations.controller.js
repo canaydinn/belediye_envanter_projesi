@@ -146,3 +146,4 @@ exports.deleteLocation = async (req, res) => {
     });
   }
 };
+

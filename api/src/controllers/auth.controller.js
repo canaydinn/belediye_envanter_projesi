@@ -1,23 +1,23 @@
 // api/src/controllers/auth.controller.js
 const knex = require('../config/knex');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-key';
 
 // POST /api/auth/login
-exports.login = async (req, res) => {
+async function login (req, res){
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!username || !password) {
+    if (!email || !password) {
       return res
         .status(400)
-        .json({ message: 'Kullanıcı adı ve şifre zorunludur' });
+        .json({ message: 'Eposta ve şifre zorunludur' });
     }
 
     const user = await knex('users')
-      .where({ username })
+      .where({ email })
       .first();
 
     if (!user) {
@@ -37,6 +37,7 @@ exports.login = async (req, res) => {
     const payload = {
       id: user.id,
       role_id: user.role_id,
+      role:user.role,
       municipality_id: user.municipality_id,
       username: user.username,
     };
@@ -54,9 +55,10 @@ exports.login = async (req, res) => {
 
     return res.json({
       message: 'Giriş başarılı',
+      token,
       user: {
         id: user.id,
-        username: user.username,
+        email: user.email,
         role_id: user.role_id,
         municipality_id: user.municipality_id || null,
       },
@@ -66,9 +68,85 @@ exports.login = async (req, res) => {
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
+// POST /api/auth/signup
+async function signup (req, res) {
+  try {
+    const {
+      username: rawUsername,
+      email: rawEmail,
+      password,
+      full_name,
+      role_id,
+      municipality_id,
+    } = req.body;
+
+    const username = rawUsername?.trim();
+    const email = rawEmail?.trim().toLowerCase();
+
+    if (!username || !password || !municipality_id) {
+      return res.status(400).json({
+        message:
+          'username, password ve municipality_id alanları kayıt için zorunludur',
+      });
+    }
+
+    const municipality = await knex('municipalities')
+      .where({ id: municipality_id, is_active: true })
+      .first();
+
+    if (!municipality) {
+      return res
+        .status(400)
+        .json({ message: 'Geçerli ve aktif bir belediye bulunamadı' });
+    }
+
+    const existsQuery = knex('users').where({ username });
+    if (email) {
+      existsQuery.orWhere({ email });
+    }
+
+    const exists = await existsQuery.first();
+
+    if (exists) {
+      return res
+        .status(400)
+        .json({ message: 'Bu kullanıcı adı veya e-posta zaten kullanılıyor' });
+    }
+
+    const password_hash = await bcrypt.hash(password, 10);
+
+    const [createdUser] = await knex('users')
+      .insert({
+        username,
+        email,
+        full_name,
+        role_id: role_id || 5, // default: standart kullanıcı
+        municipality_id,
+        password_hash,
+        is_active: true,
+      })
+      .returning([
+        'id',
+        'username',
+        'email',
+        'full_name',
+        'role_id',
+        'municipality_id',
+        'is_active',
+      ]);
+
+    return res.status(201).json({
+      message: 'Kayıt işlemi başarılı',
+      user: createdUser,
+    });
+  } catch (err) {
+    console.error('auth.signup hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
 
 // GET /api/auth/me
-exports.me = async (req, res) => {
+async function me (req, res){
   // auth middleware'de req.user set ediliyor
   if (!req.user) {
     return res.status(401).json({ message: 'Oturum bulunamadı' });
@@ -80,30 +158,45 @@ exports.me = async (req, res) => {
 };
 
 // POST /api/auth/logout
-exports.logout = async (req, res) => {
+async function logout(req, res) {
   res.clearCookie('token');
   return res.json({ message: 'Çıkış yapıldı' });
 };
 // api/src/controllers/auth.controller.js (içine ek)
 
-exports.municipalitySignup = async (req, res) => {
+async function municipalitySignup(req, res) {
   const trx = await knex.transaction();
   try {
     const {
+      code,
       municipality_name,
-      municipality_email,
-      municipality_phone,
+      province,
+      district,
+      tax_number,
       municipality_address,
+      contact_email,
+      contact_phone,
       contact_person,
+      license_start_date,
+      license_end_date,
+      quota_end_date,
+      admin_username,
       admin_full_name,
       admin_email,
       admin_password,
     } = req.body;
 
     // Basit zorunlu alan kontrolü
-    if (!municipality_name || !admin_email || !admin_password) {
+    if (!municipality_name || !code || !province || !district || !admin_email || !admin_password) {
       await trx.rollback();
       return res.status(400).json({ message: 'Zorunlu alanlar eksik' });
+    }
+
+    const username = admin_username || admin_email?.split('@')[0];
+
+    if (!username) {
+      await trx.rollback();
+      return res.status(400).json({ message: 'Yönetici kullanıcı adı veya e-posta gerekli' });
     }
 
     // Aynı email ile kullanıcı var mı?
@@ -113,30 +206,45 @@ exports.municipalitySignup = async (req, res) => {
       return res.status(400).json({ message: 'Bu e-posta zaten kayıtlı' });
     }
 
+    const existingMunicipality = await trx('municipalities').where({ code }).first();
+    if (existingMunicipality) {
+      await trx.rollback();
+      return res.status(400).json({ message: 'Bu belediye kodu zaten kayıtlı' });
+    }
+
     // Municipality oluştur
     const [municipality] = await trx('municipalities')
       .insert({
+        code,
         name: municipality_name,
-        email: municipality_email || null,
-        phone: municipality_phone || null,
+        province,
+        district,
+        tax_number: tax_number || null,
         address: municipality_address || null,
+        contact_email: contact_email || admin_email || null,
+        contact_phone: contact_phone || null,
         contact_person: contact_person || admin_full_name || null,
         status: 'pending',
+        is_active: false,
+        license_start_date: license_start_date || null,
+        license_end_date: license_end_date || null,
+        quota_end_date: quota_end_date || null,
       })
       .returning('*');
 
     // Şifre hash vs. (bcrypt kullanıyorsan)
-    const passwordHash = await hashPassword(admin_password);
+    const passwordHash = await bcrypt.hash(admin_password, 10);
 
     // İlk admin kullanıcı
     const [adminUser] = await trx('users')
       .insert({
         full_name: admin_full_name || contact_person || municipality_name,
+        username,
         email: admin_email,
-        password: passwordHash,
-        role: 'municipality_admin',
+        password_hash: passwordHash,
+        role_id: 1,
         municipality_id: municipality.id,
-        is_active: true,
+        is_active: false,
       })
       .returning('*');
 
@@ -154,7 +262,7 @@ exports.municipalitySignup = async (req, res) => {
 
 
 // POST /api/auth/change-password
-exports.changePassword = async (req, res) => {
+async function changePassword (req, res) {
   try {
     const userId = req.user?.id;
     const { current_password, new_password } = req.body;
@@ -194,7 +302,7 @@ exports.changePassword = async (req, res) => {
 };
 
 // POST /api/auth/request-password-reset
-exports.requestPasswordReset = async (req, res) => {
+async function requestPasswordReset  (req, res) {
   try {
     const { email } = req.body;
 
@@ -226,7 +334,7 @@ exports.requestPasswordReset = async (req, res) => {
 };
 
 // POST /api/auth/reset-password
-exports.resetPassword = async (req, res) => {
+async function resetPassword(req, res){
   try {
     const { token, new_password } = req.body;
 
@@ -269,7 +377,7 @@ exports.resetPassword = async (req, res) => {
 };
 
 // POST /api/auth/refresh
-exports.refreshToken = async (req, res) => {
+async function refreshToken (req, res) {
   try {
     const cookieToken = req.cookies?.token;
     const authHeader = req.headers['authorization'];
@@ -323,4 +431,16 @@ exports.refreshToken = async (req, res) => {
     console.error('auth.refreshToken hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
+};
+
+module.exports = {
+  login,
+  signup,
+  me,
+  logout,
+  municipalitySignup,
+  changePassword,
+  requestPasswordReset,
+  resetPassword,
+  refreshToken,
 };

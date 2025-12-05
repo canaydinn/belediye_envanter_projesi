@@ -15,7 +15,12 @@ exports.getAll = async (req, res) => {
         'address',
         'contact_email',
         'contact_phone',
+        'contact_person',
         'is_active',
+        'status',
+        'license_start_date',
+        'license_end_date',
+        'quota_end_date',
         'created_at',
         'updated_at'
       )
@@ -44,7 +49,12 @@ exports.getById = async (req, res) => {
         'address',
         'contact_email',
         'contact_phone',
+        'contact_person',
         'is_active',
+        'status',
+        'license_start_date',
+        'license_end_date',
+        'quota_end_date',
         'created_at',
         'updated_at'
       )
@@ -74,6 +84,7 @@ exports.create = async (req, res) => {
       address,
       contact_email,
       contact_phone,
+      contact_person,
     } = req.body;
 
     // Basit validasyon
@@ -102,7 +113,9 @@ exports.create = async (req, res) => {
         address: address || null,
         contact_email: contact_email || null,
         contact_phone: contact_phone || null,
-        is_active: true,
+        contact_person: contact_person || null,
+        is_active: false,
+        status: 'pending',
       })
       .returning([
         'id',
@@ -114,7 +127,12 @@ exports.create = async (req, res) => {
         'address',
         'contact_email',
         'contact_phone',
+        'contact_person',
         'is_active',
+        'status',
+        'license_start_date',
+        'license_end_date',
+        'quota_end_date',
         'created_at',
         'updated_at',
       ]);
@@ -140,6 +158,11 @@ exports.update = async (req, res) => {
       contact_email,
       contact_phone,
       is_active,
+      contact_person,
+      status,
+      license_start_date,
+      license_end_date,
+      quota_end_date,
     } = req.body;
 
     const [updated] = await knex('municipalities')
@@ -154,7 +177,12 @@ exports.update = async (req, res) => {
           address,
           contact_email,
           contact_phone,
+          contact_person,
           is_active,
+          status,
+          license_start_date,
+          license_end_date,
+          quota_end_date,
           updated_at: knex.fn.now(),
         },
         [
@@ -167,7 +195,12 @@ exports.update = async (req, res) => {
           'address',
           'contact_email',
           'contact_phone',
+          'contact_person',
           'is_active',
+          'status',
+          'license_start_date',
+          'license_end_date',
+          'quota_end_date',
           'created_at',
           'updated_at',
         ]
@@ -194,6 +227,7 @@ exports.deactivate = async (req, res) => {
       .update(
         {
           is_active: false,
+           status: 'suspended',
           updated_at: knex.fn.now(),
         },
         [
@@ -201,6 +235,7 @@ exports.deactivate = async (req, res) => {
           'code',
           'name',
           'is_active',
+          'status',
           'updated_at',
         ]
       );

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html
+  lang="tr"
+  class="light-style layout-navbar-fixed layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="../admin/assets/"
+  data-template="vertical-menu-template">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Gösterge Paneli | Envanter360</title>
+
+    <!-- Include Vuexy core CSS and vendor CSS here -->
+    <link rel="icon" type="image/x-icon" href="../admin/assets/img/favicon/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/tabler-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/flag-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../admin/assets/css/demo.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/node-waves/node-waves.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/typeahead-js/typeahead.css" />
+  
+  </head>
+
+
+  <body>
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+            <a href="index.html" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M0.0017 0V6.854C0.0017 6.854 -0.1332 9.012 1.9809 10.839L13.6912 21.9964L19.7809 21.9181L18.8042 9.8825L16.4951 7.1729L9.238 0H0.0017Z" fill="#7367F0" />
+                  <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd" d="M7.6982 16.4364L12.5199 3.2370L16.5541 7.2560L7.6982 16.4364Z" fill="#161616" />
+                  <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd" d="M8.0775 15.9175L13.9419 4.6399L16.5849 7.2848L8.0775 15.9175Z" fill="#161616" />
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M7.7730 16.3566L23.6563 0H32V6.8838C32 6.8838 31.8262 9.1784 30.6591 10.4057L19.7824 22H13.6938L7.7730 16.3566Z" fill="#7367F0" />
+                </svg>
+              </span>
+              <span class="app-brand-text demo menu-text fw-bold ms-1">Belediye Envanter</span>
+            </a>
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+              <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+              <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
+            </a>
+          </div>
+          <div class="menu-inner-shadow"></div>
+          <ul class="menu-inner py-1">
+            <li class="menu-item">
+              <a href="#" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-layout-dashboard"></i>
+                <div data-i18n="Gösterge Paneli">Gösterge Paneli</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="#" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-box"></i>
+                <div data-i18n="Varlıklar">Varlıklar</div>
+              </a>
+            </li>
+            <li class="menu-item active open">
+              <a href="#" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-arrows-left-right"></i>
+                <div data-i18n="Varlık Hareketleri">Varlık Hareketleri</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="#" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-map-pin"></i>
+                <div data-i18n="Lokasyonlar">Lokasyonlar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="#" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-category"></i>
+                <div data-i18n="Kategoriler">Kategoriler</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="#" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-users"></i>
+                <div data-i18n="Kullanıcılar">Kullanıcılar</div>
+              </a>
+            </li>
+          </ul>
+        </aside>
+        <!-- / Menu -->
+
+        <div class="layout-page">
+          <!-- Navbar -->
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+              <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                <i class="ti ti-menu-2 ti-sm"></i>
+              </a>
+            </div>
+            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+              <div class="navbar-nav align-items-center">
+                <div class="nav-item navbar-search-wrapper mb-0">
+                  <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
+                    <i class="ti ti-search ti-md"></i>
+                    <span class="d-none d-md-inline-block text-muted">Envanterde ara...</span>
+                  </a>
+                </div>
+              </div>
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <li class="nav-item lh-1 me-3">
+                  <span class="fw-semibold d-block">Ankara Belediyesi</span>
+                  <small class="text-muted">Envanter Yöneticisi</small>
+                </li>
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="#" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                      <img src="../../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#"><i class="ti ti-user-check me-2"></i>Profil</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="ti ti-settings me-2"></i>Ayarlar</a></li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li><a class="dropdown-item" href="#"><i class="ti ti-logout me-2"></i>Çıkış Yap</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div>
+                  <h4 class="fw-bold mb-1">Varlık Hareketi Oluştur</h4>
+                  <p class="text-muted mb-0">Envanterdeki bir varlığın hareketini kaydedin.</p>
+                </div>
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Gösterge Paneli</a></li>
+                    <li class="breadcrumb-item"><a href="#">Varlıklar</a></li>
+                    <li class="breadcrumb-item"><a href="#">Varlık Hareketleri</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Yeni Hareket</li>
+                  </ol>
+                </nav>
+              </div>
+
+              <div class="row g-4">
+                <!-- Left column: form -->
+                <div class="col-lg-8">
+                  <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <div>
+                        <h5 class="card-title mb-1">Hareket Bilgileri</h5>
+                        <small class="text-muted">Varlık hareketi, varlığın lokasyon, birim veya sorumlu kişi değişikliklerini ifade eder.</small>
+                      </div>
+                      <span class="text-body" data-bs-toggle="tooltip" data-bs-placement="left" title="Varlık hareketi, varlığın lokasyon, birim veya sorumlu kişi değişikliklerini ifade eder.">
+                        <i class="ti ti-help-circle ti-md"></i>
+                      </span>
+                    </div>
+                    <div class="card-body">
+                      <form id="movementForm" novalidate>
+                        <div class="mb-4">
+                          <label for="assetSelect" class="form-label">Varlık <span class="text-danger">*</span></label>
+                          <select class="form-select" id="assetSelect" name="asset" data-live-search="true" required>
+                            <option value="" selected disabled>Varlık seçiniz</option>
+                            <option value="pc-000123" data-dept="Bilgi İşlem" data-location="Ana Bina - 3. Kat" data-owner="Ahmet Yılmaz">Masaüstü Bilgisayar - 000123</option>
+                            <option value="ac-000456" data-dept="Destek Hizmetleri" data-location="Depo 2" data-owner="Elif Demir">Klima Ünitesi - 000456</option>
+                            <option value="pr-000789" data-dept="Basın Yayın" data-location="Ek Hizmet Binası - 1. Kat" data-owner="Mehmet Kaya">Projeksiyon Cihazı - 000789</option>
+                          </select>
+                          <div class="invalid-feedback">Lütfen bir varlık seçiniz.</div>
+                          <small class="text-muted">Varlık kodu ile arama yapabilirsiniz.</small>
+                        </div>
+
+                        <div class="mb-4">
+                          <label class="form-label d-block">Hareket Türü <span class="text-danger">*</span></label>
+                          <div class="row g-2">
+                            <div class="col-md-4">
+                              <div class="form-check custom-option custom-option-basic checked">
+                                <label class="form-check-label custom-option-content" for="moveDept">
+                                  <input class="form-check-input" type="radio" name="movementType" id="moveDept" value="department" checked />
+                                  <span class="custom-option-header">
+                                    <span class="h6 mb-0">Birim Değişikliği</span>
+                                  </span>
+                                  <span class="custom-option-body">Varlığın bağlı olduğu birimi değiştirin.</span>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-check custom-option custom-option-basic">
+                                <label class="form-check-label custom-option-content" for="moveLocation">
+                                  <input class="form-check-input" type="radio" name="movementType" id="moveLocation" value="location" />
+                                  <span class="custom-option-header">
+                                    <span class="h6 mb-0">Lokasyon Değişikliği</span>
+                                  </span>
+                                  <span class="custom-option-body">Varlığın bulunduğu lokasyonu güncelleyin.</span>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-check custom-option custom-option-basic">
+                                <label class="form-check-label custom-option-content" for="moveOwner">
+                                  <input class="form-check-input" type="radio" name="movementType" id="moveOwner" value="owner" />
+                                  <span class="custom-option-header">
+                                    <span class="h6 mb-0">Sorumlu Kişi Değişikliği</span>
+                                  </span>
+                                  <span class="custom-option-body">Sorumlu personeli güncelleyin.</span>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-check custom-option custom-option-basic">
+                                <label class="form-check-label custom-option-content" for="maintenance">
+                                  <input class="form-check-input" type="radio" name="movementType" id="maintenance" value="maintenance" />
+                                  <span class="custom-option-header">
+                                    <span class="h6 mb-0">Bakım / Onarım</span>
+                                  </span>
+                                  <span class="custom-option-body">Bakım ya da onarım süreci başlatın.</span>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-check custom-option custom-option-basic">
+                                <label class="form-check-label custom-option-content" for="decommission">
+                                  <input class="form-check-input" type="radio" name="movementType" id="decommission" value="decommission" />
+                                  <span class="custom-option-header">
+                                    <span class="h6 mb-0">Hurdaya Ayırma</span>
+                                  </span>
+                                  <span class="custom-option-body">Varlığı envanterden çıkarın.</span>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="invalid-feedback d-block d-none" id="movementTypeFeedback">Lütfen hareket türünü seçiniz.</div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                          <div class="col-md-6">
+                            <label class="form-label">Mevcut Birim</label>
+                            <input type="text" class="form-control" id="currentDept" placeholder="Varlık seçildiğinde dolacak" disabled />
+                          </div>
+                          <div class="col-md-6">
+                            <label for="newDept" class="form-label">Yeni Birim <span class="text-danger">*</span></label>
+                            <select id="newDept" name="newDept" class="form-select" required>
+                              <option value="" selected disabled>Seçiniz</option>
+                              <option value="Bilgi İşlem">Bilgi İşlem</option>
+                              <option value="Destek Hizmetleri">Destek Hizmetleri</option>
+                              <option value="Basın Yayın">Basın Yayın</option>
+                              <option value="İnsan Kaynakları">İnsan Kaynakları</option>
+                              <option value="Mali Hizmetler">Mali Hizmetler</option>
+                            </select>
+                            <div class="invalid-feedback">Yeni birimi seçiniz.</div>
+                          </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                          <div class="col-md-6">
+                            <label class="form-label">Mevcut Lokasyon</label>
+                            <input type="text" class="form-control" id="currentLocation" placeholder="Varlık seçildiğinde dolacak" disabled />
+                          </div>
+                          <div class="col-md-6">
+                            <label for="newLocation" class="form-label">Yeni Lokasyon <span class="text-danger">*</span></label>
+                            <select id="newLocation" name="newLocation" class="form-select" required>
+                              <option value="" selected disabled>Seçiniz</option>
+                              <option value="Ana Bina - 1. Kat">Ana Bina - 1. Kat</option>
+                              <option value="Ana Bina - 3. Kat">Ana Bina - 3. Kat</option>
+                              <option value="Ek Hizmet Binası - 1. Kat">Ek Hizmet Binası - 1. Kat</option>
+                              <option value="Depo 1">Depo 1</option>
+                              <option value="Depo 2">Depo 2</option>
+                            </select>
+                            <div class="invalid-feedback">Yeni lokasyonu seçiniz.</div>
+                          </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                          <div class="col-md-6">
+                            <label class="form-label">Mevcut Sorumlu Kişi</label>
+                            <input type="text" class="form-control" id="currentOwner" placeholder="Varlık seçildiğinde dolacak" disabled />
+                          </div>
+                          <div class="col-md-6">
+                            <label for="newOwner" class="form-label">Yeni Sorumlu Kişi <span class="text-danger">*</span></label>
+                            <select id="newOwner" name="newOwner" class="form-select" required>
+                              <option value="" selected disabled>Seçiniz</option>
+                              <option value="Ahmet Yılmaz">Ahmet Yılmaz</option>
+                              <option value="Elif Demir">Elif Demir</option>
+                              <option value="Mehmet Kaya">Mehmet Kaya</option>
+                              <option value="Zeynep Karaca">Zeynep Karaca</option>
+                              <option value="Murat Kılıç">Murat Kılıç</option>
+                            </select>
+                            <div class="invalid-feedback">Yeni sorumlu kişiyi seçiniz.</div>
+                          </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                          <div class="col-md-6">
+                            <label for="movementDate" class="form-label">Hareket Tarihi <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="movementDate" name="movementDate" required />
+                            <div class="invalid-feedback">Hareket tarihini seçiniz.</div>
+                          </div>
+                          <div class="col-md-6">
+                            <label for="quantity" class="form-label">Miktar <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" min="1" step="1" value="1" required />
+                            <div class="invalid-feedback">Geçerli bir miktar giriniz.</div>
+                          </div>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="description" class="form-label">Açıklama</label>
+                          <textarea class="form-control" id="description" name="description" rows="3" placeholder="Örnek: Birim değişikliği nedeniyle İnsan Kaynakları servisine aktarıldı."></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                          <label for="officer" class="form-label">İşlemi Yapan Personel</label>
+                          <select id="officer" name="officer" class="form-select">
+                            <option value="" selected disabled>Seçiniz</option>
+                            <option value="Sevgi Aydın">Sevgi Aydın</option>
+                            <option value="Barış Koç">Barış Koç</option>
+                            <option value="Aslı Öztürk">Aslı Öztürk</option>
+                            <option value="Kemal Kaplan">Kemal Kaplan</option>
+                          </select>
+                          <small class="text-muted">Bu alan, işlemi yapan yetkili personeli ifade eder.</small>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                          <a href="#" class="btn btn-outline-secondary">Vazgeç</a>
+                          <button type="submit" class="btn btn-primary">Hareketi Kaydet</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right column: summary -->
+                <div class="col-lg-4">
+                  <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <h6 class="mb-0">Varlık Özeti</h6>
+                      <span class="badge bg-label-primary">Canlı</span>
+                    </div>
+                    <div class="card-body">
+                      <div class="d-flex align-items-center mb-3">
+                        <div class="avatar me-3">
+                          <span class="avatar-initial rounded-circle bg-label-primary"><i class="ti ti-box"></i></span>
+                        </div>
+                        <div>
+                          <h6 class="mb-0" id="summaryName">Masaüstü Bilgisayar</h6>
+                          <small class="text-muted" id="summaryCode">Kod: 000123</small>
+                        </div>
+                      </div>
+                      <div class="list-group list-group-flush">
+                        <div class="list-group-item px-0 d-flex align-items-center">
+                          <i class="ti ti-building-bank text-primary me-2"></i>
+                          <div>
+                            <div class="text-muted">Mevcut Birim</div>
+                            <div class="fw-semibold" id="summaryDept">Bilgi İşlem</div>
+                          </div>
+                        </div>
+                        <div class="list-group-item px-0 d-flex align-items-center">
+                          <i class="ti ti-map-pin text-success me-2"></i>
+                          <div>
+                            <div class="text-muted">Mevcut Lokasyon</div>
+                            <div class="fw-semibold" id="summaryLocation">Ana Bina - 3. Kat</div>
+                          </div>
+                        </div>
+                        <div class="list-group-item px-0 d-flex align-items-center">
+                          <i class="ti ti-user-check text-info me-2"></i>
+                          <div>
+                            <div class="text-muted">Mevcut Sorumlu</div>
+                            <div class="fw-semibold" id="summaryOwner">Ahmet Yılmaz</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <h6 class="mb-0">Son Hareketler</h6>
+                      <span class="badge bg-label-secondary">Son 5</span>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table table-sm mb-0">
+                        <thead class="table-light">
+                          <tr>
+                            <th>Tarih</th>
+                            <th>Tür</th>
+                            <th>Değişim</th>
+                            <th>Kullanıcı</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>12.08.2024</td>
+                            <td><span class="badge bg-primary">Birim</span></td>
+                            <td>Bilgi İşlem &gt; Destek</td>
+                            <td>Sevgi Aydın</td>
+                          </tr>
+                          <tr>
+                            <td>02.08.2024</td>
+                            <td><span class="badge bg-warning text-dark">Lokasyon</span></td>
+                            <td>Ana Bina &gt; Depo 1</td>
+                            <td>Mehmet Kaya</td>
+                          </tr>
+                          <tr>
+                            <td>21.07.2024</td>
+                            <td><span class="badge bg-info text-dark">Sorumlu</span></td>
+                            <td>Ayşe K. &gt; Ahmet Y.</td>
+                            <td>Barış Koç</td>
+                          </tr>
+                          <tr>
+                            <td>18.07.2024</td>
+                            <td><span class="badge bg-label-success text-success border border-success">Bakım</span></td>
+                            <td>Servis Gönderimi</td>
+                            <td>Elif Demir</td>
+                          </tr>
+                          <tr>
+                            <td>01.07.2024</td>
+                            <td><span class="badge bg-danger">Hurda</span></td>
+                            <td>Hurdaya Ayrıldı</td>
+                            <td>Ahmet Yılmaz</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- / Content -->
+
+            <!-- Footer -->
+            <footer class="content-footer footer bg-footer-theme">
+              <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                <div class="mb-2 mb-md-0">
+                  © <script>document.write(new Date().getFullYear());</script>, Belediye Envanter Yönetim Sistemi
+                </div>
+                <div class="d-none d-lg-inline-block">
+                  <a href="#" class="footer-link me-4">Gizlilik</a>
+                  <a href="#" class="footer-link">Yardım</a>
+                </div>
+              </div>
+            </footer>
+            <!-- / Footer -->
+          </div>
+          <!-- Content wrapper -->
+        </div>
+      </div>
+      <div class="layout-overlay layout-menu-toggle"></div>
+      <div class="drag-target"></div>
+    </div>
+
+    <!-- Toasts container -->
+    <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1080">
+      <div id="toastSuccess" class="bs-toast toast fade" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <i class="ti ti-circle-check text-success me-2"></i>
+          <div class="me-auto fw-semibold">Başarılı</div>
+          <small>Şimdi</small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">Varlık hareketi başarıyla kaydedildi.</div>
+      </div>
+
+      <div id="toastError" class="bs-toast toast fade" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <i class="ti ti-alert-triangle text-danger me-2"></i>
+          <div class="me-auto fw-semibold">Hata</div>
+          <small>Şimdi</small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">Lütfen formdaki zorunlu alanları kontrol edin.</div>
+      </div>
+    </div>
+
+    <!-- Core JS -->
+    <script src="../../assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../../assets/vendor/libs/popper/popper.js"></script>
+    <script src="../../assets/vendor/js/bootstrap.js"></script>
+    <script src="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../../assets/vendor/libs/node-waves/node-waves.js"></script>
+    <script src="../../assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="../../assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="../../assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="../../assets/vendor/js/menu.js"></script>
+
+    <!-- Main JS -->
+    <script>
+      const assetSummary = {
+        'pc-000123': {
+          name: 'Masaüstü Bilgisayar',
+          code: '000123',
+          dept: 'Bilgi İşlem',
+          location: 'Ana Bina - 3. Kat',
+          owner: 'Ahmet Yılmaz'
+        },
+        'ac-000456': {
+          name: 'Klima Ünitesi',
+          code: '000456',
+          dept: 'Destek Hizmetleri',
+          location: 'Depo 2',
+          owner: 'Elif Demir'
+        },
+        'pr-000789': {
+          name: 'Projeksiyon Cihazı',
+          code: '000789',
+          dept: 'Basın Yayın',
+          location: 'Ek Hizmet Binası - 1. Kat',
+          owner: 'Mehmet Kaya'
+        }
+      };
+
+      const movementForm = document.getElementById('movementForm');
+      const assetSelect = document.getElementById('assetSelect');
+      const movementDate = document.getElementById('movementDate');
+      const movementTypeFeedback = document.getElementById('movementTypeFeedback');
+      const newDept = document.getElementById('newDept');
+      const newLocation = document.getElementById('newLocation');
+      const newOwner = document.getElementById('newOwner');
+      const movementTypeInputs = movementForm.querySelectorAll('input[name="movementType"]');
+
+      // Set default date to today
+      movementDate.value = new Date().toISOString().split('T')[0];
+
+      // Update summary and current fields when asset changes
+      assetSelect.addEventListener('change', (event) => {
+        const selected = assetSummary[event.target.value];
+        if (!selected) return;
+        document.getElementById('summaryName').textContent = selected.name;
+        document.getElementById('summaryCode').textContent = `Kod: ${selected.code}`;
+        document.getElementById('summaryDept').textContent = selected.dept;
+        document.getElementById('summaryLocation').textContent = selected.location;
+        document.getElementById('summaryOwner').textContent = selected.owner;
+        document.getElementById('currentDept').value = selected.dept;
+        document.getElementById('currentLocation').value = selected.location;
+        document.getElementById('currentOwner').value = selected.owner;
+      });
+
+      // Toggle selected style on movement type cards
+      movementTypeInputs.forEach((input) => {
+        input.addEventListener('change', () => {
+          movementTypeInputs.forEach((radio) => {
+            const option = radio.closest('.custom-option');
+            option.classList.toggle('checked', radio.checked);
+          });
+        });
+      });
+
+      // Form validation and submission simulation
+      movementForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const movementTypeSelected = movementForm.querySelector('input[name="movementType"]:checked');
+        if (!movementTypeSelected) {
+          movementTypeFeedback.classList.remove('d-none');
+        } else {
+          movementTypeFeedback.classList.add('d-none');
+        }
+
+        const requiresOwner = movementTypeSelected && movementTypeSelected.value === 'owner';
+        newOwner.required = requiresOwner;
+        newOwner.parentElement.querySelector('.invalid-feedback').textContent = requiresOwner
+          ? 'Yeni sorumlu kişiyi seçiniz.'
+          : 'Bu alan zorunlu değil.';
+
+        const requiresDept = movementTypeSelected && movementTypeSelected.value === 'department';
+        newDept.required = requiresDept;
+        newDept.parentElement.querySelector('.invalid-feedback').textContent = requiresDept
+          ? 'Yeni birimi seçiniz.'
+          : 'Bu alan zorunlu değil.';
+
+        const requiresLocation = movementTypeSelected && movementTypeSelected.value === 'location';
+        newLocation.required = requiresLocation;
+        newLocation.parentElement.querySelector('.invalid-feedback').textContent = requiresLocation
+          ? 'Yeni lokasyonu seçiniz.'
+          : 'Bu alan zorunlu değil.';
+
+        movementForm.classList.add('was-validated');
+        const isValid = movementForm.checkValidity() && movementTypeSelected;
+
+        const toastEl = document.getElementById(isValid ? 'toastSuccess' : 'toastError');
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="tr" class="light-style layout-navbar-fixed layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../admin/assets/" data-template="vertical-menu-template">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>Lokasyonlar | Envanter360</title>
+    <meta name="description" content="Envanter360 lokasyon listesi" />
+
+    <link rel="icon" type="image/x-icon" href="../admin/assets/img/favicon/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/tabler-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/flag-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../admin/assets/css/demo.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/node-waves/node-waves.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/typeahead-js/typeahead.css" />
+
+    <script src="../admin/assets/vendor/js/helpers.js"></script>
+    <script src="../admin/assets/vendor/js/template-customizer.js"></script>
+    <script src="../admin/assets/js/config.js"></script>
+  </head>
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Sidebar Navigation -->
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+            <a href="index.html" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                <!-- Logo placeholder -->
+              </span>
+              <span class="app-brand-text demo menu-text fw-bold">Envanter360</span>
+            </a>
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+              <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+              <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
+            </a>
+          </div>
+          <div class="menu-inner-shadow"></div>
+          <ul class="menu-inner py-1 navigation navigation-main">
+            <li class="menu-item">
+              <a href="../admin/dashboard.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                <div>Dashboard</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/assets.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-package"></i>
+                <div>Varlıklar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/assets-movements.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-arrows-left-right"></i>
+                <div>Varlık Hareketleri</div>
+              </a>
+            </li>
+            <li class="menu-item active open">
+              <a href="../admin/locations.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-map-pin"></i>
+                <div>Lokasyonlar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/categories.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-category"></i>
+                <div>Kategoriler</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/users.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-users"></i>
+                <div>Kullanıcılar</div>
+              </a>
+            </li>
+          </ul>
+        </aside>
+        <!-- / Sidebar Navigation -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+              <div class="navbar-nav align-items-center">
+                <div class="nav-item navbar-search-wrapper mb-0">
+                  <a class="nav-item nav-link search-toggler px-0" href="#">
+                    <i class="ti ti-search ti-md"></i>
+                    <span class="d-none d-md-inline-block">Arama</span>
+                  </a>
+                </div>
+              </div>
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <li class="nav-item dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="#" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                      <img src="../admin/assets/img/avatars/1.png" alt="Avatar" class="w-px-40 h-auto rounded-circle" />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar avatar-online">
+                              <img src="../admin/assets/img/avatars/1.png" alt="Avatar" class="w-px-40 h-auto rounded-circle" />
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <span class="fw-semibold d-block">Belediye Yöneticisi</span>
+                            <small class="text-muted">Municipality</small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li><div class="dropdown-divider"></div></li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <i class="ti ti-user me-2 ti-sm"></i>
+                        <span class="align-middle">Profil</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <i class="ti ti-settings me-2 ti-sm"></i>
+                        <span class="align-middle">Ayarlar</span>
+                      </a>
+                    </li>
+                    <li><div class="dropdown-divider"></div></li>
+                    <li>
+                      <a class="dropdown-item" href="auth-login-cover.html">
+                        <i class="ti ti-logout me-2 ti-sm"></i>
+                        <span class="align-middle">Çıkış</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Page Header -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                  <h4 class="fw-bold mb-1">Lokasyonlar</h4>
+                  <p class="text-muted mb-0">Belediyenize ait tüm lokasyonları ve bu lokasyonlardaki varlık sayılarını görüntüleyin.</p>
+                </div>
+                <div class="d-none d-md-block">
+                  <ol class="breadcrumb breadcrumb-style2 mb-0">
+                    <li class="breadcrumb-item"><a href="dashboards-analytics.html">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Lokasyonlar</li>
+                  </ol>
+                </div>
+              </div>
+
+              <!-- Filters & Actions Card -->
+              <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5 class="card-title mb-0">Lokasyon Filtreleri</h5>
+                    <small class="text-muted">Lokasyon listesi üzerinde filtreleme ve hızlı işlemler.</small>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <a href="locations-create.html" class="btn btn-primary">
+                      <i class="feather icon-plus me-1"></i>
+                      Yeni Lokasyon Ekle
+                    </a>
+                    <a href="/api/locations/export/excel" class="btn btn-outline-secondary">
+                      <i class="feather icon-download me-1"></i>
+                      Dışa Aktar (Excel)
+                    </a>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <form class="row g-3">
+                    <div class="col-12 col-md-4 col-xl-3">
+                      <label class="form-label" for="filter-name">Lokasyon Adı</label>
+                      <input type="text" id="filter-name" class="form-control" placeholder="Lokasyon adı ile ara" />
+                    </div>
+                    <div class="col-12 col-md-4 col-xl-3">
+                      <label class="form-label" for="filter-type">Lokasyon Tipi</label>
+                      <select id="filter-type" class="form-select">
+                        <option>Tümü</option>
+                        <option>Bina</option>
+                        <option>Depo</option>
+                        <option>Açık Alan</option>
+                        <option>Saha Ofisi</option>
+                        <option>Diğer</option>
+                      </select>
+                    </div>
+                    <div class="col-12 col-md-4 col-xl-3">
+                      <label class="form-label" for="filter-department">Birim</label>
+                      <select id="filter-department" class="form-select">
+                        <option>Tümü</option>
+                        <option>Mali Hizmetler</option>
+                        <option>Fen İşleri</option>
+                        <option>İnsan Kaynakları</option>
+                        <option>Temizlik İşleri</option>
+                      </select>
+                    </div>
+                    <div class="col-12 col-md-4 col-xl-3">
+                      <label class="form-label" for="filter-status">Durum</label>
+                      <select id="filter-status" class="form-select">
+                        <option>Tümü</option>
+                        <option>Aktif</option>
+                        <option>Pasif</option>
+                      </select>
+                    </div>
+                    <div class="col-12 col-md-8 col-xl-6">
+                      <label class="form-label" for="filter-address">Adres / Açıklama</label>
+                      <input type="text" id="filter-address" class="form-control" placeholder="Adres veya açıklama parçası" />
+                    </div>
+                    <div class="col-12 d-flex align-items-end gap-2">
+                      <button type="button" class="btn btn-primary">Filtrele</button>
+                      <button type="reset" class="btn btn-outline-secondary">Temizle</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <!-- KPI Cards Row (Optional) -->
+              <div class="row mb-4 g-3">
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card card-border-shadow-primary h-100">
+                    <div class="card-body">
+                      <div class="d-flex align-items-start justify-content-between">
+                        <div class="content-left">
+                          <p class="text-muted mb-1">Toplam Lokasyon</p>
+                          <h4 class="mb-0">48</h4>
+                          <small class="text-muted">Belediyeye kayıtlı tüm lokasyonlar</small>
+                        </div>
+                        <span class="badge bg-label-primary rounded p-2">
+                          <i class="ti ti-building ti-md"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card card-border-shadow-success h-100">
+                    <div class="card-body">
+                      <div class="d-flex align-items-start justify-content-between">
+                        <div class="content-left">
+                          <p class="text-muted mb-1">Aktif Lokasyon</p>
+                          <h4 class="mb-0">42</h4>
+                          <small class="text-muted">Aktif olarak kullanılan lokasyonlar</small>
+                        </div>
+                        <span class="badge bg-label-success rounded p-2">
+                          <i class="ti ti-checks ti-md"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card card-border-shadow-warning h-100">
+                    <div class="card-body">
+                      <div class="d-flex align-items-start justify-content-between">
+                        <div class="content-left">
+                          <p class="text-muted mb-1">Depo Sayısı</p>
+                          <h4 class="mb-0">5</h4>
+                          <small class="text-muted">Depo veya ambar olarak kullanılan lokasyonlar</small>
+                        </div>
+                        <span class="badge bg-label-warning rounded p-2">
+                          <i class="ti ti-home-dollar ti-md"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card card-border-shadow-info h-100">
+                    <div class="card-body">
+                      <div class="d-flex align-items-start justify-content-between">
+                        <div class="content-left">
+                          <p class="text-muted mb-1">Envanter Yoğun Lokasyon</p>
+                          <h4 class="mb-0">Merkez Bina</h4>
+                          <small class="text-muted">En fazla varlık barındıran lokasyon</small>
+                        </div>
+                        <span class="badge bg-label-info rounded p-2">
+                          <i class="ti ti-map-pin ti-md"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12 col-lg-8 col-xl-9">
+                  <!-- Locations Table Card -->
+                  <div class="card">
+                    <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+                      <div>
+                        <h5 class="card-title mb-0">Lokasyon Listesi</h5>
+                        <small class="text-muted">Lokasyon detaylarını görüntüleyin ve işlemlere erişin.</small>
+                      </div>
+                      <div class="d-flex align-items-center gap-2">
+                        <small class="text-muted">Gösterilen: 1–25 / 48</small>
+                        <div class="d-flex align-items-center">
+                          <label for="page-size" class="form-label me-2 mb-0">Sayfa Boyutu</label>
+                          <select id="page-size" class="form-select form-select-sm">
+                            <option>25</option>
+                            <option>50</option>
+                            <option>100</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="table-responsive text-nowrap">
+                      <table class="table table-hover table-striped mb-0">
+                        <thead class="table-light">
+                          <tr>
+                            <th>Kod</th>
+                            <th>Lokasyon Adı</th>
+                            <th>Tip</th>
+                            <th>Birim</th>
+                            <th>Adres / Açıklama</th>
+                            <th>Varlık Sayısı</th>
+                            <th>Durum</th>
+                            <th>İşlemler</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr data-location-id="1">
+                            <td>LKS-001</td>
+                            <td>Merkez Bina</td>
+                            <td>Bina</td>
+                            <td>Mali Hizmetler</td>
+                            <td>Merkez Mah. Cumhuriyet Cad. No:10</td>
+                            <td>1.245</td>
+                            <td><span class="badge badge-light-success">Aktif</span></td>
+                            <td class="d-flex gap-1">
+                              <a href="location-detail.html?id=1" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
+                              <a href="location-edit.html?id=1" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
+                              <a href="assets.html?location_id=1" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
+                              <a href="location-map.html?id=1" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
+                            </td>
+                          </tr>
+                          <tr data-location-id="2">
+                            <td>LKS-002</td>
+                            <td>Şehir Kütüphanesi</td>
+                            <td>Bina</td>
+                            <td>Kültür</td>
+                            <td>Atatürk Bulvarı No:45</td>
+                            <td>562</td>
+                            <td><span class="badge badge-light-success">Aktif</span></td>
+                            <td class="d-flex gap-1">
+                              <a href="location-detail.html?id=2" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
+                              <a href="location-edit.html?id=2" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
+                              <a href="assets.html?location_id=2" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
+                              <a href="location-map.html?id=2" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
+                            </td>
+                          </tr>
+                          <tr data-location-id="3">
+                            <td>LKS-003</td>
+                            <td>Depo 1</td>
+                            <td>Depo</td>
+                            <td>Fen İşleri</td>
+                            <td>Sanayi Bölgesi 3. Sokak</td>
+                            <td>328</td>
+                            <td><span class="badge badge-light-success">Aktif</span></td>
+                            <td class="d-flex gap-1">
+                              <a href="location-detail.html?id=3" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
+                              <a href="location-edit.html?id=3" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
+                              <a href="assets.html?location_id=3" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
+                              <a href="location-map.html?id=3" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
+                            </td>
+                          </tr>
+                          <tr data-location-id="4">
+                            <td>LKS-004</td>
+                            <td>Depo 2</td>
+                            <td>Depo</td>
+                            <td>Temizlik İşleri</td>
+                            <td>Lojistik Merkezi 2. Blok</td>
+                            <td>190</td>
+                            <td><span class="badge badge-light-secondary">Pasif</span></td>
+                            <td class="d-flex gap-1">
+                              <a href="location-detail.html?id=4" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
+                              <a href="location-edit.html?id=4" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
+                              <a href="assets.html?location_id=4" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
+                              <a href="location-map.html?id=4" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
+                            </td>
+                          </tr>
+                          <tr data-location-id="5">
+                            <td>LKS-005</td>
+                            <td>Park ve Bahçeler Saha Ofisi</td>
+                            <td>Saha Ofisi</td>
+                            <td>Park ve Bahçeler</td>
+                            <td>Yeşil Vadi Parkı Yanı</td>
+                            <td>142</td>
+                            <td><span class="badge badge-light-success">Aktif</span></td>
+                            <td class="d-flex gap-1">
+                              <a href="location-detail.html?id=5" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
+                              <a href="location-edit.html?id=5" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
+                              <a href="assets.html?location_id=5" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
+                              <a href="location-map.html?id=5" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
+                            </td>
+                          </tr>
+                          <tr data-location-id="6">
+                            <td>LKS-006</td>
+                            <td>Atölye ve Tamirhane</td>
+                            <td>Açık Alan</td>
+                            <td>Fen İşleri</td>
+                            <td>Atölye Sok. No:8</td>
+                            <td>275</td>
+                            <td><span class="badge badge-light-success">Aktif</span></td>
+                            <td class="d-flex gap-1">
+                              <a href="location-detail.html?id=6" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
+                              <a href="location-edit.html?id=6" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
+                              <a href="assets.html?location_id=6" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
+                              <a href="location-map.html?id=6" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
+                            </td>
+                          </tr>
+                          <tr data-location-id="7">
+                            <td>LKS-007</td>
+                            <td>Bilgi İşlem Ofisi</td>
+                            <td>Bina</td>
+                            <td>Bilişim</td>
+                            <td>Teknokent Plaza Kat:3</td>
+                            <td>410</td>
+                            <td><span class="badge badge-light-success">Aktif</span></td>
+                            <td class="d-flex gap-1">
+                              <a href="location-detail.html?id=7" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
+                              <a href="location-edit.html?id=7" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
+                              <a href="assets.html?location_id=7" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
+                              <a href="location-map.html?id=7" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
+                            </td>
+                          </tr>
+                          <tr data-location-id="8">
+                            <td>LKS-008</td>
+                            <td>Saha Ofisi Kuzey</td>
+                            <td>Saha Ofisi</td>
+                            <td>Fen İşleri</td>
+                            <td>Kuzey Çevre Yolu Şantiyesi</td>
+                            <td>96</td>
+                            <td><span class="badge badge-light-secondary">Pasif</span></td>
+                            <td class="d-flex gap-1">
+                              <a href="location-detail.html?id=8" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
+                              <a href="location-edit.html?id=8" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
+                              <a href="assets.html?location_id=8" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
+                              <a href="location-map.html?id=8" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="card-footer d-flex flex-wrap justify-content-between align-items-center gap-2">
+                      <small class="text-muted">Sayfa 1 / 2</small>
+                      <nav aria-label="Lokasyonlar sayfalandırma">
+                        <ul class="pagination pagination-sm mb-0">
+                          <li class="page-item disabled"><a class="page-link" href="#">Önceki</a></li>
+                          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                          <li class="page-item"><a class="page-link" href="#">2</a></li>
+                          <li class="page-item"><a class="page-link" href="#">Sonraki</a></li>
+                        </ul>
+                      </nav>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right Column Statistics / Map (Optional) -->
+                <div class="col-12 col-lg-4 col-xl-3">
+                  <div class="card mb-4">
+                    <div class="card-header">
+                      <h6 class="mb-0">Lokasyon Tipi Dağılımı</h6>
+                    </div>
+                    <div class="card-body">
+                      <ul class="list-unstyled mb-0">
+                        <li class="d-flex align-items-center justify-content-between mb-2">
+                          <div><span class="badge bg-label-primary me-2 rounded-pill">&bull;</span> Bina</div>
+                          <span class="fw-semibold">22</span>
+                        </li>
+                        <li class="d-flex align-items-center justify-content-between mb-2">
+                          <div><span class="badge bg-label-warning me-2 rounded-pill">&bull;</span> Depo</div>
+                          <span class="fw-semibold">5</span>
+                        </li>
+                        <li class="d-flex align-items-center justify-content-between mb-2">
+                          <div><span class="badge bg-label-success me-2 rounded-pill">&bull;</span> Açık Alan</div>
+                          <span class="fw-semibold">12</span>
+                        </li>
+                        <li class="d-flex align-items-center justify-content-between mb-2">
+                          <div><span class="badge bg-label-info me-2 rounded-pill">&bull;</span> Saha Ofisi</div>
+                          <span class="fw-semibold">9</span>
+                        </li>
+                        <li class="d-flex align-items-center justify-content-between">
+                          <div><span class="badge bg-label-secondary me-2 rounded-pill">&bull;</span> Diğer</div>
+                          <span class="fw-semibold">0</span>
+                        </li>
+                      </ul>
+                      <!-- Placeholder for location type distribution chart -->
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="card-header">
+                      <h6 class="mb-0">Harita Görünümü</h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="map-placeholder" style="height: 200px; background-color: #f0f2f5; border-radius: 0.5rem;">
+                        <!-- Map component will be injected here in the future -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- / Content -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+      <!-- / Layout container -->
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    <!-- Include Vuexy core JS and vendor scripts here -->
+  </body>
+</html>

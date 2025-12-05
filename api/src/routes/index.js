@@ -15,5 +15,7 @@ router.use('/audit', require('./audit.routes'));
 router.use('/qrcode', require('./qrcode.routes'));
 router.use('/admin/municipalities', require('./municipalities.routes'));
 router.use('/superadmin', superadminRoutes);
+router.use('/dashboard', require('./dashboard.routes'));
+router.use('/asset-movements', require('./asset.movements.route'));
 
 module.exports = router;

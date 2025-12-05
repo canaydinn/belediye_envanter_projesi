@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html
+  lang="tr"
+  class="light-style layout-navbar-fixed layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="../admin/assets/"
+  data-template="vertical-menu-template">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Admin Paneli | Envanter360</title>
+
+    <meta name="description" content="Süperadmin paneli ile belediyeleri ve kullanıcıları yönetin." />
+
+    <!-- Include Vuexy core CSS and vendor CSS here -->
+    <link rel="icon" type="image/x-icon" href="../admin/assets/img/favicon/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/tabler-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/flag-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../admin/assets/css/demo.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/node-waves/node-waves.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/typeahead-js/typeahead.css" />
+  </head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Superadmin Sidebar Navigation -->
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+            <a href="/superadmin-dashboard.html" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z"
+                    fill="#7367F0" />
+                  <path
+                    opacity="0.06"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z"
+                    fill="#161616" />
+                  <path
+                    opacity="0.06"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z"
+                    fill="#161616" />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z"
+                    fill="#7367F0" />
+                </svg>
+              </span>
+              <span class="app-brand-text demo menu-text fw-bold">Envantor</span>
+            </a>
+
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+              <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+              <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
+            </a>
+          </div>
+
+          <div class="menu-inner-shadow"></div>
+
+         <ul class="menu-inner py-1 navigation navigation-main">
+            <li class="menu-item active">
+              <a href="../admin/super-admin-dashboard.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                <div>Superadmin Dashboard</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/super-admin-municipalities.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-building"></i>
+                <div>Belediyeler</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/super-admin-users.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-users"></i>
+                <div>Kullanıcılar</div>
+              </a>
+            </li>
+            <li class="menu-item ">
+              <a href="../admin/super-admin-plans.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-layers"></i>
+                <div>Abonelik Planları</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/super-admin-logs.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-clipboard-text"></i>
+                <div>Sistem Logları</div>
+              </a>
+            </li>
+          </ul>
+        </aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme">
+            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+              <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                <i class="ti ti-menu-2 ti-sm"></i>
+              </a>
+            </div>
+            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+              <div class="navbar-nav align-items-center">
+                <div class="nav-item navbar-search-wrapper mb-0">
+                  <a class="nav-item nav-link search-toggler d-flex align-items-center px-0" href="javascript:void(0);">
+                  </a>
+                </div>
+              </div>
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <li class="nav-item lh-1 me-3">
+                  <span class="fw-semibold d-block">Admin</span>
+                  <small class="text-muted">Envantor</small>
+                </li>
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                      <img src="../admin/assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar avatar-online">
+                              <img src="../admin/assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <span class="fw-semibold d-block">Admin</span>
+                            <small class="text-muted">Yönetici</small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li><div class="dropdown-divider"></div></li>
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <i class="ti ti-user-check me-2 ti-sm"></i>
+                        <span class="align-middle">Profil</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <i class="ti ti-logout me-2 ti-sm"></i>
+                        <span class="align-middle">Çıkış</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <!-- Page Header -->
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                <div>
+                  <h2 class="fw-bold mb-1">Admin Paneli</h2>
+                  <p class="text-muted mb-0">Belediyeleri, kullanıcıları ve sistem durumunu yönetin.</p>
+                </div>
+                <div class="d-flex align-items-center text-muted">
+                  <i class="ti ti-home me-2"></i>
+                  <span class="me-2">Admin</span>
+                  <i class="ti ti-chevron-right"></i>
+                  <span class="ms-2">Dashboard</span>
+                </div>
+              </div>
+
+              <!-- KPI Cards Row -->
+              <div class="row g-4 mb-4">
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card h-100">
+                    <div class="card-body d-flex align-items-center">
+                      <div class="avatar flex-shrink-0 me-3">
+                        <span class="avatar-initial rounded bg-label-primary"><i class="feather icon-home"></i></span>
+                      </div>
+                      <div>
+                        <small class="text-muted d-block">Toplam Belediye</small>
+                        <h3 class="mb-1"><a
+                                class="text-heading"
+                                href="../admin/super-admin-municipalities.html"
+                                data-role="municipality-count"
+                                aria-live="polite"
+                                aria-label="Belediye sayısı">
+                                24
+                              </a></h3>
+                        <p class="mb-0 text-muted">Sisteme kayıtlı belediye sayısı</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card h-100">
+                    <div class="card-body d-flex align-items-center">
+                      <div class="avatar flex-shrink-0 me-3">
+                        <span class="avatar-initial rounded bg-label-success"><i class="feather icon-check-circle"></i></span>
+                      </div>
+                      <div>
+                        <small class="text-muted d-block">Aktif Belediye</small>
+                        <h3 class="mb-1">
+                          <a
+                            class="text-heading"
+                            href="../admin/super-admin-municipalities.html"
+                            data-role="municipality-active-count"
+                            aria-live="polite"
+                            aria-label="Aktif belediye sayısı">
+                            0
+                          </a>
+                        </h3>
+                        <p class="mb-0 text-muted">Aktif olarak kullanılan belediyeler</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card h-100">
+                    <div class="card-body d-flex align-items-center">
+                      <div class="avatar flex-shrink-0 me-3">
+                        <span class="avatar-initial rounded bg-label-warning"><i class="feather icon-clock"></i></span>
+                      </div>
+                      <div>
+                        <small class="text-muted d-block">Bekleyen Onay</small>
+                        <h3 class="mb-1">3</h3>
+                        <p class="mb-0 text-muted">Onay bekleyen yeni başvurular</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card h-100">
+                    <div class="card-body d-flex align-items-center">
+                      <div class="avatar flex-shrink-0 me-3">
+                        <span class="avatar-initial rounded bg-label-info"><i class="feather icon-users"></i></span>
+                      </div>
+                      <div>
+                        <small class="text-muted d-block">Toplam Kullanıcı</small>
+                        <h3 class="mb-1">152</h3>
+                        <p class="mb-0 text-muted">Tüm belediyelerdeki kullanıcılar</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row g-4">
+                <div class="col-12 col-lg-8">
+                  <!-- Municipality Overview Card -->
+                  <div class="card">
+                    <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-2">
+                      <div>
+                        <h5 class="mb-1">Belediye Genel Görünümü</h5>
+                        <p class="mb-0 text-muted">Durum, plan ve kullanıcı sayısı genel bakışı.</p>
+                      </div>
+                      <a href="/superadmin-municipalities.html" class="btn btn-sm btn-primary">Yeni Belediye Ekle</a>
+                    </div>
+                    <div class="card-body">
+                      <div class="row g-2 mb-3 align-items-end">
+                        <div class="col-12 col-md-5">
+                          <label for="municipalitySearch" class="form-label">Belediye adı ile ara</label>
+                          <input type="text" id="municipalitySearch" class="form-control" placeholder="Örn: Konak Belediyesi" />
+                        </div>
+                        <div class="col-12 col-md-4">
+                          <label for="statusFilter" class="form-label">Durum</label>
+                          <select id="statusFilter" class="form-select">
+                            <option selected>Tümü</option>
+                            <option>Aktif</option>
+                            <option>Pasif</option>
+                            <option>Beklemede</option>
+                          </select>
+                        </div>
+                        <div class="col-12 col-md-3 d-grid">
+                          <button class="btn btn-primary">Filtrele</button>
+                        </div>
+                      </div>
+                      <div class="table-responsive">
+                        <table class="table table-striped table-hover align-middle">
+                          <thead class="table-light">
+                            <tr>
+                              <th>Belediye Adı</th>
+                              <th>İl / İlçe</th>
+                              <th>Kullanıcı Sayısı</th>
+                              <th>Durum</th>
+                              <th>Plan</th>
+                              <th>Son Giriş</th>
+                              <th>İşlemler</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr data-municipality-id="1">
+                              <td>Konak Belediyesi</td>
+                              <td>İzmir / Konak</td>
+                              <td>42</td>
+                              <td><span class="badge bg-label-success">Aktif</span></td>
+                              <td><span class="badge bg-label-primary">Pro</span></td>
+                              <td>12.06.2024 09:30</td>
+                              <td class="d-flex gap-1 flex-wrap">
+                                <a href="/superadmin-municipalities.html?id=1" class="btn btn-sm btn-outline-primary">Detay</a>
+                                <a href="/superadmin-users.html?municipality_id=1" class="btn btn-sm btn-outline-info">Kullanıcılar</a>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Düzenle</button>
+                                <button type="button" class="btn btn-sm btn-outline-warning">Pasif Yap</button>
+                              </td>
+                            </tr>
+                            <tr data-municipality-id="2">
+                              <td>Nilüfer Belediyesi</td>
+                              <td>Bursa / Nilüfer</td>
+                              <td>28</td>
+                              <td><span class="badge bg-label-warning">Beklemede</span></td>
+                              <td><span class="badge bg-label-info">Standart</span></td>
+                              <td>11.06.2024 15:10</td>
+                              <td class="d-flex gap-1 flex-wrap">
+                                <a href="/superadmin-municipalities.html?id=2" class="btn btn-sm btn-outline-primary">Detay</a>
+                                <a href="/superadmin-users.html?municipality_id=2" class="btn btn-sm btn-outline-info">Kullanıcılar</a>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Düzenle</button>
+                                <button type="button" class="btn btn-sm btn-outline-success">Aktif Yap</button>
+                              </td>
+                            </tr>
+                            <tr data-municipality-id="3">
+                              <td>Urla Belediyesi</td>
+                              <td>İzmir / Urla</td>
+                              <td>18</td>
+                              <td><span class="badge bg-label-secondary">Pasif</span></td>
+                              <td><span class="badge bg-label-info">Standart</span></td>
+                              <td>05.06.2024 12:25</td>
+                              <td class="d-flex gap-1 flex-wrap">
+                                <a href="/superadmin-municipalities.html?id=3" class="btn btn-sm btn-outline-primary">Detay</a>
+                                <a href="/superadmin-users.html?municipality_id=3" class="btn btn-sm btn-outline-info">Kullanıcılar</a>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Düzenle</button>
+                                <button type="button" class="btn btn-sm btn-outline-success">Aktif Yap</button>
+                              </td>
+                            </tr>
+                            <tr data-municipality-id="4">
+                              <td>Çankaya Belediyesi</td>
+                              <td>Ankara / Çankaya</td>
+                              <td>36</td>
+                              <td><span class="badge bg-label-success">Aktif</span></td>
+                              <td><span class="badge bg-label-primary">Pro</span></td>
+                              <td>12.06.2024 08:40</td>
+                              <td class="d-flex gap-1 flex-wrap">
+                                <a href="/superadmin-municipalities.html?id=4" class="btn btn-sm btn-outline-primary">Detay</a>
+                                <a href="/superadmin-users.html?municipality_id=4" class="btn btn-sm btn-outline-info">Kullanıcılar</a>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Düzenle</button>
+                                <button type="button" class="btn btn-sm btn-outline-warning">Pasif Yap</button>
+                              </td>
+                            </tr>
+                            <tr data-municipality-id="5">
+                              <td>Yenişehir Belediyesi</td>
+                              <td>Mersin / Yenişehir</td>
+                              <td>12</td>
+                              <td><span class="badge bg-label-warning">Beklemede</span></td>
+                              <td><span class="badge bg-label-success">Deneme</span></td>
+                              <td>10.06.2024 10:05</td>
+                              <td class="d-flex gap-1 flex-wrap">
+                                <a href="/superadmin-municipalities.html?id=5" class="btn btn-sm btn-outline-primary">Detay</a>
+                                <a href="/superadmin-users.html?municipality_id=5" class="btn btn-sm btn-outline-info">Kullanıcılar</a>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Düzenle</button>
+                                <button type="button" class="btn btn-sm btn-outline-success">Aktif Yap</button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-lg-4">
+                  <!-- Right Column Analytics -->
+                  <div class="card mb-4">
+                    <div class="card-header">
+                      <h5 class="mb-0">Plan Dağılımı</h5>
+                    </div>
+                    <div class="card-body">
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                          Standart <span class="badge bg-label-info">14 belediye</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                          Pro <span class="badge bg-label-primary">7 belediye</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                          Deneme <span class="badge bg-label-warning">3 belediye</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-header">
+                      <h5 class="mb-0">Son Aktiviteler</h5>
+                    </div>
+                    <div class="card-body">
+                      <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                          <div class="d-flex">
+                            <div class="avatar flex-shrink-0 me-3">
+                              <span class="avatar-initial rounded-circle bg-label-primary"><i class="feather icon-user-plus"></i></span>
+                            </div>
+                            <div class="d-flex flex-column">
+                              <h6 class="mb-1">Urla Belediyesi yeni kullanıcı ekledi</h6>
+                              <small class="text-muted">5 dakika önce</small>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="list-group-item">
+                          <div class="d-flex">
+                            <div class="avatar flex-shrink-0 me-3">
+                              <span class="avatar-initial rounded-circle bg-label-success"><i class="feather icon-trending-up"></i></span>
+                            </div>
+                            <div class="d-flex flex-column">
+                              <h6 class="mb-1">Konak Belediyesi planını Pro'ya yükseltti</h6>
+                              <small class="text-muted">2 saat önce</small>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="list-group-item">
+                          <div class="d-flex">
+                            <div class="avatar flex-shrink-0 me-3">
+                              <span class="avatar-initial rounded-circle bg-label-warning"><i class="feather icon-alert-triangle"></i></span>
+                            </div>
+                            <div class="d-flex flex-column">
+                              <h6 class="mb-1">Yenişehir Belediyesi başvurusu beklemede</h6>
+                              <small class="text-muted">Dün</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- / Content -->
+
+            <!-- Footer -->
+            <footer class="content-footer footer bg-footer-theme">
+              <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                <div class="mb-2 mb-md-0">© 2024 Envanter360</div>
+                <div class="d-none d-lg-inline-block">Süperadmin Paneli</div>
+              </div>
+            </footer>
+            <!-- / Footer -->
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+      <!-- / Layout container -->
+    </div>
+    <!-- / Layout wrapper -->
+
+    <!-- Core JS -->
+    <!-- Include Vuexy core JS files -->
+    <script src="../admin/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../admin/assets/vendor/libs/popper/popper.js"></script>
+    <script src="../admin/assets/vendor/js/bootstrap.js"></script>
+    <script src="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../admin/assets/vendor/libs/node-waves/node-waves.js"></script>
+    <script src="../admin/assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="../admin/assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="../admin/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="../admin/assets/vendor/js/menu.js"></script>
+    <script src="../admin/assets/js/main.js"></script>
+    <script src="../admin/assets/js/app/super-admin-dashboard.js"></script>
+
+  </body>
+</html>

@@ -1,6 +1,9 @@
 exports.seed = async function (knex) {
   // Tüm belediyeleri temizle
   await knex("municipalities").del();
+   const now = new Date();
+  const oneYearLater = new Date(now);
+  oneYearLater.setFullYear(now.getFullYear() + 1);
 
   await knex("municipalities").insert([
     {
@@ -13,7 +16,12 @@ exports.seed = async function (knex) {
       address: "Urla Belediyesi, İzmir",
       contact_email: "info@urla.bel.tr",
       contact_phone: "0232 123 45 67",
+      contact_person: "Sistem Yöneticisi",
       is_active: true,
+       status: "active",
+      license_start_date: now,
+      license_end_date: oneYearLater,
+      quota_end_date: oneYearLater,
     },
     {
       id: 2,
@@ -25,7 +33,12 @@ exports.seed = async function (knex) {
       address: "Etimesgut Belediyesi, Ankara",
       contact_email: "info@etimesgut.bel.tr",
       contact_phone: "0312 987 65 43",
+      contact_person: "Etimesgut Bilgi İşlem",
       is_active: true,
+       status: "active",
+      license_start_date: now,
+      license_end_date: oneYearLater,
+      quota_end_date: oneYearLater,
     },
     {
       id: 3,
@@ -37,7 +50,12 @@ exports.seed = async function (knex) {
       address: "Yenişehir Belediyesi, Mersin",
       contact_email: "info@yenisehir.bel.tr",
       contact_phone: "0324 555 55 55",
+      contact_person: "Yenişehir Bilgi İşlem",
       is_active: true,
+       status: "active",
+      license_start_date: now,
+      license_end_date: oneYearLater,
+      quota_end_date: oneYearLater,
     }
   ]);
 };

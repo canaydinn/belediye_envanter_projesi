@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html
+  lang="tr"
+  class="light-style layout-navbar-fixed layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="../admin/assets/"
+  data-template="vertical-menu-template">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Gösterge Paneli | Envanter360</title>
+
+    <!-- Include Vuexy core CSS and vendor CSS here -->
+    <link rel="icon" type="image/x-icon" href="../admin/assets/img/favicon/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/tabler-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/flag-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../admin/assets/css/demo.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/node-waves/node-waves.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/typeahead-js/typeahead.css" />
+  
+  </head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Sidebar Navigation -->
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+            <a href="index.html" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z"
+                    fill="#7367F0" />
+                  <path
+                    opacity="0.06"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z"
+                    fill="#161616" />
+                  <path
+                    opacity="0.06"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z"
+                    fill="#161616" />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z"
+                    fill="#7367F0" />
+                </svg>
+              </span>
+              <span class="app-brand-text demo menu-text fw-bold">Envanter360</span>
+            </a>
+
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+              <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+              <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
+            </a>
+          </div>
+
+          <div class="menu-inner-shadow"></div>
+
+          <ul class="menu-inner py-1 navigation navigation-main">
+            <li class="menu-item active">
+              <a href="../admin/dashboard.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                <div>Dashboard</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/assets.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-building"></i>
+                <div>Varlıklar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/asset-movements.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-arrows-exchange"></i>
+                <div>Varlık Hareketleri</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/locations.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-map"></i>
+                <div>Lokasyonlar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/categories.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-category"></i>
+                <div>Kategoriler</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/users.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-users"></i>
+                <div>Kullanıcılar</div>
+              </a>
+            </li>
+          </ul>
+        </aside>
+        <!-- / Sidebar Navigation -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                      <img src="../admin/assets/img/avatars/1.png" alt="User" class="h-auto rounded-circle" />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar avatar-online">
+                              <img src="../admin/assets/img/avatars/1.png" alt="User" class="h-auto rounded-circle" />
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <span class="fw-semibold d-block">Belediye Yöneticisi</span>
+                            <small class="text-muted">Urla Belediyesi</small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li><div class="dropdown-divider"></div></li>
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <i class="ti ti-user-check me-2 ti-sm"></i>
+                        <span class="align-middle">Profil</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <i class="ti ti-settings me-2 ti-sm"></i>
+                        <span class="align-middle">Ayarlar</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <i class="ti ti-logout me-2 ti-sm"></i>
+                        <span class="align-middle">Çıkış</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Page Header -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+                <div>
+                  <h4 class="mb-1">Gösterge Paneli</h4>
+                  <p class="text-muted mb-0">Belediyenizin envanter durumuna hızlı bakış.</p>
+                </div>
+                <div class="breadcrumb-wrapper">
+                  <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item active">Dashboard</li>
+                  </ol>
+                </div>
+              </div>
+
+              <div class="row g-4">
+                <!-- Municipality Info Card -->
+                <div class="col-12 col-lg-6">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                        <div>
+                          <h5 class="card-title mb-1">Urla Belediyesi</h5>
+                          <p class="text-muted mb-2">İzmir / Urla</p>
+                        </div>
+                        <span class="badge badge-light-primary">Plan: Pro</span>
+                      </div>
+                      <div class="row g-3 mt-1">
+                        <div class="col-12 col-sm-4">
+                          <div class="d-flex align-items-center">
+                            <span class="badge rounded-pill bg-label-primary p-2 me-3">
+                              <i class="ti ti-users ti-sm"></i>
+                            </span>
+                            <div>
+                              <h6 class="mb-0">Toplam Kullanıcı</h6>
+                              <small class="text-muted">32</small>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                          <div class="d-flex align-items-center">
+                            <span class="badge rounded-pill bg-label-info p-2 me-3">
+                              <i class="ti ti-building-skyscraper ti-sm"></i>
+                            </span>
+                            <div>
+                              <h6 class="mb-0">Toplam Birim</h6>
+                              <small class="text-muted">12</small>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                          <div class="d-flex align-items-center">
+                            <span class="badge rounded-pill bg-label-success p-2 me-3">
+                              <i class="ti ti-map-pin ti-sm"></i>
+                            </span>
+                            <div>
+                              <h6 class="mb-0">Toplam Lokasyon</h6>
+                              <small class="text-muted">48</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Quick Actions Card -->
+                <div class="col-12 col-lg-6">
+                  <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                      <h5 class="card-title mb-0">Hızlı İşlemler</h5>
+                      <small class="text-muted">Sık kullanılan işlemlere hızlı erişim.</small>
+                    </div>
+                    <div class="card-body">
+                      <div class="row g-3">
+                        <div class="col-12 col-sm-6">
+                          <a href="assets-create.html" class="btn btn-primary w-100 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-plus me-2 ti-sm"></i>
+                            Yeni Varlık Ekle
+                          </a>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <a href="qr-scan.html" class="btn btn-label-primary w-100 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-camera me-2 ti-sm"></i>
+                            QR Kod Tara
+                          </a>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <a href="asset-movement-create.html" class="btn btn-label-info w-100 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-arrows-shuffle me-2 ti-sm"></i>
+                            Varlık Hareketi Oluştur
+                          </a>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <a href="reports.html" class="btn btn-label-secondary w-100 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-bar-chart-2 me-2 ti-sm"></i>
+                            Raporları Görüntüle
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- KPI Cards Row -->
+              <div class="row g-4 mt-2">
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <div class="d-flex align-items-start justify-content-between">
+                        <div class="content-left">
+                          <span class="text-muted">Toplam Varlık</span>
+                          <div class="d-flex align-items-center mt-2">
+                            <h4 class="mb-0 me-2">4.328</h4>
+                          </div>
+                          <small class="text-muted">Belediyeye ait toplam kayıtlı varlık</small>
+                        </div>
+                        <span class="badge rounded-pill bg-label-primary p-2">
+                          <i class="ti ti-building-warehouse ti-sm"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <div class="d-flex align-items-start justify-content-between">
+                        <div class="content-left">
+                          <span class="text-muted">Son 30 Günde Hareket Gören Varlık</span>
+                          <div class="d-flex align-items-center mt-2">
+                            <h4 class="mb-0 me-2">612</h4>
+                          </div>
+                          <small class="text-muted">Taşınan, zimmeti değişen veya güncellenen varlıklar</small>
+                        </div>
+                        <span class="badge rounded-pill bg-label-info p-2">
+                          <i class="ti ti-refresh ti-sm"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <div class="d-flex align-items-start justify-content-between">
+                        <div class="content-left">
+                          <span class="text-muted">Bakım Gerektiren Varlık</span>
+                          <div class="d-flex align-items-center mt-2">
+                            <h4 class="mb-0 me-2">27</h4>
+                          </div>
+                          <small class="text-muted">Bakım zamanı yaklaşan veya geciken varlıklar</small>
+                        </div>
+                        <span class="badge rounded-pill bg-label-warning p-2">
+                          <i class="ti ti-tools ti-sm"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <div class="d-flex align-items-start justify-content-between">
+                        <div class="content-left">
+                          <span class="text-muted">QR Kodlu Varlık Oranı</span>
+                          <div class="d-flex align-items-center mt-2">
+                            <h4 class="mb-0 me-2">86%</h4>
+                          </div>
+                          <small class="text-muted">QR kod ile etiketlenmiş varlıklar</small>
+                        </div>
+                        <span class="badge rounded-pill bg-label-success p-2">
+                          <i class="ti ti-qrcode ti-sm"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Main Content -->
+              <div class="row g-4 mt-2">
+                <div class="col-lg-8 col-xl-8">
+                  <!-- Recent Asset Movements Card -->
+                  <div class="card h-100">
+                    <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
+                      <div>
+                        <h5 class="card-title mb-1">Son Varlık Hareketleri</h5>
+                        <p class="text-muted mb-0">Son işlemler en yeniye göre listelenmiştir.</p>
+                      </div>
+                      <a href="asset-movements.html" class="text-primary">Tüm hareketleri görüntüle</a>
+                    </div>
+                    <div class="card-body">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th>Tarih</th>
+                              <th>Varlık</th>
+                              <th>Eski Lokasyon / Birim</th>
+                              <th>Yeni Lokasyon / Birim</th>
+                              <th>İşlem Tipi</th>
+                              <th>İşlemi Yapan</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr data-movement-id="1">
+                              <td>2025-03-01</td>
+                              <td>Bilgisayar - HP ProDesk</td>
+                              <td>Bilgi İşlem / Merkez</td>
+                              <td>Bilgi İşlem / Şube 2</td>
+                              <td><span class="badge badge-light-primary">Zimmet</span></td>
+                              <td>Ayşe Demir</td>
+                            </tr>
+                            <tr data-movement-id="2">
+                              <td>2025-03-02</td>
+                              <td>Hizmet Aracı - 35 AB 123</td>
+                              <td>Destek Hizmetleri / Garaj</td>
+                              <td>Destek Hizmetleri / Atölye</td>
+                              <td><span class="badge badge-light-info">Devir</span></td>
+                              <td>Mehmet Yılmaz</td>
+                            </tr>
+                            <tr data-movement-id="3">
+                              <td>2025-03-03</td>
+                              <td>Projeksiyon Cihazı</td>
+                              <td>Kültür / Toplantı Salonu</td>
+                              <td>Kültür / Depo</td>
+                              <td><span class="badge badge-light-warning">Bakım</span></td>
+                              <td>Elif Kaya</td>
+                            </tr>
+                            <tr data-movement-id="4">
+                              <td>2025-03-04</td>
+                              <td>Yazıcı - Brother HL</td>
+                              <td>Mali Hizmetler / Kat 2</td>
+                              <td>Mali Hizmetler / Kat 1</td>
+                              <td><span class="badge badge-light-primary">Zimmet</span></td>
+                              <td>Okan Çetin</td>
+                            </tr>
+                            <tr data-movement-id="5">
+                              <td>2025-03-05</td>
+                              <td>Klima Ünitesi</td>
+                              <td>Fen İşleri / Depo</td>
+                              <td>Hurda Alanı</td>
+                              <td><span class="badge badge-light-danger">Hurda</span></td>
+                              <td>Selin Acar</td>
+                            </tr>
+                            <tr data-movement-id="6">
+                              <td>2025-03-06</td>
+                              <td>Masaüstü Bilgisayar</td>
+                              <td>Sosyal Hizmetler / Ofis</td>
+                              <td>Sosyal Hizmetler / Ofis</td>
+                              <td><span class="badge badge-light-warning">Bakım</span></td>
+                              <td>Deniz Arslan</td>
+                            </tr>
+                            <tr data-movement-id="7">
+                              <td>2025-03-07</td>
+                              <td>Tablet - Samsung Tab</td>
+                              <td>İnsan Kaynakları / Eğitim</td>
+                              <td>İnsan Kaynakları / Eğitim</td>
+                              <td><span class="badge badge-light-info">Devir</span></td>
+                              <td>İpek Gür</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-xl-4">
+                  <!-- Category Distribution Card -->
+                  <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <h5 class="card-title mb-0">Kategori Dağılımı</h5>
+                      <span class="badge bg-label-secondary">Özet</span>
+                    </div>
+                    <div class="card-body">
+                      <div class="mb-3">
+                        <!-- Placeholder for donut chart -->
+                        <div class="border rounded p-4 text-center text-muted">Grafik alanı (yakında)</div>
+                      </div>
+                      <ul class="list-unstyled mb-0">
+                        <li class="d-flex align-items-center mb-2">
+                          <span class="badge rounded-pill bg-label-primary me-3 p-2"><i class="ti ti-point-filled"></i></span>
+                          <div class="w-100 d-flex justify-content-between">
+                            <span>Büro Mobilyaları</span>
+                            <small class="text-muted">35%</small>
+                          </div>
+                        </li>
+                        <li class="d-flex align-items-center mb-2">
+                          <span class="badge rounded-pill bg-label-info me-3 p-2"><i class="ti ti-point-filled"></i></span>
+                          <div class="w-100 d-flex justify-content-between">
+                            <span>Bilgi Teknolojileri</span>
+                            <small class="text-muted">27%</small>
+                          </div>
+                        </li>
+                        <li class="d-flex align-items-center mb-2">
+                          <span class="badge rounded-pill bg-label-success me-3 p-2"><i class="ti ti-point-filled"></i></span>
+                          <div class="w-100 d-flex justify-content-between">
+                            <span>Araçlar</span>
+                            <small class="text-muted">18%</small>
+                          </div>
+                        </li>
+                        <li class="d-flex align-items-center mb-2">
+                          <span class="badge rounded-pill bg-label-warning me-3 p-2"><i class="ti ti-point-filled"></i></span>
+                          <div class="w-100 d-flex justify-content-between">
+                            <span>Makine / Ekipman</span>
+                            <small class="text-muted">12%</small>
+                          </div>
+                        </li>
+                        <li class="d-flex align-items-center">
+                          <span class="badge rounded-pill bg-label-secondary me-3 p-2"><i class="ti ti-point-filled"></i></span>
+                          <div class="w-100 d-flex justify-content-between">
+                            <span>Diğer</span>
+                            <small class="text-muted">8%</small>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <!-- Upcoming Maintenance Card -->
+                  <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <h5 class="card-title mb-0">Yaklaşan Bakımlar</h5>
+                      <a href="maintenance.html" class="text-primary">Tüm bakım kayıtları</a>
+                    </div>
+                    <div class="card-body">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th>Varlık</th>
+                              <th>Son Tarih</th>
+                              <th>Durum</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Generator 3</td>
+                              <td>2025-03-15</td>
+                              <td><span class="badge badge-light-warning">Yaklaşıyor</span></td>
+                            </tr>
+                            <tr>
+                              <td>Bina Asansörü</td>
+                              <td>2025-03-10</td>
+                              <td><span class="badge badge-light-danger">Gecikti</span></td>
+                            </tr>
+                            <tr>
+                              <td>Klima Ünitesi</td>
+                              <td>2025-03-20</td>
+                              <td><span class="badge badge-light-info">Planlandı</span></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-center text-muted mt-4">Envanter360 • Belediye Envanter Yönetim Sistemi</div>
+            </div>
+            <!-- / Content -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- / Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+      <!-- / Layout container -->
+    </div>
+    <!-- / Layout wrapper -->
+
+    <!-- Include Vuexy core JS and vendor JS here -->
+  </body>
+  </html>
