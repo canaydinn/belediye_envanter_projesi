@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="../admin/assets/vendor/libs/node-waves/node-waves.css" />
     <link rel="stylesheet" href="../admin/assets/vendor/libs/typeahead-js/typeahead.css" />
-  
+  <script src="../assets/js/config.js"></script>
   </head>
 
   <body>
@@ -36,7 +36,7 @@
             </a>
           </div>
         <ul class="menu-inner py-1 navigation navigation-main">
-            <li class="menu-item active">
+            <li class="menu-item ">
               <a href="../admin/super-admin-dashboard.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div>Süper Admin Paneli</div>
@@ -54,7 +54,7 @@
                 <div>Abonelik Planları</div>
               </a>
             </li>
-            <li class="menu-item">
+            <li class="menu-item active">
               <a href="../admin/super-admin-logs.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-clipboard-text"></i>
                 <div>Sistem Logları</div>
@@ -95,14 +95,64 @@
                   <h4 class="mb-1">Sistem Logları</h4>
                   <p class="text-muted mb-0">Sistem genelinde gerçekleşen olayları ve hataları izleyin.</p>
                 </div>
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item">Superadmin</li>
-                    <li class="breadcrumb-item active" aria-current="page">Sistem Logları</li>
-                  </ol>
-                </nav>
+               
               </div>
-
+<!-- KPI Cards Row -->
+              <div class="row mb-4 g-3">
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card h-100">
+                    <div class="card-body d-flex align-items-center">
+                      <div class="avatar me-3">
+                        <span class="avatar-initial rounded bg-label-primary"><i class="feather icon-activity"></i></span>
+                      </div>
+                      <div>
+                        <h4 class="mb-1" id="log-total-count">12.450</h4>
+                        <p class="mb-0 text-muted">Tüm loglar</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card h-100">
+                    <div class="card-body d-flex align-items-center">
+                      <div class="avatar me-3">
+                        <span class="avatar-initial rounded bg-label-danger"><i class="feather icon-alert-triangle"></i></span>
+                      </div>
+                      <div>
+                        <h4 class="mb-1" id="log-error-count">320</h4>
+                        <p class="mb-0 text-muted">Hata seviyesindeki loglar</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card h-100">
+                    <div class="card-body d-flex align-items-center">
+                      <div class="avatar me-3">
+                        <span class="avatar-initial rounded bg-label-warning"><i class="feather icon-alert-circle"></i></span>
+                      </div>
+                      <div>
+                        <h4 class="mb-1" id="log-warning-count">740</h4>
+                        <p class="mb-0 text-muted">Uyarı seviyesindeki loglar</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card h-100">
+                    <div class="card-body d-flex align-items-center">
+                      <div class="avatar me-3">
+                        <span class="avatar-initial rounded bg-label-danger"><i class="feather icon-zap"></i></span>
+                      </div>
+                      <div>
+                        <h4 class="mb-1" id="log-critical-count">12</h4>
+                        <p class="mb-0 text-muted">Kritik olaylar</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- / KPI Cards Row -->
               <!-- Filters Card -->
               <div class="card mb-4">
                 <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
@@ -111,23 +161,23 @@
                     <small class="text-muted">Görüntülenecek logları filtreleyin.</small>
                   </div>
                   <div class="d-flex align-items-center gap-2">
-                    <a href="/api/superadmin/logs/export/csv" class="btn btn-sm btn-outline-secondary">
+                   <!--  <a href="/api/superadmin/logs/export/csv" class="btn btn-sm btn-outline-secondary">
                       <i class="feather icon-download me-1"></i> Dışa Aktar (CSV)
                     </a>
                     <a href="/api/superadmin/logs/export/json" class="btn btn-sm btn-outline-secondary">
                       <i class="feather icon-download me-1"></i> Dışa Aktar (JSON)
-                    </a>
+                    </a> -->
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="row g-3">
-                    <div class="col-12 col-md-4 col-xl-3">
+                   <!--  <div class="col-12 col-md-4 col-xl-3">
                       <label class="form-label" for="logDateFrom">Tarih Aralığı</label>
                       <div class="d-flex align-items-center gap-2">
                         <input type="text" id="logDateFrom" class="form-control" placeholder="Başlangıç" />
                         <input type="text" id="logDateTo" class="form-control" placeholder="Bitiş" />
                       </div>
-                    </div>
+                    </div> -->
                     <div class="col-12 col-md-4 col-xl-2">
                       <label class="form-label" for="logMunicipality">Belediye</label>
                       <select id="logMunicipality" class="form-select">
@@ -147,79 +197,25 @@
                         <option>CRITICAL</option>
                       </select>
                     </div>
-                    <div class="col-12 col-md-6 col-xl-3">
+                    <!-- <div class="col-12 col-md-6 col-xl-3">
                       <label class="form-label" for="logModule">Modül / Endpoint</label>
                       <input type="text" id="logModule" class="form-control" placeholder="/api/assets, /api/auth/login, superadmin-service, etc." />
-                    </div>
-                    <div class="col-12 col-md-6 col-xl-3">
+                    </div> -->
+                   <!--  <div class="col-12 col-md-6 col-xl-3">
                       <label class="form-label" for="logUser">Kullanıcı veya E-posta</label>
                       <input type="text" id="logUser" class="form-control" placeholder="kullanıcı adı veya e-posta" />
-                    </div>
+                    </div> -->
                     <div class="col-12 col-md-6 col-xl-2 d-flex align-items-end gap-2">
-                      <button class="btn btn-primary flex-grow-1" type="button">Filtrele</button>
-                      <button class="btn btn-outline-secondary" type="button">Temizle</button>
+                      <button class="btn btn-primary flex-grow-1" type="button" id="logFilterBtn">Filtrele</button>
+<button class="btn btn-outline-secondary" type="button" id="logClearBtn">Temizle</button>
+
                     </div>
                   </div>
                 </div>
               </div>
               <!-- / Filters Card -->
 
-              <!-- KPI Cards Row -->
-              <div class="row mb-4 g-3">
-                <div class="col-12 col-md-6 col-xl-3">
-                  <div class="card h-100">
-                    <div class="card-body d-flex align-items-center">
-                      <div class="avatar me-3">
-                        <span class="avatar-initial rounded bg-label-primary"><i class="feather icon-activity"></i></span>
-                      </div>
-                      <div>
-                        <h4 class="mb-1">12.450</h4>
-                        <p class="mb-0 text-muted">Seçili tarih aralığındaki tüm loglar</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-6 col-xl-3">
-                  <div class="card h-100">
-                    <div class="card-body d-flex align-items-center">
-                      <div class="avatar me-3">
-                        <span class="avatar-initial rounded bg-label-danger"><i class="feather icon-alert-triangle"></i></span>
-                      </div>
-                      <div>
-                        <h4 class="mb-1">320</h4>
-                        <p class="mb-0 text-muted">Hata seviyesindeki loglar</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-6 col-xl-3">
-                  <div class="card h-100">
-                    <div class="card-body d-flex align-items-center">
-                      <div class="avatar me-3">
-                        <span class="avatar-initial rounded bg-label-warning"><i class="feather icon-alert-circle"></i></span>
-                      </div>
-                      <div>
-                        <h4 class="mb-1">740</h4>
-                        <p class="mb-0 text-muted">Uyarı seviyesindeki loglar</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-6 col-xl-3">
-                  <div class="card h-100">
-                    <div class="card-body d-flex align-items-center">
-                      <div class="avatar me-3">
-                        <span class="avatar-initial rounded bg-label-danger"><i class="feather icon-zap"></i></span>
-                      </div>
-                      <div>
-                        <h4 class="mb-1">12</h4>
-                        <p class="mb-0 text-muted">Kritik olaylar</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- / KPI Cards Row -->
+              
 
               <!-- Logs Table Card -->
               <div class="card">
@@ -250,86 +246,9 @@
                         <th class="text-nowrap text-center">İşlemler</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr data-log-id="log-001">
-                        <td>2025-03-12 14:32:10</td>
-                        <td><span class="badge badge-light-danger">ERROR</span></td>
-                        <td>Urla Belediyesi</td>
-                        <td>ahmet.yilmaz@urla.bel.tr</td>
-                        <td>POST /api/assets</td>
-                        <td>Duplicate key value violates unique constraint 'assets_pkey'</td>
-                        <td class="text-center">
-                          <button class="btn btn-sm btn-icon btn-text-secondary" data-bs-toggle="modal" data-bs-target="#logDetailModal">
-                            <i class="feather icon-eye"></i>
-                          </button>
-                          <button class="btn btn-sm btn-icon btn-text-secondary" type="button">
-                            <i class="feather icon-copy"></i>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr data-log-id="log-002">
-                        <td>2025-03-12 13:18:44</td>
-                        <td><span class="badge badge-light-warning">WARNING</span></td>
-                        <td>Konak Belediyesi</td>
-                        <td>zeynep.kaya@konak.bel.tr</td>
-                        <td>GET /api/auth/login</td>
-                        <td>Multiple failed login attempts detected for user zeynep.kaya</td>
-                        <td class="text-center">
-                          <button class="btn btn-sm btn-icon btn-text-secondary" data-bs-toggle="modal" data-bs-target="#logDetailModal">
-                            <i class="feather icon-eye"></i>
-                          </button>
-                          <button class="btn btn-sm btn-icon btn-text-secondary" type="button">
-                            <i class="feather icon-copy"></i>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr data-log-id="log-003">
-                        <td>2025-03-12 12:02:05</td>
-                        <td><span class="badge badge-light-primary">INFO</span></td>
-                        <td>Yenişehir Belediyesi</td>
-                        <td>mehmet.demir@yenisehir.bel.tr</td>
-                        <td>GET /api/assets</td>
-                        <td>Assets list retrieved successfully</td>
-                        <td class="text-center">
-                          <button class="btn btn-sm btn-icon btn-text-secondary" data-bs-toggle="modal" data-bs-target="#logDetailModal">
-                            <i class="feather icon-eye"></i>
-                          </button>
-                          <button class="btn btn-sm btn-icon btn-text-secondary" type="button">
-                            <i class="feather icon-copy"></i>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr data-log-id="log-004">
-                        <td>2025-03-12 11:44:31</td>
-                        <td><span class="badge badge-danger">CRITICAL</span></td>
-                        <td>Urla Belediyesi</td>
-                        <td>system@envanter360.com</td>
-                        <td>POST /api/superadmin/sync</td>
-                        <td>Database connection lost while syncing municipality data</td>
-                        <td class="text-center">
-                          <button class="btn btn-sm btn-icon btn-text-secondary" data-bs-toggle="modal" data-bs-target="#logDetailModal">
-                            <i class="feather icon-eye"></i>
-                          </button>
-                          <button class="btn btn-sm btn-icon btn-text-secondary" type="button">
-                            <i class="feather icon-copy"></i>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr data-log-id="log-005">
-                        <td>2025-03-12 10:15:22</td>
-                        <td><span class="badge badge-light-warning">WARNING</span></td>
-                        <td>Konak Belediyesi</td>
-                        <td>fatma.oz@konak.bel.tr</td>
-                        <td>PUT /api/assets/3821</td>
-                        <td>Asset update retried due to optimistic lock failure...</td>
-                        <td class="text-center">
-                          <button class="btn btn-sm btn-icon btn-text-secondary" data-bs-toggle="modal" data-bs-target="#logDetailModal">
-                            <i class="feather icon-eye"></i>
-                          </button>
-                          <button class="btn btn-sm btn-icon btn-text-secondary" type="button">
-                            <i class="feather icon-copy"></i>
-                          </button>
-                        </td>
+                   <tbody data-role="logs-table-body">
+                      <tr>
+                        <td colspan="7" class="text-center text-muted">Log verileri yükleniyor...</td>
                       </tr>
                     </tbody>
                   </table>
@@ -441,6 +360,20 @@
     </div>
     <!-- / Log Detail Modal -->
 
-    <!-- Include Vuexy core JS and vendor JS here -->
-  </body>
+</body>
+ <!-- Core JS -->
+    
+    <script src="../admin/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../admin/assets/vendor/libs/popper/popper.js"></script>
+    <script src="../admin/assets/vendor/js/bootstrap.js"></script>
+    <script src="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../admin/assets/vendor/libs/node-waves/node-waves.js"></script>
+    <script src="../admin/assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="../admin/assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="../admin/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="../admin/assets/vendor/js/menu.js"></script>
+    <script src="../admin/assets/js/main.js"></script>
+    <script src="../admin/assets/js/app/super-admin-logs.js"></script>  
+  
+
 </html>

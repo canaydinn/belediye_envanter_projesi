@@ -111,13 +111,14 @@
                   <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
                       <div>
+                        <div id="create-user-feedback" class="alert d-none" role="alert"></div>
                         <h5 class="mb-1">Kullanıcı Bilgileri</h5>
                         <small class="text-muted">Ad, kullanıcı adı ve iletişim bilgilerini doldurun.</small>
                       </div>
                       <span class="badge bg-label-primary">Zorunlu alanlar *</span>
                     </div>
                     <div class="card-body">
-                      <form class="row g-3">
+                      <form id="create-user-form"  class="row g-3">
                         <div class="col-md-6">
                           <label class="form-label" for="full-name">Ad Soyad *</label>
                           <input type="text" class="form-control" id="full-name" placeholder="Örn: Ahmet Yılmaz" required />
@@ -150,10 +151,10 @@
                           <label class="form-label" for="role">Rol *</label>
                           <select id="role" class="form-select" required>
                             <option value="" disabled selected>Rol seçin</option>
-                            <option value="superadmin">Superadmin</option>
-                            <option value="manager">Belediye Yöneticisi</option>
-                            <option value="unit">Birim Sorumlusu</option>
-                            <option value="staff">Personel</option>
+                            <option value="2">Taşınır Kayıt</option>
+                            <option value="3">Taşınır Kontrol</option>
+                            <option value="4">Birim Sorumlusu</option>
+                            <option value="5">Kullanıcı</option>
                           </select>
                         </div>
                         <div class="col-md-6">
@@ -226,8 +227,10 @@
                             <label class="form-check-label" for="send-welcome">Hoş geldin e-postası gönder</label>
                           </div>
                         </div>
+                      
+
                         <div class="col-md-6">
-                           <button class="btn btn-primary" type="button"><i class="ti ti-send me-1"></i>Kaydet ve Bilgilendir</button>
+                           <button id="submit-create-user"  class="btn btn-primary" type="submit"><i class="ti ti-send me-1"></i>Kaydet ve Bilgilendir</button>
 
                         </div>
                       </div>
@@ -253,6 +256,211 @@
       </div>
     </div>
   </body>
+  <script>
+    (() => {
+      const municipalitySelect = document.getElementById('municipality');
+      if (!municipalitySelect) return;
+
+      const setOptions = (options = []) => {
+        municipalitySelect.innerHTML = '';
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Seçiniz';
+        municipalitySelect.appendChild(defaultOption);
+
+        options.forEach(({ id, name }) => {
+          const option = document.createElement('option');
+          option.value = id;
+          option.textContent = name;
+          municipalitySelect.appendChild(option);
+        });
+
+        if (options.length === 0) {
+          const emptyOption = document.createElement('option');
+          emptyOption.disabled = true;
+          emptyOption.textContent = 'Kayıtlı belediye bulunamadı';
+          municipalitySelect.appendChild(emptyOption);
+        }
+      };
+
+      const showError = message => {
+        municipalitySelect.innerHTML = '';
+        const errorOption = document.createElement('option');
+        errorOption.disabled = true;
+        errorOption.selected = true;
+        errorOption.textContent = message || 'Belediyeler yüklenemedi';
+        municipalitySelect.appendChild(errorOption);
+      };
+
+      const loadMunicipalities = async () => {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch('http://localhost:4000/api/superadmin/municipalities', {
+            headers: token
+              ? {
+                  Authorization: `Bearer ${token}`,
+                }
+              : {},
+          });
+
+          if (!response.ok) {
+            throw new Error('API isteği başarısız');
+          }
+
+          const data = await response.json();
+          const municipalities = Array.isArray(data)
+            ? data.filter(item => item?.is_active !== false)
+            : [];
+
+          setOptions(municipalities);
+        } catch (err) {
+          console.error('Belediyeler yüklenirken hata oluştu:', err);
+          showError('Belediyeler yüklenemedi');
+        }
+      };
+
+      loadMunicipalities();
+    })();
+  </script>
+  <script>
+    (() => {
+      const form = document.getElementById('create-user-form');
+      const submitButton = document.getElementById('submit-create-user');
+      const feedback = document.getElementById('create-user-feedback');
+
+      const setFeedback = (type, message) => {
+        if (!feedback) return;
+        feedback.className = `alert alert-${type}`;
+        feedback.textContent = message;
+      };
+
+      const clearFeedback = () => {
+        if (!feedback) return;
+        feedback.classList.add('d-none');
+        feedback.textContent = '';
+      };
+
+      const disableSubmit = isDisabled => {
+        if (!submitButton) return;
+        submitButton.disabled = isDisabled;
+        submitButton.classList.toggle('disabled', isDisabled);
+      };
+
+      const showFeedback = (type, message) => {
+        if (!feedback) return;
+        setFeedback(type, message);
+        feedback.classList.remove('d-none');
+      };
+
+      const collectPayload = () => {
+        const fullName = document.getElementById('full-name')?.value.trim();
+        const username = document.getElementById('username')?.value.trim();
+        const email = document.getElementById('email')?.value.trim();
+        const phone = document.getElementById('phone')?.value.trim();
+        const municipalityValue = document.getElementById('municipality')?.value;
+        const roleValue = document.getElementById('role')?.value;
+        const password = document.getElementById('password')?.value;
+        const passwordConfirm = document.getElementById('password-confirm')?.value;
+        const isActive = document.getElementById('status')?.checked;
+        const emailVerified = document.getElementById('email-verified')?.checked;
+
+        return {
+          fullName,
+          username,
+          email,
+          phone,
+          municipalityValue,
+          roleValue,
+          password,
+          passwordConfirm,
+          isActive,
+          emailVerified,
+        };
+      };
+
+      const validatePayload = payload => {
+        const { password, passwordConfirm, roleValue, municipalityValue } = payload;
+
+        if (password && passwordConfirm && password !== passwordConfirm) {
+          throw new Error('Şifre ve şifre tekrar alanları eşleşmiyor');
+        }
+
+        const roleId = Number(roleValue);
+        if (!roleId || Number.isNaN(roleId)) {
+          throw new Error('Geçerli bir rol seçin');
+        }
+
+        let municipality_id = null;
+        if (municipalityValue) {
+          const parsed = Number(municipalityValue);
+          if (Number.isNaN(parsed)) {
+            throw new Error('Belediye seçimi geçerli değil');
+          }
+          municipality_id = parsed;
+        }
+
+        return {
+          ...payload,
+          role_id: roleId,
+          municipality_id,
+        };
+      };
+
+      const handleSubmit = async event => {
+        event.preventDefault();
+        clearFeedback();
+
+        if (!form || !submitButton) return;
+
+        try {
+          const collected = collectPayload();
+          const validated = validatePayload(collected);
+
+          const payload = {
+            username: validated.username,
+            email: validated.email,
+            password: validated.password,
+            full_name: validated.fullName,
+            role_id: validated.role_id,
+            municipality_id: validated.municipality_id,
+            phone: validated.phone || undefined,
+            is_active: validated.isActive,
+            email_verified: validated.emailVerified,
+          };
+
+          disableSubmit(true);
+          const token = localStorage.getItem('token');
+
+          const response = await fetch('http://localhost:4000/api/superadmin/users', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify(payload),
+          });
+
+          const result = await response.json().catch(() => ({}));
+
+          if (!response.ok) {
+            const message = result?.message || 'Kullanıcı kaydedilemedi';
+            throw new Error(message);
+          }
+
+          showFeedback('success', result?.message || 'Kullanıcı başarıyla oluşturuldu');
+          form.reset();
+        } catch (err) {
+          console.error('Kullanıcı oluşturma hatası:', err);
+          showFeedback('danger', err.message || 'Bir hata oluştu');
+        } finally {
+          disableSubmit(false);
+        }
+      };
+
+      submitButton?.addEventListener('click', handleSubmit);
+      form?.addEventListener('submit', handleSubmit);
+    })();
+  </script>
   <script>
     (() => {
       const municipalitySelect = document.getElementById('municipality');

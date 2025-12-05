@@ -1,6 +1,6 @@
 // api/src/controllers/superadmin.controller.js
 const knex = require('../config/knex');
-
+const bcrypt = require('bcryptjs');
 exports.listMunicipalities = async (req, res) => {
   try {
     const municipalities = await knex('municipalities')
@@ -297,18 +297,38 @@ exports.getDenemePlanMunicipalityCount = async (_req, res) => {
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
+// controllers/superadmin.controller.js içindeki listRecentLogs
 exports.listRecentLogs = async (req, res) => {
   try {
     const { limit = 20 } = req.query;
 
     const parsedLimit = Number(limit);
-    const effectiveLimit = Number.isNaN(parsedLimit) || parsedLimit <= 0
-      ? 20
-      : Math.min(parsedLimit, 100);
+    const effectiveLimit =
+      Number.isNaN(parsedLimit) || parsedLimit <= 0
+        ? 20
+        : Math.min(parsedLimit, 100);
 
-    const logs = await knex('logs')
-      .select('*')
-      .orderBy('created_at', 'desc')
+    const logs = await knex('logs as l')
+      .leftJoin('municipalities as m', 'l.municipality_id', 'm.id')
+      .leftJoin('users as u', 'l.user_id', 'u.id')
+      .select(
+        'l.id',
+        'l.level',
+        'l.module',
+        'l.action',
+        'l.message',
+        'l.context',
+        'l.ip_address',
+        'l.user_agent',
+        'l.created_at',
+        'm.name as municipality_name',
+        'u.email as user_email',
+
+        // HATA OLUŞTURAN SATIR DÜZELTİLDİ:
+        // 'u.name as user_name'
+        'u.username as user_name'   // ← Eğer full_name varsa 'u.full_name as user_name'
+      )
+      .orderBy('l.created_at', 'desc')
       .limit(effectiveLimit);
 
     return res.json(logs);
@@ -317,6 +337,8 @@ exports.listRecentLogs = async (req, res) => {
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
+
+
 exports.getMunicipalityCount = async (_req, res) => {
   try {
     const [result] = await knex('municipalities').count('id as count');
@@ -491,6 +513,144 @@ exports.deactivateMunicipality = async (req, res) => {
     return res.json(updated);
   } catch (err) {
     console.error('superadmin.deactivateMunicipality hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
+exports.createUser = async (req, res) => {
+  try {
+    const {
+      username: rawUsername,
+      email: rawEmail,
+      password,
+      full_name: rawFullName,
+      role_id,
+      municipality_id,
+      phone,
+      is_active,
+      email_verified,
+    } = req.body;
+
+    const username = rawUsername?.trim();
+    const email = rawEmail?.trim().toLowerCase();
+    const full_name = rawFullName?.trim();
+    const normalizedIsActive = is_active === undefined ? true : Boolean(is_active);
+
+    if (!username || !email || !password || !full_name || !role_id) {
+      return res
+        .status(400)
+        .json({ message: 'username, email, password, full_name ve role_id alanları zorunludur' });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({ message: 'Şifre en az 8 karakter olmalıdır' });
+    }
+
+    const role = await knex('roles').where({ id: role_id }).first();
+    if (!role) {
+      return res.status(400).json({ message: 'Geçerli bir rol bulunamadı' });
+    }
+
+    let municipality = null;
+    if (municipality_id) {
+      municipality = await knex('municipalities').where({ id: municipality_id }).first();
+      if (!municipality) {
+        return res.status(400).json({ message: 'Geçerli bir belediye bulunamadı' });
+      }
+    }
+
+    const existingUser = await knex('users')
+      .whereRaw('LOWER(username) = ?', [username.toLowerCase()])
+      .orWhereRaw('LOWER(email) = ?', [email])
+      .first();
+
+    if (existingUser) {
+      return res.status(400).json({ message: 'Bu kullanıcı adı veya e-posta zaten kullanılıyor' });
+    }
+
+    const password_hash = await bcrypt.hash(password, 10);
+
+    const [inserted] = await knex('users')
+      .insert({
+        username,
+        email,
+        full_name,
+        role_id,
+        municipality_id: municipality?.id || null,
+        phone: phone?.trim() || null,
+        password_hash,
+        is_active: normalizedIsActive,
+        email_verified_at: email_verified ? knex.fn.now() : null,
+        created_by: req.user?.id || null,
+        updated_by: req.user?.id || null,
+        created_at: knex.fn.now(),
+        updated_at: knex.fn.now(),
+      })
+      .returning([
+        'id',
+        'username',
+        'email',
+        'full_name',
+        'role_id',
+        'municipality_id',
+        'phone',
+        'is_active',
+        'email_verified_at',
+        'created_at',
+        'updated_at',
+      ]);
+
+    return res
+      .status(201)
+      .json({ message: 'Kullanıcı başarıyla oluşturuldu', user: inserted });
+  } catch (err) {
+    console.error('superadmin.createUser hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
+exports.listAllUsers = async (_req, res) => {
+  try {
+    const users = await knex('users as u')
+      .leftJoin('municipalities as m', 'u.municipality_id', 'm.id')
+      .leftJoin('roles as r', 'u.role_id', 'r.id')
+      .select(
+        'u.id',
+        'u.username',
+        'u.email',
+        'u.full_name',
+        'u.role_id',
+        'u.municipality_id',
+        'u.is_active',
+        'u.last_login_at',
+        'u.created_at',
+        'm.name as municipality_name',
+        'r.name as role_name'
+      )
+      .orderBy('u.created_at', 'desc');
+
+    return res.json(users);
+  } catch (err) {
+    console.error('superadmin.listAllUsers hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
+exports.getLogStats = async (_req, res) => {
+  try {
+    const [totalResult] = await knex('logs').count('id as count');
+    const [errorResult] = await knex('logs').where({ level: 'ERROR' }).count('id as count');
+    const [warningResult] = await knex('logs').where({ level: 'WARNING' }).count('id as count');
+    const [criticalResult] = await knex('logs').where({ level: 'CRITICAL' }).count('id as count');
+
+    return res.json({
+      total: Number(totalResult?.count) || 0,
+      error: Number(errorResult?.count) || 0,
+      warning: Number(warningResult?.count) || 0,
+      critical: Number(criticalResult?.count) || 0,
+    });
+  } catch (err) {
+    console.error('superadmin.getLogStats hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };

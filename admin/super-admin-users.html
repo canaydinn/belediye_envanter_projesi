@@ -126,7 +126,7 @@
                   </a>
                 </div>
                 <div class="card-body">
-                  <form class="row gy-3 gx-3 align-items-end">
+                  <form class="row gy-3 gx-3 align-items-end" id="user-filter-form">
                     <div class="col-12 col-md-4 col-lg-3">
                       <label class="form-label" for="filter-name">Ad / Soyad</label>
                       <input type="text" id="filter-name" name="filter-name" class="form-control" placeholder="Kullanıcı adı ile ara" />
@@ -148,10 +148,10 @@
                       <label class="form-label" for="filter-role">Rol</label>
                       <select id="filter-role" name="filter-role" class="form-select">
                         <option value="">Tümü</option>
-                        <option value="superadmin">Superadmin</option>
-                        <option value="manager">Belediye Yöneticisi</option>
-                        <option value="unit">Birim Sorumlusu</option>
-                        <option value="staff">Personel</option>
+                        <option value="2">Taşınır Kayıt Yetkilisi</option>
+                        <option value="3">Taşınır Kontrol Yetkilisi</option>
+                        <option value="4">Birim Sorumlusu</option>
+                        <option value="5">Kullanıcı</option>
                       </select>
                     </div>
                     <div class="col-12 col-md-4 col-lg-2">
@@ -178,7 +178,7 @@
                   <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                       <h5 class="mb-0">Kullanıcılar</h5>
-                      <span class="badge bg-label-primary">Toplam: 152</span>
+                      <span class="badge bg-label-primary" id="users-total">Toplam: 152</span>
                     </div>
                     <div class="table-responsive text-nowrap">
                       <table class="table table-hover table-striped mb-0">
@@ -195,76 +195,15 @@
                             <th>İşlemler</th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr data-user-id="1">
-                            <td>1</td>
-                            <td>Ahmet Yılmaz</td>
-                            <td>ahmet.yilmaz@urla.bel.tr</td>
-                            <td>Urla Belediyesi</td>
-                            <td><span class="badge bg-label-info">Belediye Yöneticisi</span></td>
-                            <td><span class="badge badge-light-success">Aktif</span></td>
-                            <td>12.09.2024 09:15</td>
-                            <td>05.03.2023</td>
-                            <td class="d-flex gap-1">
-                              <a href="superadmin-user-detail.html?id=1" class="btn btn-sm btn-outline-primary" title="Detay">Detay</a>
-                              <a href="superadmin-user-edit.html?id=1" class="btn btn-sm btn-outline-secondary" title="Düzenle">Düzenle</a>
-                              <a href="superadmin-user-reset-password.html?id=1" class="btn btn-sm btn-outline-warning" title="Şifre Sıfırla">Şifre Sıfırla</a>
-                              <button type="button" class="btn btn-sm btn-outline-danger" title="Pasif Yap">Pasif Yap</button>
-                            </td>
-                          </tr>
-                          <tr data-user-id="2">
-                            <td>2</td>
-                            <td>Zeynep Demir</td>
-                            <td>zeynep.demir@konak.bel.tr</td>
-                            <td>Konak Belediyesi</td>
-                            <td><span class="badge bg-label-primary">Birim Sorumlusu</span></td>
-                            <td><span class="badge badge-light-success">Aktif</span></td>
-                            <td>10.09.2024 15:42</td>
-                            <td>21.06.2023</td>
-                            <td class="d-flex gap-1">
-                              <a href="superadmin-user-detail.html?id=2" class="btn btn-sm btn-outline-primary" title="Detay">Detay</a>
-                              <a href="superadmin-user-edit.html?id=2" class="btn btn-sm btn-outline-secondary" title="Düzenle">Düzenle</a>
-                              <a href="superadmin-user-reset-password.html?id=2" class="btn btn-sm btn-outline-warning" title="Şifre Sıfırla">Şifre Sıfırla</a>
-                              <button type="button" class="btn btn-sm btn-outline-danger" title="Pasif Yap">Pasif Yap</button>
-                            </td>
-                          </tr>
-                          <tr data-user-id="3">
-                            <td>3</td>
-                            <td>Mehmet Kaya</td>
-                            <td>mehmet.kaya@yenisehir.bel.tr</td>
-                            <td>Yenişehir Belediyesi</td>
-                            <td><span class="badge bg-label-secondary">Personel</span></td>
-                            <td><span class="badge badge-light-warning">Beklemede</span></td>
-                            <td>—</td>
-                            <td>02.08.2024</td>
-                            <td class="d-flex gap-1">
-                              <a href="superadmin-user-detail.html?id=3" class="btn btn-sm btn-outline-primary" title="Detay">Detay</a>
-                              <a href="superadmin-user-edit.html?id=3" class="btn btn-sm btn-outline-secondary" title="Düzenle">Düzenle</a>
-                              <a href="superadmin-user-reset-password.html?id=3" class="btn btn-sm btn-outline-warning" title="Şifre Sıfırla">Şifre Sıfırla</a>
-                              <button type="button" class="btn btn-sm btn-outline-success" title="Aktif Yap">Aktif Yap</button>
-                            </td>
-                          </tr>
-                          <tr data-user-id="4">
-                            <td>4</td>
-                            <td>Superadmin Hesabı</td>
-                            <td>superadmin@envanter360.com</td>
-                            <td>—</td>
-                            <td><span class="badge bg-label-danger">Superadmin</span></td>
-                            <td><span class="badge badge-light-success">Aktif</span></td>
-                            <td>11.09.2024 18:30</td>
-                            <td>15.01.2023</td>
-                            <td class="d-flex gap-1">
-                              <a href="superadmin-user-detail.html?id=4" class="btn btn-sm btn-outline-primary" title="Detay">Detay</a>
-                              <a href="superadmin-user-edit.html?id=4" class="btn btn-sm btn-outline-secondary" title="Düzenle">Düzenle</a>
-                              <a href="superadmin-user-reset-password.html?id=4" class="btn btn-sm btn-outline-warning" title="Şifre Sıfırla">Şifre Sıfırla</a>
-                              <button type="button" class="btn btn-sm btn-outline-secondary" title="Pasif Yap">Pasif Yap</button>
-                            </td>
+                         <tbody id="users-table-body">
+                          <tr>
+                            <td colspan="9" class="text-center text-muted py-4">Kullanıcılar yükleniyor...</td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                     <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-center">
-                      <small class="text-muted mb-2 mb-md-0">Gösterilen: 1–10 / 152</small>
+                      <small class="text-muted mb-2 mb-md-0" id="users-pagination-info">Gösterilen: 1–10 / 152</small>
                       <nav aria-label="Kullanıcılar sayfalandırma">
                         <ul class="pagination pagination-sm mb-0">
                           <li class="page-item disabled"><a class="page-link" href="javascript:void(0);" aria-label="Önceki"><i class="ti ti-chevron-left"></i></a></li>
@@ -285,22 +224,28 @@
                       <h6 class="mb-0">Rol Dağılımı</h6>
                       <small class="text-muted">Kullanıcı rollerinin genel dağılımı</small>
                     </div>
-                    <ul class="list-group list-group-flush">
+                    <!-- <ul class="list-group list-group-flush">
                       <li class="list-group-item d-flex justify-content-between align-items-center">Superadmin <span class="badge bg-label-danger">2 kullanıcı</span></li>
                       <li class="list-group-item d-flex justify-content-between align-items-center">Belediye Yöneticisi <span class="badge bg-label-info">12 kullanıcı</span></li>
                       <li class="list-group-item d-flex justify-content-between align-items-center">Birim Sorumlusu <span class="badge bg-label-primary">35 kullanıcı</span></li>
                       <li class="list-group-item d-flex justify-content-between align-items-center">Personel <span class="badge bg-label-secondary">103 kullanıcı</span></li>
-                    </ul>
+                    </ul> -->
+                    <ul class="list-group list-group-flush" id="role-distribution-list">
+                      <li class="list-group-item text-muted">Veriler yükleniyor...</li>
+                      </ul>
                   </div>
                   <div class="card">
                     <div class="card-header">
                       <h6 class="mb-0">Durum Dağılımı</h6>
                       <small class="text-muted">Aktif, pasif ve bekleyen kullanıcılar</small>
                     </div>
-                    <ul class="list-group list-group-flush">
+                    <!-- <ul class="list-group list-group-flush">
                       <li class="list-group-item d-flex justify-content-between align-items-center">Aktif <span class="badge badge-light-success">140</span></li>
                       <li class="list-group-item d-flex justify-content-between align-items-center">Pasif <span class="badge badge-light-secondary">8</span></li>
                       <li class="list-group-item d-flex justify-content-between align-items-center">Beklemede <span class="badge badge-light-warning">4</span></li>
+                    </ul> -->
+                     <ul class="list-group list-group-flush" id="status-distribution-list">
+                      <li class="list-group-item text-muted">Veriler yükleniyor...</li>
                     </ul>
                   </div>
                 </div>
@@ -328,4 +273,283 @@
 
     <!-- Include Vuexy core JS and vendor JS here -->
   </body>
+   <script>
+      (() => {
+        const API_URL = 'http://localhost:4000/api/superadmin/users/all';
+        const tableBody = document.getElementById('users-table-body');
+        const totalBadge = document.getElementById('users-total');
+        const paginationInfo = document.getElementById('users-pagination-info');
+        const roleDistributionList = document.getElementById('role-distribution-list');
+        const statusDistributionList = document.getElementById('status-distribution-list');
+
+        const setTableMessage = (message) => {
+          tableBody.innerHTML = `
+            <tr>
+              <td colspan="9" class="text-center text-muted py-4">${message}</td>
+            </tr>
+          `;
+        };
+
+        const formatDate = (value) => {
+          if (!value) return '—';
+          const date = new Date(value);
+          return date.toLocaleDateString('tr-TR');
+        };
+
+        const formatDateTime = (value) => {
+          if (!value) return '—';
+          const date = new Date(value);
+          return date.toLocaleString('tr-TR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+        };
+
+        const getRoleBadgeClass = (roleName = '') => {
+          const normalized = roleName.toLowerCase();
+
+          if (normalized.includes('superadmin')) return 'badge bg-label-danger';
+          if (normalized.includes('yönetici') || normalized.includes('manager')) return 'badge bg-label-info';
+          if (normalized.includes('birim')) return 'badge bg-label-primary';
+          if (normalized.includes('personel') || normalized.includes('staff')) return 'badge bg-label-secondary';
+
+          return 'badge bg-label-secondary';
+        };
+
+        const renderRoleDistribution = (users) => {
+          roleDistributionList.innerHTML = '';
+
+          const roleCounts = users.reduce((acc, user) => {
+            const roleName = user.role_name || 'Rol belirtilmedi';
+            acc[roleName] = (acc[roleName] || 0) + 1;
+            return acc;
+          }, {});
+
+          if (Object.keys(roleCounts).length === 0) {
+            roleDistributionList.innerHTML = '<li class="list-group-item text-muted">Rol bilgisi bulunamadı</li>';
+            return;
+          }
+
+          Object.entries(roleCounts).forEach(([roleName, count]) => {
+            const item = document.createElement('li');
+            item.className = 'list-group-item d-flex justify-content-between align-items-center';
+            item.innerHTML = `${roleName} <span class="${getRoleBadgeClass(roleName)}">${count} kullanıcı</span>`;
+            roleDistributionList.appendChild(item);
+          });
+        };
+
+        const renderStatusDistribution = (users) => {
+          statusDistributionList.innerHTML = '';
+
+          const statusCounts = users.reduce(
+            (acc, user) => {
+              const statusKey = user.is_active === true ? 'Aktif' : user.is_active === false ? 'Pasif' : 'Beklemede';
+              acc[statusKey] = (acc[statusKey] || 0) + 1;
+              return acc;
+            },
+            {}
+          );
+
+          if (Object.keys(statusCounts).length === 0) {
+            statusDistributionList.innerHTML = '<li class="list-group-item text-muted">Durum bilgisi bulunamadı</li>';
+            return;
+          }
+
+          const badgeClasses = {
+            Aktif: 'badge badge-light-success',
+            Pasif: 'badge badge-light-secondary',
+            Beklemede: 'badge badge-light-warning',
+          };
+
+          Object.entries(statusCounts).forEach(([status, count]) => {
+            const item = document.createElement('li');
+            item.className = 'list-group-item d-flex justify-content-between align-items-center';
+            const badgeClass = badgeClasses[status] || 'badge bg-label-secondary';
+            item.innerHTML = `${status} <span class="${badgeClass}">${count}</span>`;
+            statusDistributionList.appendChild(item);
+          });
+        };
+
+        const renderUsers = (users) => {
+          if (!Array.isArray(users) || users.length === 0) {
+            totalBadge.textContent = 'Toplam: 0';
+            paginationInfo.textContent = 'Gösterilen: 0 / 0';
+            setTableMessage('Kullanıcı bulunamadı');
+            renderRoleDistribution([]);
+            renderStatusDistribution([]);
+            return;
+          }
+
+          tableBody.innerHTML = '';
+
+          users.forEach((user) => {
+            const row = document.createElement('tr');
+            row.dataset.userId = user.id;
+
+            const statusBadge = user.is_active === false ? 'badge badge-light-secondary' : 'badge badge-light-success';
+            const statusLabel = user.is_active === false ? 'Pasif' : 'Aktif';
+            const roleName = user.role_name || 'Rol belirtilmedi';
+
+            row.innerHTML = `
+              <td>${user.id ?? '—'}</td>
+              <td>${user.full_name || '—'}</td>
+              <td>${user.email || '—'}</td>
+              <td>${user.municipality_name || '—'}</td>
+              <td><span class="${getRoleBadgeClass(roleName)}">${roleName}</span></td>
+              <td><span class="${statusBadge}">${statusLabel}</span></td>
+              <td>${formatDateTime(user.last_login_at)}</td>
+              <td>${formatDate(user.created_at)}</td>
+              <td class="d-flex gap-1">
+                <a href="superadmin-user-detail.html?id=${user.id}" class="btn btn-sm btn-outline-primary" title="Detay">Detay</a>
+                <a href="superadmin-user-edit.html?id=${user.id}" class="btn btn-sm btn-outline-secondary" title="Düzenle">Düzenle</a>
+                <a href="superadmin-user-reset-password.html?id=${user.id}" class="btn btn-sm btn-outline-warning" title="Şifre Sıfırla">Şifre Sıfırla</a>
+                <button type="button" class="btn btn-sm btn-outline-${user.is_active === false ? 'success' : 'danger'}" title="${user.is_active === false ? 'Aktif Yap' : 'Pasif Yap'}">${user.is_active === false ? 'Aktif Yap' : 'Pasif Yap'}</button>
+              </td>
+            `;
+
+            tableBody.appendChild(row);
+          });
+
+          totalBadge.textContent = `Toplam: ${users.length}`;
+          paginationInfo.textContent = `Gösterilen: 1–${users.length} / ${users.length}`;
+
+          renderRoleDistribution(users);
+          renderStatusDistribution(users);
+        };
+
+        const fetchUsers = async () => {
+          try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(API_URL, {
+              headers: token
+                ? {
+                    Authorization: `Bearer ${token}`,
+                  }
+                : {},
+            });
+
+            if (!response.ok) {
+              throw new Error('API isteği başarısız');
+            }
+
+            const data = await response.json();
+            const users = Array.isArray(data) ? data : [];
+
+            renderUsers(users);
+          } catch (error) {
+            console.error('Kullanıcılar yüklenirken hata oluştu:', error);
+            totalBadge.textContent = 'Toplam: 0';
+            paginationInfo.textContent = 'Gösterilen: 0 / 0';
+            setTableMessage('Kullanıcılar yüklenemedi');
+            roleDistributionList.innerHTML = '<li class="list-group-item text-muted">Rol dağılımı hesaplanamadı</li>';
+            statusDistributionList.innerHTML = '<li class="list-group-item text-muted">Durum dağılımı hesaplanamadı</li>';
+          }
+        };
+
+        fetchUsers();
+      })();
+    </script>
+ <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterForm = document.getElementById('user-filter-form');
+    const nameInput = document.getElementById('filter-name');
+    const emailInput = document.getElementById('filter-email');
+    const municipalitySelect = document.getElementById('filter-municipality');
+    const roleSelect = document.getElementById('filter-role');
+    const statusSelect = document.getElementById('filter-status');
+
+    const applyFilters = () => {
+      const nameValue = nameInput.value.trim().toLowerCase();
+      const emailValue = emailInput.value.trim().toLowerCase();
+      const municipalityValue = municipalitySelect.value.trim().toLowerCase();
+      const roleValue = roleSelect.value.trim();      // superadmin / manager / unit / staff
+      const statusValue = statusSelect.value.trim();  // active / passive / pending
+
+      const tableBody = document.getElementById('users-table-body');
+      const tableRows = tableBody.querySelectorAll('tr');
+
+      tableRows.forEach((row) => {
+        const nameCell = row.querySelector('td:nth-child(2)');
+        const emailCell = row.querySelector('td:nth-child(3)');
+        const municipalityCell = row.querySelector('td:nth-child(4)');
+        const roleCell = row.querySelector('td:nth-child(5)');
+        const statusCell = row.querySelector('td:nth-child(6)');
+
+        // Placeholder satırı (örneğin "Kullanıcılar yükleniyor...") ise doğrudan gösterelim
+        if (!nameCell || !emailCell || !municipalityCell || !roleCell || !statusCell) {
+          row.style.display = '';
+          return;
+        }
+
+        const nameText = nameCell.textContent.toLowerCase();
+        const emailText = emailCell.textContent.toLowerCase();
+        const municipalityText = municipalityCell.textContent.toLowerCase();
+        const roleText = roleCell.textContent.toLowerCase();
+        const statusText = statusCell.textContent.toLowerCase();
+
+        // Ad / Soyad filtresi (içeriyorsa geçsin)
+        const matchName =
+          !nameValue || nameText.includes(nameValue);
+
+        // E-posta filtresi
+        const matchEmail =
+          !emailValue || emailText.includes(emailValue);
+
+        // Belediye filtresi (select value: "urla", "konak", "yenisehir"
+        // tablo: "Urla Belediyesi" vb. => substring kontrolü iş görür)
+        const matchMunicipality =
+          !municipalityValue || municipalityText.includes(municipalityValue);
+
+        // Rol filtresi – select value'larını role yazılarındaki ifadelere map edelim
+        let matchRole = true;
+        if (roleValue) {
+          if (roleValue === 'superadmin') {
+            matchRole = roleText.includes('superadmin');
+          } else if (roleValue === 'manager') {
+            // "Belediye Yöneticisi" ifadesini yakalamak için
+            matchRole = roleText.includes('yönetici');
+          } else if (roleValue === 'unit') {
+            matchRole = roleText.includes('birim');
+          } else if (roleValue === 'staff') {
+            matchRole = roleText.includes('personel') || roleText.includes('staff');
+          }
+        }
+
+        // Durum filtresi – tablo: "Aktif", "Pasif" (ileride "Beklemede" de gelebilir)
+        let matchStatus = true;
+        if (statusValue) {
+          if (statusValue === 'active') {
+            matchStatus = statusText.includes('aktif');
+          } else if (statusValue === 'passive') {
+            matchStatus = statusText.includes('pasif');
+          } else if (statusValue === 'pending') {
+            matchStatus = statusText.includes('beklemede');
+          }
+        }
+
+        const visible =
+          matchName &&
+          matchEmail &&
+          matchMunicipality &&
+          matchRole &&
+          matchStatus;
+
+        row.style.display = visible ? '' : 'none';
+      });
+    };
+
+    filterForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      applyFilters();
+    });
+
+    filterForm?.addEventListener('reset', () => {
+      // reset ile inputlar temizlendikten sonra tüm satırları tekrar göster
+      setTimeout(applyFilters, 0);
+    });
+  });
+</script>
 </html>

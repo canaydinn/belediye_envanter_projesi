@@ -32,7 +32,9 @@ router.post('/municipalities/create', superadminController.createMunicipality);
 router.patch('/municipalities/:id/status', superadminController.updateMunicipalityStatus);
 router.patch('/municipalities/:id/deactivate', superadminController.deactivateMunicipality);
 router.put('/municipalities/:id', superadminController.updateMunicipality);
-
+router.post('/users', superadminController.createUser);
+router.get('/users/all', superadminController.listAllUsers);
+router.get('/logs/stats', superadminController.getLogStats);
 // ❗ En sona:
 router.get('/municipalities/:id', superadminController.getMunicipalityById);
 
