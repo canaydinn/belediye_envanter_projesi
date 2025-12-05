@@ -12,7 +12,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Admin Paneli | Envanter360</title>
+    <title>Süper Admin Paneli | Envantor</title>
 
     <meta name="description" content="Süperadmin paneli ile belediyeleri ve kullanıcıları yönetin." />
 
@@ -70,11 +70,6 @@
               </span>
               <span class="app-brand-text demo menu-text fw-bold">Envantor</span>
             </a>
-
-            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
-              <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
-              <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
-            </a>
           </div>
 
           <div class="menu-inner-shadow"></div>
@@ -83,7 +78,7 @@
             <li class="menu-item active">
               <a href="../admin/super-admin-dashboard.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div>Superadmin Dashboard</div>
+                <div>Süper Admin Paneli</div>
               </a>
             </li>
             <li class="menu-item">
@@ -100,7 +95,7 @@
             </li>
             <li class="menu-item ">
               <a href="../admin/super-admin-plans.html" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-layers"></i>
+                <i class="menu-icon tf-icons ti ti-layers-intersect"></i>
                 <div>Abonelik Planları</div>
               </a>
             </li>
@@ -132,7 +127,7 @@
               </div>
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <li class="nav-item lh-1 me-3">
-                  <span class="fw-semibold d-block">Admin</span>
+                  <span class="fw-semibold d-block">Süper Admin</span>
                   <small class="text-muted">Envantor</small>
                 </li>
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -184,15 +179,10 @@
               <!-- Page Header -->
               <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                 <div>
-                  <h2 class="fw-bold mb-1">Admin Paneli</h2>
+                  <h2 class="fw-bold mb-1">Süper Admin Paneli</h2>
                   <p class="text-muted mb-0">Belediyeleri, kullanıcıları ve sistem durumunu yönetin.</p>
                 </div>
-                <div class="d-flex align-items-center text-muted">
-                  <i class="ti ti-home me-2"></i>
-                  <span class="me-2">Admin</span>
-                  <i class="ti ti-chevron-right"></i>
-                  <span class="ms-2">Dashboard</span>
-                </div>
+              
               </div>
 
               <!-- KPI Cards Row -->
@@ -249,7 +239,16 @@
                       </div>
                       <div>
                         <small class="text-muted d-block">Bekleyen Onay</small>
-                        <h3 class="mb-1">3</h3>
+                        <h3 class="mb-1">
+                          <a
+                            class="text-heading"
+                            href="../admin/super-admin-municipalities.html"
+                            data-role="municipality-pending-count"
+                            aria-live="polite"
+                            aria-label="Onay bekleyen belediye sayısı">
+                            0
+                          </a>
+                        </h3>
                         <p class="mb-0 text-muted">Onay bekleyen yeni başvurular</p>
                       </div>
                     </div>
@@ -263,7 +262,16 @@
                       </div>
                       <div>
                         <small class="text-muted d-block">Toplam Kullanıcı</small>
-                        <h3 class="mb-1">152</h3>
+                        <h3 class="mb-1">
+                          <a
+                            class="text-heading"
+                            href="../admin/super-admin-municipalities.html"
+                            data-role="total-user-count"
+                            aria-live="polite"
+                            aria-label="Toplam kullanıcı sayısı">
+                            0
+                          </a>
+                        </h3>
                         <p class="mb-0 text-muted">Tüm belediyelerdeki kullanıcılar</p>
                       </div>
                     </div>
@@ -280,7 +288,7 @@
                         <h5 class="mb-1">Belediye Genel Görünümü</h5>
                         <p class="mb-0 text-muted">Durum, plan ve kullanıcı sayısı genel bakışı.</p>
                       </div>
-                      <a href="/superadmin-municipalities.html" class="btn btn-sm btn-primary">Yeni Belediye Ekle</a>
+                      <a href="/admin/super-admin-create-municipality.html" class="btn btn-sm btn-primary">Yeni Belediye Ekle</a>
                     </div>
                     <div class="card-body">
                       <div class="row g-2 mb-3 align-items-end">
@@ -314,78 +322,9 @@
                               <th>İşlemler</th>
                             </tr>
                           </thead>
-                          <tbody>
-                            <tr data-municipality-id="1">
-                              <td>Konak Belediyesi</td>
-                              <td>İzmir / Konak</td>
-                              <td>42</td>
-                              <td><span class="badge bg-label-success">Aktif</span></td>
-                              <td><span class="badge bg-label-primary">Pro</span></td>
-                              <td>12.06.2024 09:30</td>
-                              <td class="d-flex gap-1 flex-wrap">
-                                <a href="/superadmin-municipalities.html?id=1" class="btn btn-sm btn-outline-primary">Detay</a>
-                                <a href="/superadmin-users.html?municipality_id=1" class="btn btn-sm btn-outline-info">Kullanıcılar</a>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Düzenle</button>
-                                <button type="button" class="btn btn-sm btn-outline-warning">Pasif Yap</button>
-                              </td>
-                            </tr>
-                            <tr data-municipality-id="2">
-                              <td>Nilüfer Belediyesi</td>
-                              <td>Bursa / Nilüfer</td>
-                              <td>28</td>
-                              <td><span class="badge bg-label-warning">Beklemede</span></td>
-                              <td><span class="badge bg-label-info">Standart</span></td>
-                              <td>11.06.2024 15:10</td>
-                              <td class="d-flex gap-1 flex-wrap">
-                                <a href="/superadmin-municipalities.html?id=2" class="btn btn-sm btn-outline-primary">Detay</a>
-                                <a href="/superadmin-users.html?municipality_id=2" class="btn btn-sm btn-outline-info">Kullanıcılar</a>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Düzenle</button>
-                                <button type="button" class="btn btn-sm btn-outline-success">Aktif Yap</button>
-                              </td>
-                            </tr>
-                            <tr data-municipality-id="3">
-                              <td>Urla Belediyesi</td>
-                              <td>İzmir / Urla</td>
-                              <td>18</td>
-                              <td><span class="badge bg-label-secondary">Pasif</span></td>
-                              <td><span class="badge bg-label-info">Standart</span></td>
-                              <td>05.06.2024 12:25</td>
-                              <td class="d-flex gap-1 flex-wrap">
-                                <a href="/superadmin-municipalities.html?id=3" class="btn btn-sm btn-outline-primary">Detay</a>
-                                <a href="/superadmin-users.html?municipality_id=3" class="btn btn-sm btn-outline-info">Kullanıcılar</a>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Düzenle</button>
-                                <button type="button" class="btn btn-sm btn-outline-success">Aktif Yap</button>
-                              </td>
-                            </tr>
-                            <tr data-municipality-id="4">
-                              <td>Çankaya Belediyesi</td>
-                              <td>Ankara / Çankaya</td>
-                              <td>36</td>
-                              <td><span class="badge bg-label-success">Aktif</span></td>
-                              <td><span class="badge bg-label-primary">Pro</span></td>
-                              <td>12.06.2024 08:40</td>
-                              <td class="d-flex gap-1 flex-wrap">
-                                <a href="/superadmin-municipalities.html?id=4" class="btn btn-sm btn-outline-primary">Detay</a>
-                                <a href="/superadmin-users.html?municipality_id=4" class="btn btn-sm btn-outline-info">Kullanıcılar</a>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Düzenle</button>
-                                <button type="button" class="btn btn-sm btn-outline-warning">Pasif Yap</button>
-                              </td>
-                            </tr>
-                            <tr data-municipality-id="5">
-                              <td>Yenişehir Belediyesi</td>
-                              <td>Mersin / Yenişehir</td>
-                              <td>12</td>
-                              <td><span class="badge bg-label-warning">Beklemede</span></td>
-                              <td><span class="badge bg-label-success">Deneme</span></td>
-                              <td>10.06.2024 10:05</td>
-                              <td class="d-flex gap-1 flex-wrap">
-                                <a href="/superadmin-municipalities.html?id=5" class="btn btn-sm btn-outline-primary">Detay</a>
-                                <a href="/superadmin-users.html?municipality_id=5" class="btn btn-sm btn-outline-info">Kullanıcılar</a>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Düzenle</button>
-                                <button type="button" class="btn btn-sm btn-outline-success">Aktif Yap</button>
-                              </td>
-                            </tr>
-                          </tbody>
+                           <tbody data-role="municipality-table-body" aria-live="polite">
+                            <tr>
+                              <td colspan="7" class="text-center text-muted">Veriler yükleniyor...</td>
                         </table>
                       </div>
                     </div>
@@ -401,13 +340,13 @@
                     <div class="card-body">
                       <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                          Standart <span class="badge bg-label-info">14 belediye</span>
+                             Standart <span class="badge bg-label-info" data-role="standard-plan-count">14 belediye</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                          Pro <span class="badge bg-label-primary">7 belediye</span>
+                             Pro <span class="badge bg-label-info" data-role="pro-plan-count">14 belediye</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                          Deneme <span class="badge bg-label-warning">3 belediye</span>
+                             Deneme <span class="badge bg-label-warning" data-role="deneme-plan-count">3 belediye</span>
                         </li>
                       </ul>
                     </div>
@@ -417,41 +356,8 @@
                       <h5 class="mb-0">Son Aktiviteler</h5>
                     </div>
                     <div class="card-body">
-                      <div class="list-group list-group-flush">
-                        <div class="list-group-item">
-                          <div class="d-flex">
-                            <div class="avatar flex-shrink-0 me-3">
-                              <span class="avatar-initial rounded-circle bg-label-primary"><i class="feather icon-user-plus"></i></span>
-                            </div>
-                            <div class="d-flex flex-column">
-                              <h6 class="mb-1">Urla Belediyesi yeni kullanıcı ekledi</h6>
-                              <small class="text-muted">5 dakika önce</small>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="list-group-item">
-                          <div class="d-flex">
-                            <div class="avatar flex-shrink-0 me-3">
-                              <span class="avatar-initial rounded-circle bg-label-success"><i class="feather icon-trending-up"></i></span>
-                            </div>
-                            <div class="d-flex flex-column">
-                              <h6 class="mb-1">Konak Belediyesi planını Pro'ya yükseltti</h6>
-                              <small class="text-muted">2 saat önce</small>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="list-group-item">
-                          <div class="d-flex">
-                            <div class="avatar flex-shrink-0 me-3">
-                              <span class="avatar-initial rounded-circle bg-label-warning"><i class="feather icon-alert-triangle"></i></span>
-                            </div>
-                            <div class="d-flex flex-column">
-                              <h6 class="mb-1">Yenişehir Belediyesi başvurusu beklemede</h6>
-                              <small class="text-muted">Dün</small>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <div class="list-group list-group-flush" data-role="recent-logs">
+                        <div class="list-group-item text-center text-muted">Son aktiviteler yükleniyor...</div>
                     </div>
                   </div>
                 </div>
@@ -462,8 +368,7 @@
             <!-- Footer -->
             <footer class="content-footer footer bg-footer-theme">
               <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-                <div class="mb-2 mb-md-0">© 2024 Envanter360</div>
-                <div class="d-none d-lg-inline-block">Süperadmin Paneli</div>
+                <div class="mb-2 mb-md-0">© 2025 Envantor</div>
               </div>
             </footer>
             <!-- / Footer -->

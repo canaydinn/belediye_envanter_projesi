@@ -4,21 +4,22 @@ exports.seed = async function (knex) {
    const now = new Date();
   const oneYearLater = new Date(now);
   oneYearLater.setFullYear(now.getFullYear() + 1);
-
+const planTypes = ['basic', 'standard', 'premium'];
+  const pickPlanType = () => planTypes[Math.floor(Math.random() * planTypes.length)];
   await knex("municipalities").insert([
     {
-      id: 1,
-      code: "URLA_BLD",
-      name: "Urla Belediyesi",
-      province: "İzmir",
-      district: "Urla",
-      tax_number: "1234567890",
-      address: "Urla Belediyesi, İzmir",
-      contact_email: "info@urla.bel.tr",
-      contact_phone: "0232 123 45 67",
-      contact_person: "Sistem Yöneticisi",
+      code: 'URLA_BLD',
+      name: 'Urla Belediyesi',
+      province: 'İzmir',
+      district: 'Urla',
+      tax_number: '1234567890',
+      address: 'Urla Belediyesi, İzmir',
+      contact_email: 'info@urla.bel.tr',
+      contact_phone: '0232 123 45 67',
+      contact_person: 'Sistem Yöneticisi',
       is_active: true,
-       status: "active",
+      status: "active",
+      plan_type: pickPlanType(),
       license_start_date: now,
       license_end_date: oneYearLater,
       quota_end_date: oneYearLater,
@@ -36,6 +37,7 @@ exports.seed = async function (knex) {
       contact_person: "Etimesgut Bilgi İşlem",
       is_active: true,
        status: "active",
+      plan_type: pickPlanType(),
       license_start_date: now,
       license_end_date: oneYearLater,
       quota_end_date: oneYearLater,
@@ -53,7 +55,7 @@ exports.seed = async function (knex) {
       contact_person: "Yenişehir Bilgi İşlem",
       is_active: true,
        status: "active",
-      license_start_date: now,
+      plan_type: pickPlanType(),
       license_end_date: oneYearLater,
       quota_end_date: oneYearLater,
     }

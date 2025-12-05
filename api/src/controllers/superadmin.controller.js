@@ -91,52 +91,128 @@ const updatePayload = {
     if (license_end_date !== undefined) updatePayload.license_end_date = license_end_date;
     if (quota_end_date !== undefined) updatePayload.quota_end_date = quota_end_date;
     const [updated] = await knex('municipalities')
-      .where({ id });
+      .where({ id })
+      .update(updatePayload)
+      .returning('*');
 
-    if (!updated) {
+    if (!updated || updated.length === 0) {
       return res.status(404).json({ message: 'Belediye bulunamadı' });
     }
 
-    return res.json(updated);
+    return res.json(updated[0]);
   } catch (err) {
     console.error('superadmin.updateMunicipalityStatus hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
+const MUNICIPALITY_CODE_PREFIX = 'BLD-';
+
+const generateMunicipalityCode = async () => {
+  const lastMunicipality = await knex('municipalities')
+    .where('code', 'like', `${MUNICIPALITY_CODE_PREFIX}%`)
+    .orderBy('id', 'desc')
+    .first();
+
+  const lastNumber = lastMunicipality?.code?.split('-')[1];
+  const nextNumber = lastNumber && /^\d+$/.test(lastNumber)
+    ? parseInt(lastNumber, 10) + 1
+    : 1;
+
+  return `${MUNICIPALITY_CODE_PREFIX}${String(nextNumber).padStart(3, '0')}`;
+};
+// Yeni belediye oluştur
 exports.createMunicipality = async (req, res) => {
   try {
-    const { name, email, phone, license_end_date, status = 'pending' } = req.body;
+    const {
+      name,
+      province,
+      district,
+      tax_number,
+      address,
+      contact_email,
+      contact_phone,
+      contact_person,
+      license_start_date,
+      license_end_date,
+      quota_end_date,
+      plan_type,
+      logo_url,
+      domain_url,
+      api_key,
+      max_users,
+      max_assets,
+      notes,
+      activation_token,
+    } = req.body;
 
-    if (!name || !email || !phone) {
+    // Basit validasyon
+    if (!name || !province || !district) {
       return res.status(400).json({
-        message: 'name, email ve phone alanları zorunludur',
+        message: 'name, province ve district alanları zorunludur',
       });
     }
 
+    
+    const code = await generateMunicipalityCode();
+
     const [inserted] = await knex('municipalities')
       .insert({
+        code,
         name,
-        email,
-        phone,
-        status,
-        license_end_date: license_end_date || null,
-        is_active: false,
+        province,
+        district,
+        tax_number: tax_number || null,
+        address: address || null,
+        contact_email: contact_email || null,
+        contact_phone: contact_phone || null,
+        contact_person: contact_person || null,
+        is_active: true,
+        status: 'active',
+        license_start_date: license_start_date ? new Date(license_start_date) : null,
+        license_end_date: license_end_date ? new Date(license_end_date) : null,
+        quota_end_date: quota_end_date ? new Date(quota_end_date) : null,
+        plan_type: plan_type || null,
+        logo_url: logo_url || null,
+        domain_url: domain_url || null,
+        api_key: api_key || null,
+        max_users: max_users ?? null,
+        max_assets: max_assets ?? null,
+        notes: notes || null,
+        activation_token: activation_token || null,
+        created_at: knex.fn.now(),
+        updated_at: knex.fn.now(),
       })
       .returning([
         'id',
+        'code',
         'name',
-        'email',
-        'phone',
-        'status',
-        'license_end_date',
+        'province',
+        'district',
+        'tax_number',
+        'address',
+        'contact_email',
+        'contact_phone',
+        'contact_person',
         'is_active',
+        'status',
+        'license_start_date',
+        'license_end_date',
+        'quota_end_date',
+        'plan_type',
+        'logo_url',
+        'domain_url',
+        'api_key',
+        'max_users',
+        'max_assets',
+        'notes',
+        'activation_token',
         'created_at',
         'updated_at',
       ]);
 
     return res.status(201).json(inserted);
   } catch (err) {
-    console.error('superadmin.createMunicipality hatası:', err);
+    console.error('municipalities.create hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
@@ -204,72 +280,39 @@ exports.listUsersByMunicipality = async (req, res) => {
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
-exports.listStandardPlanMunicipalities = async (req, res) => {
+exports.getStandardPlanMunicipalityCount = async (_req, res) => {
   try {
-    const municipalities = await knex('municipalities')
-      .select(
-        'id',
-        'name',
-        'email',
-        'phone',
-        'status',
-        'license_end_date',
-        'is_active',
-        'plan_type',
-        'created_at'
-      )
+    const [{ count }] = await knex('municipalities')
       .where({ plan_type: 'standard' })
-      .orderBy('created_at', 'desc');
+      .count('id as count');
 
-    return res.json(municipalities);
+    return res.json({ count: Number(count) || 0 });
   } catch (err) {
-    console.error('superadmin.listStandardPlanMunicipalities hatası:', err);
+    console.error('superadmin.getStandardPlanMunicipalityCount hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
-exports.listProPlanMunicipalities = async (req, res) => {
+exports.getProPlanMunicipalityCount = async (_req, res) => {
   try {
-    const municipalities = await knex('municipalities')
-      .select(
-        'id',
-        'name',
-        'email',
-        'phone',
-        'status',
-        'license_end_date',
-        'is_active',
-        'plan_type',
-        'created_at'
-      )
+    const [{ count }] = await knex('municipalities')
       .where({ plan_type: 'pro' })
-      .orderBy('created_at', 'desc');
+      .count('id as count');
 
-    return res.json(municipalities);
+    return res.json({ count: Number(count) || 0 });
   } catch (err) {
-    console.error('superadmin.listProPlanMunicipalities hatası:', err);
+    console.error('superadmin.getProPlanMunicipalityCount hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
-exports.listTrialPlanMunicipalities = async (req, res) => {
+exports.getDenemePlanMunicipalityCount = async (_req, res) => {
   try {
-    const municipalities = await knex('municipalities')
-      .select(
-        'id',
-        'name',
-        'email',
-        'phone',
-        'status',
-        'license_end_date',
-        'is_active',
-        'plan_type',
-        'created_at'
-      )
+    const [{ count }] = await knex('municipalities')
       .where({ plan_type: 'deneme' })
-      .orderBy('created_at', 'desc');
+      .count('id as count');
 
-    return res.json(municipalities);
+    return res.json({ count: Number(count) || 0 });
   } catch (err) {
-    console.error('superadmin.listTrialPlanMunicipalities hatası:', err);
+    console.error('superadmin.getDenemePlanMunicipalityCount hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
@@ -324,9 +367,21 @@ exports.getPendingMunicipalitiesCount = async (_req, res) => {
       .where({ status: 'pending' })
       .count('id as count');
 
-    return res.json({ count: Number(count) });
+    return res.json({ total_pending_municipalities: Number(count) });
   } catch (err) {
     console.error('superadmin.getPendingMunicipalitiesCount hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
+exports.getTotalCount = async (_req, res) => {
+  try {
+    const [{ count }] = await knex('users').count('id as count');
+
+    const totalUsers = Number(count) || 0;
+    return res.json({ totalUsers });
+  } catch (err) {
+    console.error('getTotalCount user hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
