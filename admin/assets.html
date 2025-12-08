@@ -142,12 +142,6 @@
                   <h4 class="fw-bold mb-1">Varlıklar</h4>
                   <p class="text-muted mb-0">Belediyenize ait tüm envanter varlıklarını görüntüleyin ve yönetin.</p>
                 </div>
-                <div class="d-none d-md-block">
-                  <ol class="breadcrumb breadcrumb-style1 m-0">
-                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Varlıklar</li>
-                  </ol>
-                </div>
               </div>
 
               <!-- Filters & Actions Card -->
@@ -157,12 +151,12 @@
                     <h5 class="card-title mb-0">Varlık Filtreleri</h5>
                   </div>
                   <div class="d-flex flex-wrap gap-2">
-                    <a href="assets-create.html" class="btn btn-primary btn-sm">
+                    <a href="create-asset.html" class="btn btn-primary btn-sm">
                       <i class="ti ti-plus me-1"></i>Yeni Varlık Ekle
                     </a>
-                    <a href="#" class="btn btn-outline-secondary btn-sm">
+                   <!--  <a href="#" class="btn btn-outline-secondary btn-sm">
                       <i class="ti ti-download me-1"></i>Dışa Aktar (Excel)
-                    </a>
+                    </a> -->
                     <a href="#" class="btn btn-outline-secondary btn-sm">
                       <i class="ti ti-printer me-1"></i>QR Etiket Yazdır
                     </a>
@@ -178,31 +172,21 @@
                       <label for="filterCategory" class="form-label">Kategori</label>
                       <select id="filterCategory" class="form-select">
                         <option>Tümü</option>
-                        <option>Büro Mobilyaları</option>
-                        <option>Bilgi Teknolojileri</option>
-                        <option>Araçlar</option>
-                        <option>Makine / Ekipman</option>
-                        <option>Diğer</option>
+                        
                       </select>
                     </div>
                     <div class="col-12 col-md-3">
                       <label for="filterDepartment" class="form-label">Birim</label>
                       <select id="filterDepartment" class="form-select">
                         <option>Tümü</option>
-                        <option>Mali Hizmetler</option>
-                        <option>Fen İşleri</option>
-                        <option>İnsan Kaynakları</option>
-                        <option>Temizlik İşleri</option>
+                        
                       </select>
                     </div>
                     <div class="col-12 col-md-3">
                       <label for="filterLocation" class="form-label">Lokasyon</label>
                       <select id="filterLocation" class="form-select">
                         <option>Tümü</option>
-                        <option>Merkez Bina</option>
-                        <option>Depo 1</option>
-                        <option>Depo 2</option>
-                        <option>Saha Ofisi</option>
+                      
                       </select>
                     </div>
                     <div class="col-12 col-md-3">
@@ -241,8 +225,7 @@
                     <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
                       <div>
                         <h5 class="card-title mb-0">Varlık Listesi</h5>
-                        <small class="text-muted">Gösterilen: 1–25 / 4.328</small>
-                      </div>
+                      <small class="text-muted" data-role="assets-table-summary">Varlıklar yükleniyor...</small>                      </div>
                       <div class="d-flex align-items-center gap-2">
                         <label for="pageSize" class="form-label mb-0 small text-muted">Sayfa Boyutu</label>
                         <select id="pageSize" class="form-select form-select-sm w-auto">
@@ -267,132 +250,9 @@
                             <th class="text-center">İşlemler</th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr data-asset-id="123">
-                            <td>VRL-000123</td>
-                            <td>Ofis Masası</td>
-                            <td>Büro Mobilyaları</td>
-                            <td>Mali Hizmetler</td>
-                            <td>Merkez Bina - 3. Kat</td>
-                            <td>Zeynep Demir</td>
-                            <td><span class="badge bg-label-success badge-sm">Aktif</span></td>
-                            <td>2025-03-10 14:22</td>
-                            <td class="text-center">
-                              <div class="d-inline-flex gap-1">
-                                <a href="asset-detail.html?id=123" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
-                                <a href="asset-edit.html?id=123" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
-                                <a href="asset-movement-create.html?asset_id=123" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
-                                <a href="asset-qr.html?id=123" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr data-asset-id="124">
-                            <td>VRL-000124</td>
-                            <td>Dizüstü Bilgisayar</td>
-                            <td>Bilgi Teknolojileri</td>
-                            <td>Bilgi Teknolojileri</td>
-                            <td>Merkez Bina - 2. Kat</td>
-                            <td>Burak Yılmaz</td>
-                            <td><span class="badge bg-label-success badge-sm">Aktif</span></td>
-                            <td>2025-03-11 09:15</td>
-                            <td class="text-center">
-                              <div class="d-inline-flex gap-1">
-                                <a href="asset-detail.html?id=124" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
-                                <a href="asset-edit.html?id=124" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
-                                <a href="asset-movement-create.html?asset_id=124" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
-                                <a href="asset-qr.html?id=124" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr data-asset-id="125">
-                            <td>VRL-000125</td>
-                            <td>Hizmet Aracı</td>
-                            <td>Araçlar</td>
-                            <td>Fen İşleri</td>
-                            <td>Depo 1</td>
-                            <td>Elif Koç</td>
-                            <td><span class="badge bg-label-warning badge-sm">Bakımda</span></td>
-                            <td>2025-03-09 17:40</td>
-                            <td class="text-center">
-                              <div class="d-inline-flex gap-1">
-                                <a href="asset-detail.html?id=125" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
-                                <a href="asset-edit.html?id=125" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
-                                <a href="asset-movement-create.html?asset_id=125" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
-                                <a href="asset-qr.html?id=125" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr data-asset-id="126">
-                            <td>VRL-000126</td>
-                            <td>Forklift</td>
-                            <td>Makine / Ekipman</td>
-                            <td>Lojistik</td>
-                            <td>Depo 2</td>
-                            <td>Mert Öz</td>
-                            <td><span class="badge bg-label-success badge-sm">Aktif</span></td>
-                            <td>2025-03-08 11:05</td>
-                            <td class="text-center">
-                              <div class="d-inline-flex gap-1">
-                                <a href="asset-detail.html?id=126" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
-                                <a href="asset-edit.html?id=126" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
-                                <a href="asset-movement-create.html?asset_id=126" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
-                                <a href="asset-qr.html?id=126" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr data-asset-id="127">
-                            <td>VRL-000127</td>
-                            <td>Arşiv Dolabı</td>
-                            <td>Büro Mobilyaları</td>
-                            <td>Mali Hizmetler</td>
-                            <td>Merkez Bina - 1. Kat</td>
-                            <td>Ayşe Şahin</td>
-                            <td><span class="badge bg-label-secondary badge-sm">Pasif</span></td>
-                            <td>2025-03-07 08:30</td>
-                            <td class="text-center">
-                              <div class="d-inline-flex gap-1">
-                                <a href="asset-detail.html?id=127" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
-                                <a href="asset-edit.html?id=127" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
-                                <a href="asset-movement-create.html?asset_id=127" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
-                                <a href="asset-qr.html?id=127" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr data-asset-id="128">
-                            <td>VRL-000128</td>
-                            <td>Yazıcı</td>
-                            <td>Bilgi Teknolojileri</td>
-                            <td>İnsan Kaynakları</td>
-                            <td>Merkez Bina - 4. Kat</td>
-                            <td>Selin Aksoy</td>
-                            <td><span class="badge bg-label-danger badge-sm">Hurda</span></td>
-                            <td>2025-03-06 15:12</td>
-                            <td class="text-center">
-                              <div class="d-inline-flex gap-1">
-                                <a href="asset-detail.html?id=128" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
-                                <a href="asset-edit.html?id=128" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
-                                <a href="asset-movement-create.html?asset_id=128" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
-                                <a href="asset-qr.html?id=128" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr data-asset-id="129">
-                            <td>VRL-000129</td>
-                            <td>Temizlik Otomatı</td>
-                            <td>Makine / Ekipman</td>
-                            <td>Temizlik İşleri</td>
-                            <td>Saha Ofisi</td>
-                            <td>Fatma Çelik</td>
-                            <td><span class="badge bg-label-warning badge-sm">Bakımda</span></td>
-                            <td>2025-03-05 12:47</td>
-                            <td class="text-center">
-                              <div class="d-inline-flex gap-1">
-                                <a href="asset-detail.html?id=129" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
-                                <a href="asset-edit.html?id=129" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
-                                <a href="asset-movement-create.html?asset_id=129" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
-                                <a href="asset-qr.html?id=129" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
-                              </div>
-                            </td>
+                        <tbody data-role="assets-table-body">
+                          <tr>
+                            <td colspan="9" class="text-center text-muted">Varlıklar yükleniyor...</td>
                           </tr>
                         </tbody>
                       </table>
@@ -424,19 +284,19 @@
                       <ul class="list-unstyled mb-0">
                         <li class="d-flex justify-content-between align-items-center mb-2">
                           <div><span class="badge bg-label-success me-2">&nbsp;</span>Aktif</div>
-                          <span class="fw-semibold">3.920</span>
+                          <span class="fw-semibold" data-status-count="active">0</span>
                         </li>
                         <li class="d-flex justify-content-between align-items-center mb-2">
                           <div><span class="badge bg-label-warning me-2">&nbsp;</span>Bakımda</div>
-                          <span class="fw-semibold">78</span>
+                          <span class="fw-semibold" data-status-count="in_maintenance">0</span>
                         </li>
                         <li class="d-flex justify-content-between align-items-center mb-2">
                           <div><span class="badge bg-label-danger me-2">&nbsp;</span>Hurda</div>
-                          <span class="fw-semibold">45</span>
+                          <span class="fw-semibold" data-status-count="disposed">0</span>
                         </li>
                         <li class="d-flex justify-content-between align-items-center">
                           <div><span class="badge bg-label-secondary me-2">&nbsp;</span>Pasif</div>
-                          <span class="fw-semibold">285</span>
+                          <span class="fw-semibold" data-status-count="lost">0</span>
                         </li>
                       </ul>
                       <!-- Placeholder for status distribution chart -->
@@ -458,28 +318,11 @@
                               <th>Birim</th>
                             </tr>
                           </thead>
-                          <tbody>
-                            <tr>
-                              <td>Dizüstü Bilgisayar</td>
-                              <td>2025-03-12</td>
-                              <td>Bilgi Teknolojileri</td>
-                            </tr>
-                            <tr>
-                              <td>Hizmet Aracı</td>
-                              <td>2025-03-11</td>
-                              <td>Fen İşleri</td>
-                            </tr>
-                            <tr>
-                              <td>Projeksiyon Cihazı</td>
-                              <td>2025-03-10</td>
-                              <td>Eğitim Birimi</td>
-                            </tr>
-                            <tr>
-                              <td>Ofis Sandalyesi</td>
-                              <td>2025-03-09</td>
-                              <td>Mali Hizmetler</td>
-                            </tr>
-                          </tbody>
+                          <tbody data-role="recent-assets-body">
+                              <tr>
+                                <td colspan="3" class="text-center text-muted">Son eklenen varlıklar yükleniyor...</td>
+                              </tr>
+                            </tbody>
                         </table>
                       </div>
                     </div>
@@ -502,4 +345,330 @@
 
     <!-- Include Vuexy core JS and vendor JS here -->
   </body>
+  <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const categorySelect = document.getElementById('filterCategory');
+        const departmentSelect = document.getElementById('filterDepartment');
+        const locationSelect = document.getElementById('filterLocation');
+        const selects = [categorySelect, departmentSelect, locationSelect];
+
+        const setSingleOption = (select, label) => {
+          if (!select) return;
+          select.innerHTML = '';
+          const option = document.createElement('option');
+          option.value = '';
+          option.textContent = label;
+          select.appendChild(option);
+        };
+
+        const setLoadingState = () => {
+          setSingleOption(categorySelect, 'Kategoriler yükleniyor...');
+          setSingleOption(departmentSelect, 'Birimler yükleniyor...');
+          setSingleOption(locationSelect, 'Lokasyonlar yükleniyor...');
+          selects.forEach((select) => select && (select.disabled = true));
+        };
+
+        const setErrorState = (message) => {
+          setSingleOption(categorySelect, message || 'Filtreler yüklenemedi');
+          setSingleOption(departmentSelect, message || 'Filtreler yüklenemedi');
+          setSingleOption(locationSelect, message || 'Filtreler yüklenemedi');
+          selects.forEach((select) => select && (select.disabled = true));
+        };
+
+        const populateSelect = (select, items, labelBuilder) => {
+          if (!select) return;
+          select.innerHTML = '';
+
+          const allOption = document.createElement('option');
+          allOption.value = '';
+          allOption.textContent = 'Tümü';
+          select.appendChild(allOption);
+
+          items.forEach((item) => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = labelBuilder(item);
+            select.appendChild(option);
+          });
+
+          select.disabled = false;
+        };
+
+        const loadFilters = async () => {
+          const token = localStorage.getItem('token');
+          if (!token) {
+            setErrorState('Lütfen giriş yapın');
+            return;
+          }
+
+          setLoadingState();
+
+          try {
+            const response = await fetch('http://localhost:4000/api/assets/filters', {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (!response.ok) {
+              throw new Error('Filtre verileri alınamadı');
+            }
+
+            const data = await response.json();
+            const categories = Array.isArray(data?.categories) ? data.categories : [];
+            const departments = Array.isArray(data?.departments) ? data.departments : [];
+            const locations = Array.isArray(data?.locations) ? data.locations : [];
+
+            populateSelect(categorySelect, categories, (item) =>
+              item.code ? `${item.name} (${item.code})` : item.name
+            );
+            populateSelect(departmentSelect, departments, (item) =>
+              item.code ? `${item.name} (${item.code})` : item.name
+            );
+            populateSelect(locationSelect, locations, (item) =>
+              item.code ? `${item.name} (${item.code})` : item.name
+            );
+          } catch (error) {
+            console.error('Filtre seçenekleri yüklenirken hata oluştu:', error);
+            setErrorState('Filtre verileri yüklenemedi');
+          }
+        };
+
+        loadFilters();
+      });
+    </script>
+     <script>
+      (function () {
+        const API_BASE_URL = 'http://localhost:4000/api';
+        const tableBody = document.querySelector('[data-role="assets-table-body"]');
+        const summary = document.querySelector('[data-role="assets-table-summary"]');
+
+        if (!tableBody) return;
+
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+          tableBody.innerHTML =
+            '<tr><td colspan="9" class="text-center text-muted">Oturum bulunamadı. Lütfen yeniden giriş yapın.</td></tr>';
+          if (summary) summary.textContent = 'Gösterilen: 0 / 0';
+          return;
+        }
+
+        const statusMap = {
+          active: { label: 'Aktif', className: 'badge bg-label-success badge-sm' },
+          maintenance: { label: 'Bakımda', className: 'badge bg-label-warning badge-sm' },
+          passive: { label: 'Pasif', className: 'badge bg-label-secondary badge-sm' },
+          scrap: { label: 'Hurda', className: 'badge bg-label-danger badge-sm' },
+        };
+
+        const formatDate = (value) => {
+          if (!value) return '-';
+          const date = new Date(value);
+          return Number.isNaN(date.getTime())
+            ? '-'
+            : date.toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'short' });
+        };
+
+        const renderStatus = (status) => {
+          const normalized = (status || '').toLowerCase();
+          const mapping = statusMap[normalized] || {
+            label: status || 'Bilinmiyor',
+            className: 'badge bg-label-secondary badge-sm',
+          };
+
+          return `<span class="${mapping.className}">${mapping.label}</span>`;
+        };
+
+        const buildRow = (asset) => {
+          const updatedAt = formatDate(asset?.updated_at || asset?.created_at);
+          const statusBadge = renderStatus(asset?.status);
+          const assetCode = asset?.asset_code || '-';
+          const assetName = asset?.name || '-';
+          const category = asset?.category_name || '-';
+          const department = asset?.department_name || '-';
+          const location = asset?.location_name || '-';
+          const assignedUser = asset?.assigned_user_name || '-';
+
+          return `
+            <tr data-asset-id="${asset.id}">
+              <td>${assetCode}</td>
+              <td>${assetName}</td>
+              <td>${category}</td>
+              <td>${department}</td>
+              <td>${location}</td>
+              <td>${assignedUser}</td>
+              <td>${statusBadge}</td>
+              <td>${updatedAt}</td>
+              <td class="text-center">
+                <div class="d-inline-flex gap-1">
+                  <a href="asset-detail.html?id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
+                  <a href="asset-edit.html?id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
+                  <a href="asset-movement-create.html?asset_id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
+                  <a href="asset-qr.html?id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
+                </div>
+              </td>
+            </tr>
+          `;
+        };
+
+        fetch(`${API_BASE_URL}/assets`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: 'include',
+        })
+          .then(async (response) => {
+            if (!response.ok) {
+              const errorText = await response.text();
+              throw new Error(errorText || `Varlık listesi isteği başarısız (status: ${response.status})`);
+            }
+
+            return response.json();
+          })
+          .then((assets) => {
+            if (!Array.isArray(assets) || !assets.length) {
+              tableBody.innerHTML =
+                '<tr><td colspan="9" class="text-center text-muted">Henüz varlık bulunmuyor.</td></tr>';
+              if (summary) summary.textContent = 'Gösterilen: 0 / 0';
+              return;
+            }
+
+            tableBody.innerHTML = assets.map((asset) => buildRow(asset)).join('');
+            if (summary) summary.textContent = `Gösterilen: ${assets.length} / ${assets.length}`;
+          })
+          .catch((error) => {
+            console.error('Varlıklar yüklenemedi:', error);
+            tableBody.innerHTML =
+              '<tr><td colspan="9" class="text-center text-danger">Varlık listesi yüklenirken hata oluştu.</td></tr>';
+            if (summary) summary.textContent = 'Gösterilen: 0 / 0';
+          });
+      })();
+    </script>
+     <script>
+      (async function loadStatusDistribution() {
+        const API_BASE_URL = 'http://localhost:4000/api';
+        const token = localStorage.getItem('token');
+
+        const statusElements = {
+          active: document.querySelector('[data-status-count="active"]'),
+          in_maintenance: document.querySelector('[data-status-count="in_maintenance"]'),
+          disposed: document.querySelector('[data-status-count="disposed"]'),
+          lost: document.querySelector('[data-status-count="lost"]'),
+        };
+
+        const setCount = (element, value) => {
+          if (!element) return;
+          const numericValue = Number(value ?? 0);
+          element.textContent = Number.isFinite(numericValue)
+            ? numericValue.toLocaleString('tr-TR')
+            : '0';
+        };
+
+        const applyDistribution = (distribution = {}) => {
+          setCount(statusElements.active, distribution.active);
+          setCount(statusElements.in_maintenance, distribution.in_maintenance);
+          setCount(statusElements.disposed, distribution.disposed);
+          setCount(statusElements.lost, distribution.lost);
+        };
+
+        if (!token) {
+          console.warn('Kullanıcı oturumu bulunamadı, durum dağılımı gösterilemiyor.');
+          applyDistribution();
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/assets/status-distribution`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            credentials: 'include',
+          });
+
+          const data = await response.json().catch(() => ({}));
+
+          if (!response.ok) {
+            throw new Error(data?.message || 'Durum dağılımı alınamadı');
+          }
+
+          applyDistribution(data.distribution);
+        } catch (error) {
+          console.error('Varlık durum dağılımı yüklenemedi:', error);
+          applyDistribution();
+        }
+      })();
+    </script>
+   <script>
+  (function () {
+    const tableBody = document.querySelector('[data-role="recent-assets-body"]');
+    const API_BASE_URL = 'http://localhost:4000/api';
+
+    if (!tableBody) return;
+
+    const token = localStorage.getItem('token');
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
+
+    const formatDate = (value) => {
+      if (!value) return '-';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return '-';
+      return date.toLocaleDateString('tr-TR');
+    };
+
+    const renderRows = (assets) => {
+      if (!assets?.length) {
+        tableBody.innerHTML =
+          '<tr><td colspan="3" class="text-center text-muted">Henüz varlık eklenmemiş.</td></tr>';
+        return;
+      }
+
+      const rows = assets
+        .map(
+          (asset) => `
+          <tr data-asset-id="${asset.id}">
+            <td>${asset.name || '-'}</td>
+            <td>${formatDate(asset.created_at)}</td>
+            <td>${asset.department_name || '-'}</td>
+          </tr>
+        `
+        )
+        .join('');
+
+      tableBody.innerHTML = rows;
+    };
+
+    const loadRecentAssets = async () => {
+      tableBody.innerHTML =
+        '<tr><td colspan="3" class="text-center text-muted">Son eklenen varlıklar yükleniyor...</td></tr>';
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/assets/recent-assets`, {
+          method: 'GET',
+          headers,
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text().catch(() => '');
+          throw new Error(errorText || `İstek başarısız (status: ${response.status})`);
+        }
+
+        const data = await response.json();
+        renderRows(data);
+      } catch (error) {
+        console.error('Son eklenen varlıklar alınamadı:', error);
+        tableBody.innerHTML =
+          '<tr><td colspan="3" class="text-center text-danger">Son eklenen varlıklar yüklenirken bir hata oluştu.</td></tr>';
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', loadRecentAssets);
+  })();
+</script>
+
 </html>

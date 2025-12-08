@@ -4,11 +4,12 @@ const knex = require('../config/knex');
  * GET /api/envanter
  * Aktif belediyeye ait tüm envanter kayıtlarını listeler.
  */
+// assets.controller.js
 exports.listAssets = async (req, res) => {
   try {
     const { municipality_id } = req.user;
 
-    const assets = await knex('envanter as e')
+    const assets = await knex('assets as e')
       .leftJoin('asset_categories as c', 'e.category_id', 'c.id')
       .leftJoin('departments as d', 'e.department_id', 'd.id')
       .leftJoin('locations as l', 'e.location_id', 'l.id')
@@ -48,8 +49,8 @@ exports.listAssets = async (req, res) => {
         'e.is_movable',
         'c.name as category_name',
         'd.name as department_name',
-        'l.name as location_name',
-        knex.raw("CONCAT(u.first_name, ' ', u.last_name) as assigned_user_name")
+        'l.name as location_name'
+        // 🔴 BURADAKİ CONCAT SATIRINI ŞİMDİLİK KALDIRDIK
       )
       .orderBy('e.id', 'asc');
 
@@ -59,6 +60,49 @@ exports.listAssets = async (req, res) => {
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
+/**
+ * GET /api/assets/status-distribution
+ * Aktif belediyedeki varlıkların durum dağılımını döner.
+ */
+exports.getStatusDistribution = async (req, res) => {
+  try {
+    const { municipality_id } = req.user;
+
+    if (!municipality_id) {
+      return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
+    }
+
+    const rows = await knex('assets')
+      .where({ municipality_id })
+      .select('status')
+      .count({ count: 'id' })
+      .groupBy('status');
+
+    const getCount = (statusKey) => {
+      const match = rows.find((row) => row.status === statusKey);
+      return Number(match?.count ?? match?.total ?? 0);
+    };
+
+    const distribution = {
+      active: getCount('active'),
+      in_maintenance: getCount('in_maintenance'),
+      disposed: getCount('disposed'),
+      lost: getCount('lost'),
+    };
+
+    const total = Object.values(distribution).reduce((sum, value) => sum + value, 0);
+
+    return res.json({
+      municipality_id,
+      distribution,
+      total,
+    });
+  } catch (error) {
+    console.error('assets.getStatusDistribution hatası:', error);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
 
 /**
  * GET /api/envanter/:id
@@ -69,7 +113,7 @@ exports.getAssetById = async (req, res) => {
     const { municipality_id } = req.user;
     const { id } = req.params;
 
-    const asset = await knex('envanter as e')
+    const asset = await knex('assets as e')
       .leftJoin('asset_categories as c', 'e.category_id', 'c.id')
       .leftJoin('departments as d', 'e.department_id', 'd.id')
       .leftJoin('locations as l', 'e.location_id', 'l.id')
@@ -360,3 +404,60 @@ exports.deleteAsset = async (req, res) => {
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
+// Varlık filtre alanları için kategori, birim ve lokasyon listelerini döndürür
+exports.getFilterOptions = async (req, res) => {
+  try {
+    const { municipality_id } = req.user || {};
+
+    const [categories, departments, locations] = await Promise.all([
+      knex('asset_categories')
+        .modify((qb) => {
+          if (municipality_id) {
+            qb.where('municipality_id', municipality_id);
+          }
+        })
+        .select('id', 'name', 'code'),
+      knex('departments')
+        .modify((qb) => {
+          if (municipality_id) {
+            qb.where('municipality_id', municipality_id);
+          }
+        })
+        .where({ is_active: true })
+        .select('id', 'name', 'code'),
+      knex('locations')
+        .modify((qb) => {
+          if (municipality_id) {
+            qb.where('municipality_id', municipality_id);
+          }
+        })
+        .where({ is_active: true })
+        .select('id', 'name', 'code'),
+    ]);
+
+    return res.json({ categories, departments, locations });
+  } catch (err) {
+    console.error('getFilterOptions hatası:', err);
+    return res.status(500).json({ message: 'Filtre verileri alınamadı' });
+  }
+};
+
+// GET /api/dashboard/recent-assets
+  // İlgili belediyeye ait son eklenen varlıkları döner
+  exports.getRecentAssets = async (req, res) => {
+    try {
+      const { municipality_id } = req.user;
+
+      const assets = await knex('assets as a')
+        .leftJoin('departments as d', 'a.department_id', 'd.id')
+        .where('a.municipality_id', municipality_id)
+        .select('a.id', 'a.name', 'a.asset_code', 'a.created_at', 'd.name as department_name')
+        .orderBy('a.created_at', 'desc')
+        .limit(5);
+
+      return res.json(assets);
+    } catch (err) {
+      console.error('dashboard.getRecentAssets hatası:', err);
+      return res.status(500).json({ message: 'Sunucu hatası' });
+    }
+  };

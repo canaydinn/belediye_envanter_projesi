@@ -127,3 +127,99 @@ exports.getRecentAssetMovements = async (req, res) => {
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 }
+
+// GET /api/dashboard/category-distribution
+// Varlık kategorilerinin belediye bazlı dağılım yüzdelerini döndürür
+exports.getCategoryDistribution = async (req, res) => {
+  try {
+    const municipalityId = req.user?.municipality_id;
+
+    if (!municipalityId) {
+      return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
+    }
+
+    const rows = await knex('assets as a')
+      .leftJoin('asset_categories as c', 'a.category_id', 'c.id')
+      .where('a.municipality_id', municipalityId)
+      .groupBy('a.category_id', 'c.name')
+      .select('a.category_id', 'c.name as category_name')
+      .count('a.id as total');
+
+    const totalAssets = rows.reduce((sum, row) => sum + Number(row.total), 0);
+
+    const distribution = rows.map((row) => {
+      const count = Number(row.total);
+      const percentage = totalAssets === 0 ? 0 : Number(((count / totalAssets) * 100).toFixed(2));
+
+      return {
+        category_id: row.category_id,
+        category_name: row.category_name || 'Diğer',
+        count,
+        percentage,
+      };
+    });
+
+    return res.json({
+      municipality_id: municipalityId,
+      total_assets: totalAssets,
+      distribution,
+    });
+  } catch (err) {
+    console.error('dashboard.getCategoryDistribution hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
+// GET /api/dashboard/upcoming-maintenance
+// İlgili belediyeye ait yaklaşan bakım isteklerini döner
+// dashboard.controller.js
+
+exports.getUpcomingMaintenance = async (req, res) => {
+  try {
+    const municipalityId = req.user?.municipality_id;
+
+    if (!municipalityId) {
+      return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
+    }
+
+    // Şimdilik municipality filtresi ve joinler olmadan, sadece log'ları çekelim
+    const logs = await knex('maintenance_logs as ml')
+      .select(
+        'ml.id',
+        'ml.maintenance_request_id',
+        'ml.log_date',
+        'ml.description as log_description',
+        'ml.created_by',
+        'ml.created_at',
+        'ml.updated_at'
+      )
+      .orderBy('ml.log_date', 'desc')
+      .limit(5);
+
+    const payload = logs.map((row) => {
+      const statusInfo = { state: 'planned', label: 'Planlandı' };
+
+      return {
+        id: row.id,
+        maintenance_request_id: row.maintenance_request_id,
+        log_date: row.log_date,
+        description: row.log_description,
+        asset_id: null,
+        asset_name: 'Bilinmeyen Varlık',
+        asset_code: null,
+        title: null,
+        due_date: row.log_date,
+        status: 'planned',
+        priority: 'medium',
+        status_state: statusInfo.state,
+        status_label: statusInfo.label,
+      };
+    });
+
+    return res.json(payload);
+  } catch (error) {
+    console.error('dashboard.getUpcomingMaintenance hatası:', error);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+

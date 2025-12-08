@@ -182,11 +182,7 @@
                   <h4 class="mb-1">Gösterge Paneli</h4>
                   <p class="text-muted mb-0">Belediyenizin envanter durumuna hızlı bakış.</p>
                 </div>
-                <div class="breadcrumb-wrapper">
-                  <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item active">Dashboard</li>
-                  </ol>
-                </div>
+               
               </div>
 
               <div class="row g-4">
@@ -401,44 +397,12 @@
                     <div class="card-body">
                       <div class="mb-3">
                         <!-- Placeholder for donut chart -->
-                        <div class="border rounded p-4 text-center text-muted">Grafik alanı (yakında)</div>
+                        <!-- <div class="border rounded p-4 text-center text-muted">Grafik alanı (yakında)</div> -->
                       </div>
-                      <ul class="list-unstyled mb-0">
-                        <li class="d-flex align-items-center mb-2">
-                          <span class="badge rounded-pill bg-label-primary me-3 p-2"><i class="ti ti-point-filled"></i></span>
-                          <div class="w-100 d-flex justify-content-between">
-                            <span>Büro Mobilyaları</span>
-                            <small class="text-muted">35%</small>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-2">
-                          <span class="badge rounded-pill bg-label-info me-3 p-2"><i class="ti ti-point-filled"></i></span>
-                          <div class="w-100 d-flex justify-content-between">
-                            <span>Bilgi Teknolojileri</span>
-                            <small class="text-muted">27%</small>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-2">
-                          <span class="badge rounded-pill bg-label-success me-3 p-2"><i class="ti ti-point-filled"></i></span>
-                          <div class="w-100 d-flex justify-content-between">
-                            <span>Araçlar</span>
-                            <small class="text-muted">18%</small>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-2">
-                          <span class="badge rounded-pill bg-label-warning me-3 p-2"><i class="ti ti-point-filled"></i></span>
-                          <div class="w-100 d-flex justify-content-between">
-                            <span>Makine / Ekipman</span>
-                            <small class="text-muted">12%</small>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center">
-                          <span class="badge rounded-pill bg-label-secondary me-3 p-2"><i class="ti ti-point-filled"></i></span>
-                          <div class="w-100 d-flex justify-content-between">
-                            <span>Diğer</span>
-                            <small class="text-muted">8%</small>
-                          </div>
-                        </li>
+                      <ul class="list-unstyled mb-0" data-role="category-distribution-list">
+                        <li class="d-flex align-items-center justify-content-center text-muted py-2">
+                          <small>Kategori dağılımı yükleniyor...</small>
+                          </li>
                       </ul>
                     </div>
                   </div>
@@ -459,21 +423,9 @@
                               <th>Durum</th>
                             </tr>
                           </thead>
-                          <tbody>
+                          <tbody data-role="upcoming-maintenance-body">
                             <tr>
-                              <td>Generator 3</td>
-                              <td>2025-03-15</td>
-                              <td><span class="badge badge-light-warning">Yaklaşıyor</span></td>
-                            </tr>
-                            <tr>
-                              <td>Bina Asansörü</td>
-                              <td>2025-03-10</td>
-                              <td><span class="badge badge-light-danger">Gecikti</span></td>
-                            </tr>
-                            <tr>
-                              <td>Klima Ünitesi</td>
-                              <td>2025-03-20</td>
-                              <td><span class="badge badge-light-info">Planlandı</span></td>
+                                <td colspan="3" class="text-center text-muted">Bakım kayıtları yükleniyor...</td>
                             </tr>
                           </tbody>
                         </table>
@@ -764,5 +716,178 @@
     document.addEventListener('DOMContentLoaded', loadRecentMovements);
   })();
 </script>
+<script>
+  (function () {
+    const listEl = document.querySelector('[data-role="category-distribution-list"]');
+    const API_BASE = 'http://localhost:4000/api';
+    const badgeColors = ['primary', 'info', 'success', 'warning', 'secondary', 'dark'];
 
+    if (!listEl) return;
+
+    const setMessage = (message, className = 'text-muted') => {
+      listEl.innerHTML = `<li class="d-flex align-items-center justify-content-center py-2"><small class="${className}">${message}</small></li>`;
+    };
+
+    const formatPercentage = (value) => {
+      if (!Number.isFinite(value)) return '-';
+      return `${value.toLocaleString('tr-TR', { maximumFractionDigits: 2 })}%`;
+    };
+
+    const renderCategories = (categories) => {
+      if (!categories?.length) {
+        setMessage('Kategori kaydı bulunamadı.');
+        return;
+      }
+
+      const items = categories
+        .map((category, index) => {
+          const color = badgeColors[index % badgeColors.length];
+          const percentageText = formatPercentage(category?.percentage);
+
+          return `
+            <li class="d-flex align-items-center ${index === categories.length - 1 ? '' : 'mb-2'}">
+              <span class="badge rounded-pill bg-label-${color} me-3 p-2">
+                <i class="ti ti-point-filled"></i>
+              </span>
+              <div class="w-100 d-flex justify-content-between">
+                <span>${category?.category_name || 'Belirtilmemiş'}</span>
+                <small class="text-muted">${percentageText}</small>
+              </div>
+            </li>
+          `;
+        })
+        .join('');
+
+      listEl.innerHTML = items;
+    };
+
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      setMessage('Oturum bulunamadı. Lütfen giriş yapın.', 'text-danger');
+      return;
+    }
+
+    setMessage('Kategori dağılımı yükleniyor...');
+
+    fetch(`${API_BASE}/dashboard/category-distribution`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: 'include',
+    })
+      .then(async (response) => {
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(data?.message || 'Kategori dağılımı alınamadı');
+        }
+
+        return data;
+      })
+      .then((data) => {
+        // BACKEND: { distribution: [...] }
+        renderCategories(data?.distribution || []);
+      })
+      .catch((error) => {
+        console.error('Kategori dağılımı yüklenirken hata:', error);
+        setMessage('Kategori dağılımı yüklenirken hata oluştu.', 'text-danger');
+      });
+  })();
+</script>
+<script>
+    (function () {
+      const tableBody = document.querySelector('[data-role="upcoming-maintenance-body"]');
+      const API_BASE = 'http://localhost:4000/api';
+
+      if (!tableBody) return;
+
+      const token = localStorage.getItem('token');
+
+      const statusBadgeMap = {
+        overdue: { className: 'badge badge-light-danger', label: 'Gecikti' },
+        approaching: { className: 'badge badge-light-warning', label: 'Yaklaşıyor' },
+        planned: { className: 'badge badge-light-info', label: 'Planlandı' },
+      };
+
+      const formatDate = (value) => {
+        if (!value) return '-';
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return '-';
+
+        return date.toLocaleDateString('tr-TR', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        });
+      };
+
+      const renderBadge = (state, fallbackLabel) => {
+        const config = statusBadgeMap[state] || statusBadgeMap.planned;
+        const label = fallbackLabel || config.label;
+        return `<span class="${config.className}">${label}</span>`;
+      };
+
+      const renderRows = (items) => {
+        if (!items?.length) {
+          tableBody.innerHTML =
+            '<tr><td colspan="3" class="text-center text-muted">Yaklaşan bakım kaydı bulunamadı.</td></tr>';
+          return;
+        }
+
+        const rows = items
+          .map((item) => {
+            const assetLabel = [item.asset_name, item.asset_code].filter(Boolean).join(' - ') || 'Bilinmeyen Varlık';
+            const dueDate = formatDate(item.due_date);
+            const badge = renderBadge(item.status_state, item.status_label);
+
+            return `
+              <tr data-maintenance-id="${item.id}">
+                <td>${assetLabel}</td>
+                <td>${dueDate}</td>
+                <td>${badge}</td>
+              </tr>
+            `;
+          })
+          .join('');
+
+        tableBody.innerHTML = rows;
+      };
+
+      const loadUpcomingMaintenance = async () => {
+        tableBody.innerHTML =
+          '<tr><td colspan="3" class="text-center text-muted">Bakım kayıtları yükleniyor...</td></tr>';
+
+        if (!token) {
+          tableBody.innerHTML =
+            '<tr><td colspan="3" class="text-center text-warning">Giriş yapmanız gerekiyor.</td></tr>';
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API_BASE}/dashboard/upcoming-maintenance`, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error(`İstek başarısız (status: ${response.status})`);
+          }
+
+          const data = await response.json();
+          renderRows(Array.isArray(data) ? data : []);
+        } catch (error) {
+          console.error('Yaklaşan bakım kayıtları alınamadı:', error);
+          tableBody.innerHTML =
+            '<tr><td colspan="3" class="text-center text-danger">Bakım kayıtları yüklenirken bir hata oluştu.</td></tr>';
+        }
+      };
+
+      document.addEventListener('DOMContentLoaded', loadUpcomingMaintenance);
+    })();
+  </script>
   </html>

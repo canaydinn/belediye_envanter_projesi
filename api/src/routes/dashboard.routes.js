@@ -7,4 +7,6 @@ const auth = require('../middleware/auth');
 router.get('/stats', auth, dashboardController.getMunicipalityStats);
 router.get('/municipality', auth, dashboardController.getMunicipalityInfo);
 router.get('/recent-movements', auth, dashboardController.getRecentAssetMovements);
+router.get('/category-distribution', auth, dashboardController.getCategoryDistribution);
+router.get('/upcoming-maintenance', auth, dashboardController.getUpcomingMaintenance);
 module.exports = router;
