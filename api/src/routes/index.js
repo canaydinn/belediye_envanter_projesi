@@ -5,6 +5,7 @@ const superadminRoutes = require('./superadmin.routes');
 router.use('/auth', require('./auth.routes'));
 router.use('/users', require('./user.routes'));            // <- user.routes.js
 router.use('/assets', require('./assets.route'));          // <- assets.route.js
+router.use('/asset-categories', require('./asset.categories.routes'));
 router.use('/departments', require('./department.routes'));
 router.use('/locations', require('./locations.routes'));
 router.use('/inventory', require('./inventory.routes'));

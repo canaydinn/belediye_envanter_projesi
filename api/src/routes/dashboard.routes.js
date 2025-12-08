@@ -5,5 +5,6 @@ const auth = require('../middleware/auth');
 
 // Admin dashboard istatistikleri
 router.get('/stats', auth, dashboardController.getMunicipalityStats);
-
+router.get('/municipality', auth, dashboardController.getMunicipalityInfo);
+router.get('/recent-movements', auth, dashboardController.getRecentAssetMovements);
 module.exports = router;
