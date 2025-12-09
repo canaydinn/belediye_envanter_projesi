@@ -49,7 +49,8 @@ exports.listAssets = async (req, res) => {
         'e.is_movable',
         'c.name as category_name',
         'd.name as department_name',
-        'l.name as location_name'
+        'l.name as location_name',
+        'full_name'
         // 🔴 BURADAKİ CONCAT SATIRINI ŞİMDİLİK KALDIRDIK
       )
       .orderBy('e.id', 'asc');

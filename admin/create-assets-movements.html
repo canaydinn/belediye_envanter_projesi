@@ -147,14 +147,7 @@
                   <h4 class="fw-bold mb-1">Varlık Hareketi Oluştur</h4>
                   <p class="text-muted mb-0">Envanterdeki bir varlığın hareketini kaydedin.</p>
                 </div>
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Gösterge Paneli</a></li>
-                    <li class="breadcrumb-item"><a href="#">Varlıklar</a></li>
-                    <li class="breadcrumb-item"><a href="#">Varlık Hareketleri</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Yeni Hareket</li>
-                  </ol>
-                </nav>
+              
               </div>
 
               <div class="row g-4">
@@ -255,11 +248,7 @@
                             <label for="newDept" class="form-label">Yeni Birim <span class="text-danger">*</span></label>
                             <select id="newDept" name="newDept" class="form-select" required>
                               <option value="" selected disabled>Seçiniz</option>
-                              <option value="Bilgi İşlem">Bilgi İşlem</option>
-                              <option value="Destek Hizmetleri">Destek Hizmetleri</option>
-                              <option value="Basın Yayın">Basın Yayın</option>
-                              <option value="İnsan Kaynakları">İnsan Kaynakları</option>
-                              <option value="Mali Hizmetler">Mali Hizmetler</option>
+                            
                             </select>
                             <div class="invalid-feedback">Yeni birimi seçiniz.</div>
                           </div>
@@ -274,11 +263,7 @@
                             <label for="newLocation" class="form-label">Yeni Lokasyon <span class="text-danger">*</span></label>
                             <select id="newLocation" name="newLocation" class="form-select" required>
                               <option value="" selected disabled>Seçiniz</option>
-                              <option value="Ana Bina - 1. Kat">Ana Bina - 1. Kat</option>
-                              <option value="Ana Bina - 3. Kat">Ana Bina - 3. Kat</option>
-                              <option value="Ek Hizmet Binası - 1. Kat">Ek Hizmet Binası - 1. Kat</option>
-                              <option value="Depo 1">Depo 1</option>
-                              <option value="Depo 2">Depo 2</option>
+
                             </select>
                             <div class="invalid-feedback">Yeni lokasyonu seçiniz.</div>
                           </div>
@@ -293,11 +278,7 @@
                             <label for="newOwner" class="form-label">Yeni Sorumlu Kişi <span class="text-danger">*</span></label>
                             <select id="newOwner" name="newOwner" class="form-select" required>
                               <option value="" selected disabled>Seçiniz</option>
-                              <option value="Ahmet Yılmaz">Ahmet Yılmaz</option>
-                              <option value="Elif Demir">Elif Demir</option>
-                              <option value="Mehmet Kaya">Mehmet Kaya</option>
-                              <option value="Zeynep Karaca">Zeynep Karaca</option>
-                              <option value="Murat Kılıç">Murat Kılıç</option>
+                           
                             </select>
                             <div class="invalid-feedback">Yeni sorumlu kişiyi seçiniz.</div>
                           </div>
@@ -325,10 +306,7 @@
                           <label for="officer" class="form-label">İşlemi Yapan Personel</label>
                           <select id="officer" name="officer" class="form-select">
                             <option value="" selected disabled>Seçiniz</option>
-                            <option value="Sevgi Aydın">Sevgi Aydın</option>
-                            <option value="Barış Koç">Barış Koç</option>
-                            <option value="Aslı Öztürk">Aslı Öztürk</option>
-                            <option value="Kemal Kaplan">Kemal Kaplan</option>
+                          
                           </select>
                           <small class="text-muted">Bu alan, işlemi yapan yetkili personeli ifade eder.</small>
                         </div>
@@ -483,117 +461,394 @@
         <div class="toast-body">Lütfen formdaki zorunlu alanları kontrol edin.</div>
       </div>
     </div>
+   <script>
+      const API_BASE_URL = 'http://localhost:4000';
 
-    <!-- Core JS -->
-    <script src="../../assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="../../assets/vendor/libs/popper/popper.js"></script>
-    <script src="../../assets/vendor/js/bootstrap.js"></script>
-    <script src="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="../../assets/vendor/libs/node-waves/node-waves.js"></script>
-    <script src="../../assets/vendor/libs/hammer/hammer.js"></script>
-    <script src="../../assets/vendor/libs/i18n/i18n.js"></script>
-    <script src="../../assets/vendor/libs/typeahead-js/typeahead.js"></script>
-    <script src="../../assets/vendor/js/menu.js"></script>
+document.addEventListener('DOMContentLoaded', () => {
+  initMovementForm();
+  populateDepartments();
+  populateLocations();
+  populateOwners();
+});
 
-    <!-- Main JS -->
-    <script>
-      const assetSummary = {
-        'pc-000123': {
-          name: 'Masaüstü Bilgisayar',
-          code: '000123',
-          dept: 'Bilgi İşlem',
-          location: 'Ana Bina - 3. Kat',
-          owner: 'Ahmet Yılmaz'
-        },
-        'ac-000456': {
-          name: 'Klima Ünitesi',
-          code: '000456',
-          dept: 'Destek Hizmetleri',
-          location: 'Depo 2',
-          owner: 'Elif Demir'
-        },
-        'pr-000789': {
-          name: 'Projeksiyon Cihazı',
-          code: '000789',
-          dept: 'Basın Yayın',
-          location: 'Ek Hizmet Binası - 1. Kat',
-          owner: 'Mehmet Kaya'
-        }
-      };
 
-      const movementForm = document.getElementById('movementForm');
-      const assetSelect = document.getElementById('assetSelect');
-      const movementDate = document.getElementById('movementDate');
-      const movementTypeFeedback = document.getElementById('movementTypeFeedback');
-      const newDept = document.getElementById('newDept');
-      const newLocation = document.getElementById('newLocation');
-      const newOwner = document.getElementById('newOwner');
-      const movementTypeInputs = movementForm.querySelectorAll('input[name="movementType"]');
+const initMovementForm = () => {
+  const assetSummary = {};
 
-      // Set default date to today
-      movementDate.value = new Date().toISOString().split('T')[0];
+  const movementForm = document.getElementById('movementForm');
+  const assetSelect = document.getElementById('assetSelect');
+  const movementDate = document.getElementById('movementDate');
+  const movementTypeFeedback = document.getElementById('movementTypeFeedback');
 
-      // Update summary and current fields when asset changes
-      assetSelect.addEventListener('change', (event) => {
-        const selected = assetSummary[event.target.value];
-        if (!selected) return;
-        document.getElementById('summaryName').textContent = selected.name;
-        document.getElementById('summaryCode').textContent = `Kod: ${selected.code}`;
-        document.getElementById('summaryDept').textContent = selected.dept;
-        document.getElementById('summaryLocation').textContent = selected.location;
-        document.getElementById('summaryOwner').textContent = selected.owner;
-        document.getElementById('currentDept').value = selected.dept;
-        document.getElementById('currentLocation').value = selected.location;
-        document.getElementById('currentOwner').value = selected.owner;
+  const newDept = document.getElementById('newDept');
+  const newLocation = document.getElementById('newLocation');
+  const newOwner = document.getElementById('newOwner');
+
+  const summaryName = document.getElementById('summaryName');
+  const summaryCode = document.getElementById('summaryCode');
+  const summaryDept = document.getElementById('summaryDept');
+  const summaryLocation = document.getElementById('summaryLocation');
+  const summaryOwner = document.getElementById('summaryOwner');
+
+  const currentDept = document.getElementById('currentDept');
+  const currentLocation = document.getElementById('currentLocation');
+  const currentOwner = document.getElementById('currentOwner');
+
+  if (!movementForm || !assetSelect) {
+    console.warn('movementForm veya assetSelect bulunamadı, hareket formu başlatılamadı.');
+    return;
+  }
+
+  // 1) Yardımcı: seçili varlığı özet alanlara yazar
+  const setSelectedAsset = (assetId) => {
+    const selected = assetSummary[assetId];
+    if (!selected) return;
+
+    if (summaryName) summaryName.textContent = selected.name;
+    if (summaryCode) summaryCode.textContent = `Kod: ${selected.code}`;
+    if (summaryDept) summaryDept.textContent = selected.dept;
+    if (summaryLocation) summaryLocation.textContent = selected.location;
+    if (summaryOwner) summaryOwner.textContent = selected.owner;
+
+    if (currentDept) currentDept.value = selected.dept;
+    if (currentLocation) currentLocation.value = selected.location;
+    if (currentOwner) currentOwner.value = selected.owner;
+  };
+
+  // 2) Yardımcı: varlıkları API'den çeker ve select'i doldurur
+  const loadAssets = async () => {
+    assetSelect.innerHTML = '<option value="" selected disabled>Varlık seçiniz</option>';
+
+    const token = localStorage.getItem('token');
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/assets`, {
+        method: 'GET',
+        headers,
+        credentials: 'include',
       });
 
-      // Toggle selected style on movement type cards
-      movementTypeInputs.forEach((input) => {
-        input.addEventListener('change', () => {
-          movementTypeInputs.forEach((radio) => {
-            const option = radio.closest('.custom-option');
-            option.classList.toggle('checked', radio.checked);
-          });
-        });
-      });
+      const assets = await response.json().catch(() => []);
 
-      // Form validation and submission simulation
-      movementForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        event.stopPropagation();
+      if (!response.ok) {
+        throw new Error(assets?.message || 'Varlık listesi alınamadı');
+      }
 
-        const movementTypeSelected = movementForm.querySelector('input[name="movementType"]:checked');
-        if (!movementTypeSelected) {
-          movementTypeFeedback.classList.remove('d-none');
-        } else {
-          movementTypeFeedback.classList.add('d-none');
-        }
+      if (!Array.isArray(assets) || !assets.length) {
+        assetSelect.innerHTML =
+          '<option value="" selected disabled>Henüz tanımlı varlık bulunamadı</option>';
+        return;
+      }
 
-        const requiresOwner = movementTypeSelected && movementTypeSelected.value === 'owner';
-        newOwner.required = requiresOwner;
-        newOwner.parentElement.querySelector('.invalid-feedback').textContent = requiresOwner
+      const optionMarkup = assets
+        .map((asset) => {
+          const assetId = asset?.id ?? asset?.asset_code;
+          if (!assetId) return '';
+
+          assetSummary[assetId] = {
+            name: asset?.name || 'Varlık',
+            code: asset?.asset_code || '—',
+            dept: asset?.department_name || '—',
+            location: asset?.location_name || '—',
+            owner: asset?.full_name || '—',
+          };
+
+          const codeLabel =
+            assetSummary[assetId].code !== '—' ? ` - ${assetSummary[assetId].code}` : '';
+
+          return `<option value="${assetId}"
+                    data-dept="${assetSummary[assetId].dept}"
+                    data-location="${assetSummary[assetId].location}"
+                    data-owner="${assetSummary[assetId].owner}">
+                    ${assetSummary[assetId].name}${codeLabel}
+                  </option>`;
+        })
+        .filter(Boolean)
+        .join('');
+
+      assetSelect.insertAdjacentHTML('beforeend', optionMarkup);
+
+      const firstAssetId = assets[0]?.id ?? assets[0]?.asset_code;
+      if (firstAssetId) {
+        assetSelect.value = String(firstAssetId);
+        setSelectedAsset(firstAssetId);
+      }
+    } catch (error) {
+      console.error('Varlık listesi alınamadı:', error);
+      assetSelect.innerHTML =
+        '<option value="" selected disabled>Varlıklar yüklenemedi</option>';
+    }
+  };
+
+  // 3) Yardımcı: form submit handler
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const movementTypeSelected = movementForm.querySelector(
+      'input[name="movementType"]:checked'
+    );
+
+    if (!movementTypeSelected) {
+      if (movementTypeFeedback) movementTypeFeedback.classList.remove('d-none');
+    } else {
+      if (movementTypeFeedback) movementTypeFeedback.classList.add('d-none');
+    }
+
+    const requiresOwner = movementTypeSelected && movementTypeSelected.value === 'owner';
+    const requiresDept = movementTypeSelected && movementTypeSelected.value === 'department';
+    const requiresLocation =
+      movementTypeSelected && movementTypeSelected.value === 'location';
+
+    if (newOwner) {
+      newOwner.required = requiresOwner;
+      const feedbackEl = newOwner.parentElement?.querySelector('.invalid-feedback');
+      if (feedbackEl) {
+        feedbackEl.textContent = requiresOwner
           ? 'Yeni sorumlu kişiyi seçiniz.'
           : 'Bu alan zorunlu değil.';
+      }
+    }
 
-        const requiresDept = movementTypeSelected && movementTypeSelected.value === 'department';
-        newDept.required = requiresDept;
-        newDept.parentElement.querySelector('.invalid-feedback').textContent = requiresDept
+    if (newDept) {
+      newDept.required = requiresDept;
+      const feedbackEl = newDept.parentElement?.querySelector('.invalid-feedback');
+      if (feedbackEl) {
+        feedbackEl.textContent = requiresDept
           ? 'Yeni birimi seçiniz.'
           : 'Bu alan zorunlu değil.';
+      }
+    }
 
-        const requiresLocation = movementTypeSelected && movementTypeSelected.value === 'location';
-        newLocation.required = requiresLocation;
-        newLocation.parentElement.querySelector('.invalid-feedback').textContent = requiresLocation
+    if (newLocation) {
+      newLocation.required = requiresLocation;
+      const feedbackEl = newLocation.parentElement?.querySelector('.invalid-feedback');
+      if (feedbackEl) {
+        feedbackEl.textContent = requiresLocation
           ? 'Yeni lokasyonu seçiniz.'
           : 'Bu alan zorunlu değil.';
+      }
+    }
 
-        movementForm.classList.add('was-validated');
-        const isValid = movementForm.checkValidity() && movementTypeSelected;
+    movementForm.classList.add('was-validated');
+    const isValid = movementForm.checkValidity() && !!movementTypeSelected;
 
-        const toastEl = document.getElementById(isValid ? 'toastSuccess' : 'toastError');
-        const toast = new bootstrap.Toast(toastEl);
-        toast.show();
-      });
-    </script>
+    const toastEl = document.getElementById(isValid ? 'toastSuccess' : 'toastError');
+    if (toastEl && window.bootstrap?.Toast) {
+      const toast = new bootstrap.Toast(toastEl);
+      toast.show();
+    }
+  };
+
+  // Başlangıç işleri
+  loadAssets();
+
+  if (movementDate) {
+    movementDate.value = new Date().toISOString().split('T')[0];
+  }
+
+  assetSelect.addEventListener('change', (event) => {
+    setSelectedAsset(event.target.value);
+  });
+
+  movementForm.addEventListener('submit', handleSubmit);
+};
+
+  /************************************************************
+   * 7) DEPARTMAN SELECT'İNİ DOLDURAN BAĞIMSIZ BLOK
+   ************************************************************/
+
+  const populateDepartments = async () => {
+  const selectEl = document.getElementById('newDept');
+  if (!selectEl) return;
+
+  // Başlangıç: "yükleniyor" durumu
+  selectEl.innerHTML = '';
+  selectEl.appendChild(
+    new Option('Birimler yükleniyor...', '', true, true)
+  );
+  selectEl.disabled = true;
+
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_BASE_URL}/api/departments`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+
+    if (!response.ok) throw new Error('API isteği başarısız');
+
+    const departments = await response.json();
+    const list = Array.isArray(departments) ? departments : [];
+
+    // Select'i sıfırla
+    selectEl.innerHTML = '';
+    selectEl.appendChild(new Option('Seçiniz', '', true, true));
+
+    list.forEach((dept) => {
+      selectEl.appendChild(
+        new Option(
+          `${dept.name}${dept.code ? ` (${dept.code})` : ''}`,
+          dept.id
+        )
+      );
+    });
+
+    selectEl.disabled = list.length === 0;
+
+    if (list.length === 0) {
+      selectEl.appendChild(
+        new Option('Herhangi bir birim bulunamadı', '', true, false)
+      );
+    }
+  } catch (error) {
+    console.error('Birimler yüklenirken hata oluştu:', error);
+
+    // Hata durumunda tek mesaj
+    selectEl.innerHTML = '';
+    selectEl.appendChild(
+      new Option('Birimler yüklenemedi', '', true, true)
+    );
+    selectEl.disabled = true;
+  }
+};
+
+populateDepartments();
+
+   /************************************************************
+   * 8) LOKASYON SELECT'İNİ DOLDURAN BLOK
+   ************************************************************/
+ const populateLocations = async () => {
+  const selectEl = document.getElementById('newLocation');
+  if (!selectEl) return;
+
+  // Varsayılan "Seçiniz" opsiyonu
+  const createDefaultOption = () => new Option('Seçiniz', '', true, true);
+
+  const token = localStorage.getItem('token');
+
+  // Token yoksa: giriş uyarısı göster ve çık
+  if (!token) {
+    selectEl.innerHTML = '';
+    selectEl.appendChild(createDefaultOption());
+    selectEl.appendChild(
+      new Option('Önce giriş yapmalısınız', '', true, false)
+    );
+    return;
+  }
+
+  // Yükleniyor durumu
+  selectEl.innerHTML = '';
+  selectEl.appendChild(
+    new Option('Lokasyonlar yükleniyor...', '', true, true)
+  );
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/locations?is_active=true`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Lokasyonlar yüklenemedi. Status: ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const locations = Array.isArray(payload?.data)
+      ? payload.data
+      : Array.isArray(payload)
+      ? payload
+      : [];
+
+    // Gelen lokasyon verilerini select'e yazma
+    selectEl.innerHTML = '';
+    selectEl.appendChild(createDefaultOption());
+
+    locations.forEach((loc) => {
+      selectEl.appendChild(
+        new Option(
+          loc.name || loc.code || `Lokasyon #${loc.id}`,
+          loc.id
+        )
+      );
+    });
+
+    if (locations.length === 0) {
+      selectEl.appendChild(
+        new Option('Aktif lokasyon bulunamadı', '', true, false)
+      );
+    }
+  } catch (error) {
+    console.error('Lokasyon listesi alınırken hata oluştu:', error);
+    selectEl.innerHTML = '';
+    selectEl.appendChild(createDefaultOption());
+    selectEl.appendChild(
+      new Option('Lokasyonlar yüklenemedi', '', true, false)
+    );
+  }
+};
+
+populateLocations();
+
+        /************************************************************
+   * 9) KULLANICI (OWNER) SELECT'İNİ DOLDURAN BLOK
+   ************************************************************/
+       const populateOwners = async () => {
+  const selectEl = document.getElementById('newOwner');
+  if (!selectEl) return;
+
+  const placeholderOption = '<option value="" disabled selected>Seçiniz</option>';
+  selectEl.innerHTML = placeholderOption;
+
+  try {
+    const token = localStorage.getItem('token');
+
+    const response = await fetch(`${API_BASE_URL}/api/users`, {
+      method: 'GET',
+      headers: token
+        ? {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          }
+        : { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+
+    // Hata durumunda önce logla
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => '');
+      console.error('Users response status:', response.status);
+      console.error('Users response body:', errorText);
+      throw new Error('Kullanıcılar yüklenemedi');
+    }
+
+    const users = await response.json();
+
+    const options = Array.isArray(users)
+      ? users
+          .filter((user) => user?.full_name)
+          .map(
+            (user) => `<option value="${user.full_name}">${user.full_name}</option>`
+          )
+          .join('')
+      : '';
+
+    selectEl.innerHTML = placeholderOption + options;
+  } catch (error) {
+    console.error('Sorumlu kişiler yüklenemedi:', error);
+    selectEl.innerHTML =
+      placeholderOption + '<option disabled>Kullanıcı listesi alınamadı</option>';
+  }
+};
+
+populateOwners();
+
+</script>
+
   </body>
 </html>

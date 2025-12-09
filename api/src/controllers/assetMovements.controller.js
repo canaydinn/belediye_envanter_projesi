@@ -206,3 +206,86 @@ exports.getRecentAssetMovements = async (req, res) => {
   }
 };
 
+exports.createAssetMovement = async (req, res) => {
+  try {
+    const { municipality_id, id: performedByUserId } = req.user || {};
+    const {
+      asset_id,
+      movement_type,
+      movement_date,
+      from_department_id,
+      to_department_id,
+      from_location_id,
+      to_location_id,
+      notes,
+    } = req.body;
+
+    if (!municipality_id || !performedByUserId) {
+      return res.status(401).json({ message: 'Kullanıcı bilgisi bulunamadı' });
+    }
+
+    const movementTypeMap = {
+      department: 'transfer',
+      location: 'transfer',
+      owner: 'assign',
+      decommission: 'dispose',
+      assign: 'assign',
+      transfer: 'transfer',
+      return: 'return',
+      maintenance: 'maintenance',
+      dispose: 'dispose',
+    };
+
+    const normalizedMovementType = movementTypeMap[movement_type];
+
+    if (!asset_id || !normalizedMovementType) {
+      return res.status(400).json({ message: 'Varlık ve geçerli hareket türü zorunludur' });
+    }
+
+    const asset = await knex('assets')
+      .where({ id: asset_id, municipality_id })
+      .first();
+
+    if (!asset) {
+      return res.status(404).json({ message: 'Varlık bulunamadı' });
+    }
+
+    const insertData = {
+      asset_id,
+      movement_type: normalizedMovementType,
+      movement_date: movement_date || new Date(),
+      from_department_id: from_department_id || asset.department_id || null,
+      to_department_id: to_department_id || null,
+      from_location_id: from_location_id || asset.location_id || null,
+      to_location_id: to_location_id || null,
+      municipality_id,
+      performed_by_user_id: performedByUserId,
+      created_by_user_id: performedByUserId,
+      updated_by_user_id: performedByUserId,
+      notes: notes || null,
+    };
+
+    const [created] = await knex('asset_movements')
+      .insert(insertData)
+      .returning([
+        'id',
+        'asset_id',
+        'movement_type',
+        'from_department_id',
+        'to_department_id',
+        'from_location_id',
+        'to_location_id',
+        'performed_by_user_id',
+        'movement_date',
+        'notes',
+        'municipality_id',
+        'created_at',
+        'updated_at',
+      ]);
+
+    return res.status(201).json(created);
+  } catch (err) {
+    console.error('assetMovements.createAssetMovement hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
