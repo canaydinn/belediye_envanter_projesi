@@ -60,7 +60,6 @@
           <!-- Navbar -->
           <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-              <span class="navbar-text fw-semibold">Belediye Yönetici Paneli</span>
             </div>
           </nav>
           <!-- /Navbar -->
@@ -76,69 +75,10 @@
                   <p class="mb-0 text-muted">Belediyenize bağlı kullanıcıları görüntüleyin ve yönetin.</p>
                 </div>
                 <div class="d-none d-sm-block">
-                  <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Kullanıcılar</li>
-                  </ol>
+                  
                 </div>
               </div>
-
-              <!-- Filters & Actions Card -->
-              <div class="card mb-3">
-                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-                  <h5 class="card-title mb-0">Kullanıcı Filtreleri</h5>
-                  <div class="d-flex align-items-center gap-2">
-                    <a href="municipality-user-create.html" class="btn btn-primary"><i class="feather icon-user-plus me-1"></i>Yeni Kullanıcı Ekle</a>
-                    <a href="#" class="btn btn-outline-secondary"><i class="feather icon-download me-1"></i>Dışa Aktar (Excel)</a>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <form class="row g-3">
-                    <div class="col-12 col-md-4 col-lg-3">
-                      <label class="form-label" for="filterName">Ad / Soyad</label>
-                      <input type="text" id="filterName" class="form-control" placeholder="Kullanıcı adı ile ara" />
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-3">
-                      <label class="form-label" for="filterEmail">E-posta</label>
-                      <input type="email" id="filterEmail" class="form-control" placeholder="ornek@belediye.gov.tr" />
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-3">
-                      <label class="form-label" for="filterDepartment">Birim</label>
-                      <select id="filterDepartment" class="form-select">
-                        <option>Tümü</option>
-                        <option>Mali Hizmetler</option>
-                        <option>Fen İşleri</option>
-                        <option>İnsan Kaynakları</option>
-                        <option>Temizlik İşleri</option>
-                      </select>
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-3">
-                      <label class="form-label" for="filterRole">Rol</label>
-                      <select id="filterRole" class="form-select">
-                        <option>Tümü</option>
-                        <option>Belediye Yöneticisi</option>
-                        <option>Birim Sorumlusu</option>
-                        <option>Personel</option>
-                      </select>
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-3">
-                      <label class="form-label" for="filterStatus">Durum</label>
-                      <select id="filterStatus" class="form-select">
-                        <option>Tümü</option>
-                        <option>Aktif</option>
-                        <option>Pasif</option>
-                        <option>Beklemede</option>
-                      </select>
-                    </div>
-                    <div class="col-12 d-flex align-items-center gap-2 mt-2">
-                      <button type="button" class="btn btn-primary">Filtrele</button>
-                      <button type="reset" class="btn btn-outline-secondary">Temizle</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-
-              <!-- KPI Cards Row (Optional) -->
+<!-- KPI Cards Row (Optional) -->
               <div class="row mb-3">
                 <div class="col-12 col-md-6 col-xl-3 mb-3">
                   <div class="card h-100">
@@ -197,6 +137,61 @@
                   </div>
                 </div>
               </div>
+              <!-- Filters & Actions Card -->
+              <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                  <h5 class="card-title mb-0">Kullanıcı Filtreleri</h5>
+                  <div class="d-flex align-items-center gap-2">
+                    <a href="create-users.html" class="btn btn-primary"><i class="feather icon-user-plus me-1"></i>Yeni Kullanıcı Ekle</a>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <form class="row g-3">
+                    <div class="col-12 col-md-4 col-lg-3">
+                      <label class="form-label" for="filterName">Ad / Soyad</label>
+                      <input type="text" id="filterName" class="form-control" placeholder="Kullanıcı adı ile ara" />
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-3">
+                      <label class="form-label" for="filterEmail">E-posta</label>
+                      <input type="email" id="filterEmail" class="form-control" placeholder="ornek@belediye.gov.tr" />
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-3">
+                      <label class="form-label" for="filterDepartment">Birim</label>
+                      <select id="filterDepartment" class="form-select">
+                        <option>Tümü</option>
+                        <option>Mali Hizmetler</option>
+                        <option>Fen İşleri</option>
+                        <option>İnsan Kaynakları</option>
+                        <option>Temizlik İşleri</option>
+                      </select>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-3">
+                      <label class="form-label" for="filterRole">Rol</label>
+                      <select id="filterRole" class="form-select">
+                        <option>Tümü</option>
+                        <option>Belediye Yöneticisi</option>
+                        <option>Birim Sorumlusu</option>
+                        <option>Personel</option>
+                      </select>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-3">
+                      <label class="form-label" for="filterStatus">Durum</label>
+                      <select id="filterStatus" class="form-select">
+                        <option>Tümü</option>
+                        <option>Aktif</option>
+                        <option>Pasif</option>
+                        <option>Beklemede</option>
+                      </select>
+                    </div>
+                    <div class="col-12 d-flex align-items-center gap-2 mt-2">
+                      <button type="button" class="btn btn-primary">Filtrele</button>
+                      <button type="reset" class="btn btn-outline-secondary">Temizle</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              
 
               <div class="row">
                 <div class="col-lg-8 col-xl-9">
