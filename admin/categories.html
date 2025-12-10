@@ -97,15 +97,13 @@
           <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
             <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
               <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
-                <i class="ti ti-menu-2 ti-sm"></i>
               </a>
             </div>
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-              <div class="navbar-brand">Envanter360</div>
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <li class="nav-item lh-1 me-3">
-                  <span class="badge bg-label-primary">Belediye Kullanıcısı</span>
-                </li>
+<!--                   <span class="badge bg-label-primary">Belediye Kullanıcısı</span>
+ -->                </li>
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
@@ -153,70 +151,10 @@
                 <div class="col-12">
                   <h4 class="page-title">Kategoriler</h4>
                   <p class="text-muted">Belediyenize ait envanter kategorilerini yönetin ve her kategorideki varlık sayılarını görün.</p>
-                  <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                      <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                      <li class="breadcrumb-item active" aria-current="page">Kategoriler</li>
-                    </ol>
-                  </nav>
+                  
                 </div>
               </div>
-
-              <!-- Filters & Actions Card -->
-              <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-                  <div>
-                    <h5 class="mb-1">Kategori Filtreleri</h5>
-                    <small class="text-muted">Kategorileri ada, üst kategoriye veya duruma göre filtreleyin.</small>
-                  </div>
-                  <div class="d-flex gap-2">
-                    <a href="categories-create.html" class="btn btn-primary">
-                      <i class="feather icon-plus me-1"></i> Yeni Kategori Ekle
-                    </a>
-                    <a href="#" class="btn btn-outline-secondary">
-                      <i class="feather icon-download me-1"></i> Dışa Aktar (Excel)
-                    </a>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <form class="row g-3">
-                    <div class="col-12 col-md-3">
-                      <label for="filterCategoryName" class="form-label">Kategori Adı</label>
-                      <input type="text" id="filterCategoryName" class="form-control" placeholder="Kategori adı ile ara" />
-                    </div>
-                    <div class="col-12 col-md-3">
-                      <label for="filterParentCategory" class="form-label">Üst Kategori</label>
-                      <select id="filterParentCategory" class="form-select">
-                        <option>Tümü</option>
-                        <option>Mobilya</option>
-                        <option>Bilgi Teknolojileri</option>
-                        <option>Araçlar</option>
-                        <option>Makine / Ekipman</option>
-                        <option>Diğer</option>
-                      </select>
-                    </div>
-                    <div class="col-12 col-md-3">
-                      <label for="filterStatus" class="form-label">Durum</label>
-                      <select id="filterStatus" class="form-select">
-                        <option>Tümü</option>
-                        <option>Aktif</option>
-                        <option>Pasif</option>
-                      </select>
-                    </div>
-                    <div class="col-12 col-md-3">
-                      <label for="filterDescription" class="form-label">Açıklama</label>
-                      <input type="text" id="filterDescription" class="form-control" placeholder="Açıklama parçası" />
-                    </div>
-                    <div class="col-12 d-flex gap-2 justify-content-end">
-                      <button type="submit" class="btn btn-primary">Filtrele</button>
-                      <button type="reset" class="btn btn-outline-secondary">Temizle</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-
-              <!-- KPI Cards Row (Optional) -->
-              <div class="row mb-4 g-3">
+<div class="row mb-4 g-3">
                 <div class="col-12 col-md-6 col-xl-3">
                   <div class="card h-100">
                     <div class="card-body d-flex align-items-center">
@@ -224,7 +162,7 @@
                         <span class="avatar-initial rounded bg-label-primary"><i class="ti ti-category"></i></span>
                       </div>
                       <div>
-                        <h5 class="mb-1">32</h5>
+                        <h5 class="mb-1" id="total_categories"></h5>
                         <p class="mb-0 text-muted">Toplam Kategori</p>
                         <small class="text-muted">Sistemde kayıtlı kategori sayısı</small>
                       </div>
@@ -238,7 +176,7 @@
                         <span class="avatar-initial rounded bg-label-success"><i class="ti ti-check"></i></span>
                       </div>
                       <div>
-                        <h5 class="mb-1">28</h5>
+                        <h5 class="mb-1" id="total_active_categories"></h5>
                         <p class="mb-0 text-muted">Aktif Kategori</p>
                         <small class="text-muted">Aktif olarak kullanılan kategoriler</small>
                       </div>
@@ -252,7 +190,7 @@
                         <span class="avatar-initial rounded bg-label-info"><i class="ti ti-star"></i></span>
                       </div>
                       <div>
-                        <h5 class="mb-1">Bilgi Teknolojileri</h5>
+                        <h5 class="mb-1" id="max_asset_category"></h5>
                         <p class="mb-0 text-muted">En Fazla Varlığa Sahip Kategori</p>
                         <small class="text-muted">En yüksek varlık sayısına sahip kategori</small>
                       </div>
@@ -267,13 +205,63 @@
                       </div>
                       <div>
                         <h5 class="mb-1">3</h5>
-                        <p class="mb-0 text-muted">Boş Kategoriler</p>
+                        <p class="mb-0 text-muted" id="total_empty_categories">Boş Kategoriler</p>
                         <small class="text-muted">Varlık atanmamış kategoriler</small>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <!-- Filters & Actions Card -->
+              <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                  <div>
+                    <h5 class="mb-1">Kategori Filtreleri</h5>
+                    <small class="text-muted">Kategorileri ada, üst kategoriye veya duruma göre filtreleyin.</small>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <a href="create-categories.html" class="btn btn-primary">
+                      <i class="feather icon-plus me-1"></i> Yeni Kategori Ekle
+                    </a>
+                  
+                  </div>
+                </div>
+                <div class="card-body">
+                  <form class="row g-3">
+                    <div class="col-12 col-md-3">
+                      <label for="filterCategoryName" class="form-label">Kategori Adı</label>
+                      <input type="text" id="filterCategoryName" class="form-control" placeholder="Kategori adı ile ara" />
+                    </div>
+                    <!-- <div class="col-12 col-md-3">
+                      <label for="filterParentCategory" class="form-label">Üst Kategori</label>
+                      <select id="filterParentCategory" class="form-select">
+                        <option>Tümü</option>
+                        <option>Mobilya</option>
+                        <option>Bilgi Teknolojileri</option>
+                        <option>Araçlar</option>
+                        <option>Makine / Ekipman</option>
+                        <option>Diğer</option>
+                      </select>
+                    </div> -->
+                    <div class="col-12 col-md-3">
+                      <label for="filterStatus" class="form-label">Durum</label>
+                      <select id="filterStatus" class="form-select">
+                        <option>Tümü</option>
+                        <option>Aktif</option>
+                        <option>Pasif</option>
+                      </select>
+                    </div>
+                    
+                    <div class="col-12 d-flex gap-2 justify-content-end">
+                      <button type="submit" class="btn btn-primary">Filtrele</button>
+                      <button type="reset" class="btn btn-outline-secondary">Temizle</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <!-- KPI Cards Row (Optional) -->
+              
 
               <!-- Categories Table and Insights -->
               <div class="row">
@@ -283,7 +271,7 @@
                     <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
                       <div>
                         <h5 class="mb-1">Kategori Listesi</h5>
-                        <small class="text-muted">Gösterilen: 1–25 / 32</small>
+                        <small class="text-muted" id="categorySummary">Gösterilen kategori bilgisi yükleniyor...</small>
                       </div>
                       <div class="d-flex align-items-center gap-2">
                         <label for="pageSize" class="form-label mb-0 me-1">Sayfa Boyutu:</label>
@@ -300,7 +288,6 @@
                           <tr>
                             <th>Kod</th>
                             <th>Kategori Adı</th>
-                            <th>Üst Kategori</th>
                             <th>Varlık Sayısı</th>
                             <th>Durum</th>
                             <th>Oluşturulma Tarihi</th>
@@ -308,120 +295,8 @@
                             <th>İşlemler</th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr data-category-id="1">
-                            <td>KTG-001</td>
-                            <td>Büro Mobilyaları</td>
-                            <td>Mobilya</td>
-                            <td>542</td>
-                            <td><span class="badge badge-light-success">Aktif</span></td>
-                            <td>2024-01-10</td>
-                            <td>2025-03-08</td>
-                            <td class="d-flex gap-1">
-                              <a href="category-detail.html?id=1" class="btn btn-sm btn-icon btn-outline-primary" title="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="category-edit.html?id=1" class="btn btn-sm btn-icon btn-outline-secondary" title="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?category_id=1" class="btn btn-sm btn-icon btn-outline-info" title="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-category-id="2">
-                            <td>KTG-002</td>
-                            <td>Yazılım Lisansları</td>
-                            <td>Bilgi Teknolojileri</td>
-                            <td>318</td>
-                            <td><span class="badge badge-light-success">Aktif</span></td>
-                            <td>2024-02-12</td>
-                            <td>2025-02-28</td>
-                            <td class="d-flex gap-1">
-                              <a href="category-detail.html?id=2" class="btn btn-sm btn-icon btn-outline-primary" title="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="category-edit.html?id=2" class="btn btn-sm btn-icon btn-outline-secondary" title="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?category_id=2" class="btn btn-sm btn-icon btn-outline-info" title="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-category-id="3">
-                            <td>KTG-003</td>
-                            <td>Araçlar</td>
-                            <td>Taşıtlar</td>
-                            <td>76</td>
-                            <td><span class="badge badge-light-success">Aktif</span></td>
-                            <td>2023-12-20</td>
-                            <td>2025-01-15</td>
-                            <td class="d-flex gap-1">
-                              <a href="category-detail.html?id=3" class="btn btn-sm btn-icon btn-outline-primary" title="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="category-edit.html?id=3" class="btn btn-sm btn-icon btn-outline-secondary" title="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?category_id=3" class="btn btn-sm btn-icon btn-outline-info" title="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-category-id="4">
-                            <td>KTG-004</td>
-                            <td>Temizlik Ekipmanları</td>
-                            <td>Diğer</td>
-                            <td>41</td>
-                            <td><span class="badge badge-light-secondary">Pasif</span></td>
-                            <td>2024-05-14</td>
-                            <td>2024-11-09</td>
-                            <td class="d-flex gap-1">
-                              <a href="category-detail.html?id=4" class="btn btn-sm btn-icon btn-outline-primary" title="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="category-edit.html?id=4" class="btn btn-sm btn-icon btn-outline-secondary" title="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?category_id=4" class="btn btn-sm btn-icon btn-outline-info" title="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-category-id="5">
-                            <td>KTG-005</td>
-                            <td>Güvenlik Sistemleri</td>
-                            <td>Bilgi Teknolojileri</td>
-                            <td>124</td>
-                            <td><span class="badge badge-light-success">Aktif</span></td>
-                            <td>2025-03-10</td>
-                            <td>2025-03-10</td>
-                            <td class="d-flex gap-1">
-                              <a href="category-detail.html?id=5" class="btn btn-sm btn-icon btn-outline-primary" title="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="category-edit.html?id=5" class="btn btn-sm btn-icon btn-outline-secondary" title="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?category_id=5" class="btn btn-sm btn-icon btn-outline-info" title="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-category-id="6">
-                            <td>KTG-006</td>
-                            <td>Makine &amp; Ekipman</td>
-                            <td>Makine / Ekipman</td>
-                            <td>208</td>
-                            <td><span class="badge badge-light-success">Aktif</span></td>
-                            <td>2024-03-22</td>
-                            <td>2025-02-19</td>
-                            <td class="d-flex gap-1">
-                              <a href="category-detail.html?id=6" class="btn btn-sm btn-icon btn-outline-primary" title="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="category-edit.html?id=6" class="btn btn-sm btn-icon btn-outline-secondary" title="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?category_id=6" class="btn btn-sm btn-icon btn-outline-info" title="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-category-id="7">
-                            <td>KTG-010</td>
-                            <td>Araç Kiralama</td>
-                            <td>Taşıtlar</td>
-                            <td>19</td>
-                            <td><span class="badge badge-light-secondary">Pasif</span></td>
-                            <td>2023-11-01</td>
-                            <td>2024-08-30</td>
-                            <td class="d-flex gap-1">
-                              <a href="category-detail.html?id=10" class="btn btn-sm btn-icon btn-outline-primary" title="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="category-edit.html?id=10" class="btn btn-sm btn-icon btn-outline-secondary" title="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?category_id=10" class="btn btn-sm btn-icon btn-outline-info" title="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-category-id="8">
-                            <td>KTG-011</td>
-                            <td>Filo Yönetimi</td>
-                            <td>Araçlar</td>
-                            <td>58</td>
-                            <td><span class="badge badge-light-success">Aktif</span></td>
-                            <td>2024-07-12</td>
-                            <td>2025-01-04</td>
-                            <td class="d-flex gap-1">
-                              <a href="category-detail.html?id=11" class="btn btn-sm btn-icon btn-outline-primary" title="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="category-edit.html?id=11" class="btn btn-sm btn-icon btn-outline-secondary" title="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?category_id=11" class="btn btn-sm btn-icon btn-outline-info" title="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                            </td>
-                          </tr>
-                        </tbody>
+                        <tbody id="categoryTableBody"></tbody>
+                        
                       </table>
                     </div>
                     <div class="card-footer d-flex flex-wrap justify-content-between align-items-center">
@@ -446,72 +321,16 @@
                       <small class="text-muted">Türlere göre kategori sayıları</small>
                     </div>
                     <div class="card-body">
-                      <ul class="list-unstyled mb-0">
-                        <li class="d-flex justify-content-between align-items-center mb-2">
-                          <div class="d-flex align-items-center">
-                            <span class="badge bg-label-primary rounded-pill me-2">●</span> Mobilya
-                          </div>
-                          <span class="fw-semibold">6 kategori</span>
-                        </li>
-                        <li class="d-flex justify-content-between align-items-center mb-2">
-                          <div class="d-flex align-items-center">
-                            <span class="badge bg-label-info rounded-pill me-2">●</span> Bilgi Teknolojileri
-                          </div>
-                          <span class="fw-semibold">5 kategori</span>
-                        </li>
-                        <li class="d-flex justify-content-between align-items-center mb-2">
-                          <div class="d-flex align-items-center">
-                            <span class="badge bg-label-success rounded-pill me-2">●</span> Araçlar
-                          </div>
-                          <span class="fw-semibold">4 kategori</span>
-                        </li>
-                        <li class="d-flex justify-content-between align-items-center mb-2">
-                          <div class="d-flex align-items-center">
-                            <span class="badge bg-label-warning rounded-pill me-2">●</span> Makine / Ekipman
-                          </div>
-                          <span class="fw-semibold">7 kategori</span>
-                        </li>
-                        <li class="d-flex justify-content-between align-items-center">
-                          <div class="d-flex align-items-center">
-                            <span class="badge bg-label-secondary rounded-pill me-2">●</span> Diğer
-                          </div>
-                          <span class="fw-semibold">10 kategori</span>
-                        </li>
-                      </ul>
-                      <!-- Placeholder for category type distribution chart -->
-                    </div>
+                      <div
+                        class="alert alert-info d-none"
+                        role="alert"
+                        data-role="category-distribution-alert"
+                      ></div>
+                      <ul class="list-unstyled mb-0" data-role="category-distribution-list">
+                        <li class="text-muted">Kategori türleri yükleniyor...</li>
                   </div>
 
-                  <div class="card">
-                    <div class="card-header">
-                      <h6 class="mb-1">Son Eklenen Kategoriler</h6>
-                      <small class="text-muted">Güncel eklenen kategoriler</small>
-                    </div>
-                    <div class="card-body">
-                      <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div>
-                          <h6 class="mb-0">Güvenlik Sistemleri</h6>
-                          <small class="text-muted">2025-03-10</small>
-                        </div>
-                        <span class="badge bg-label-success">Yeni</span>
-                      </div>
-                      <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div>
-                          <h6 class="mb-0">Temizlik Ekipmanları</h6>
-                          <small class="text-muted">2025-03-08</small>
-                        </div>
-                        <span class="badge bg-label-secondary">Güncel</span>
-                      </div>
-                      <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div>
-                          <h6 class="mb-0">Yazılım Lisansları</h6>
-                          <small class="text-muted">2025-03-05</small>
-                        </div>
-                        <span class="badge bg-label-info">BT</span>
-                      </div>
-                      <a href="categories.html" class="text-primary fw-semibold">Tüm kategorileri görüntüle</a>
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -544,5 +363,9 @@
     <!-- / Layout wrapper -->
 
     <!-- Include Vuexy core JS and vendor JS here -->
+      <script type="module" src="assets/js/app/categories.js"></script>
+       <script type="module" src="./assets/js/app/categories-stat.js"></script>
+              <script type="module" src="./assets/js/app/categories-dist.js"></script>
+
   </body>
 </html>

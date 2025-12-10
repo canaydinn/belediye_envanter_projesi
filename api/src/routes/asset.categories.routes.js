@@ -7,5 +7,9 @@ const assetCategoriesController = require('../controllers/assetCategories.contro
 
 // Kategori listesi
 router.get('/', auth,assetCategoriesController.listCategories);
-
+router.get('/stats', auth, assetCategoriesController.getCategoryStats);
+// Kategori dağılımı (kategori türü ve asset sayıları)
+router.get('/distribution', auth, assetCategoriesController.getCategoryDistribution);
+// Yeni kategori oluşturma
+router.post('/', auth, assetCategoriesController.createCategory);
 module.exports = router;

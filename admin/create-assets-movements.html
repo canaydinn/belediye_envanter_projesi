@@ -57,41 +57,41 @@
             </a>
           </div>
           <div class="menu-inner-shadow"></div>
-          <ul class="menu-inner py-1">
-            <li class="menu-item">
-              <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-layout-dashboard"></i>
-                <div data-i18n="Gösterge Paneli">Gösterge Paneli</div>
+          <ul class="menu-inner py-1 navigation navigation-main">
+            <li class="menu-item active">
+              <a href="../admin/dashboard.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                <div>Dashboard</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-box"></i>
-                <div data-i18n="Varlıklar">Varlıklar</div>
-              </a>
-            </li>
-            <li class="menu-item active open">
-              <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-arrows-left-right"></i>
-                <div data-i18n="Varlık Hareketleri">Varlık Hareketleri</div>
+              <a href="../admin/assets.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-building"></i>
+                <div>Varlıklar</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-map-pin"></i>
-                <div data-i18n="Lokasyonlar">Lokasyonlar</div>
+              <a href="../admin/asset-movements.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-arrows-exchange"></i>
+                <div>Varlık Hareketleri</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="#" class="menu-link">
+              <a href="../admin/locations.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-map"></i>
+                <div>Lokasyonlar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/categories.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-category"></i>
-                <div data-i18n="Kategoriler">Kategoriler</div>
+                <div>Kategoriler</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="#" class="menu-link">
+              <a href="../admin/users.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-users"></i>
-                <div data-i18n="Kullanıcılar">Kullanıcılar</div>
+                <div>Kullanıcılar</div>
               </a>
             </li>
           </ul>
@@ -109,21 +109,21 @@
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
               <div class="navbar-nav align-items-center">
                 <div class="nav-item navbar-search-wrapper mb-0">
-                  <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
+                 <!--  <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
                     <i class="ti ti-search ti-md"></i>
                     <span class="d-none d-md-inline-block text-muted">Envanterde ara...</span>
-                  </a>
+                  </a> -->
                 </div>
               </div>
               <ul class="navbar-nav flex-row align-items-center ms-auto">
-                <li class="nav-item lh-1 me-3">
+               <!--  <li class="nav-item lh-1 me-3">
                   <span class="fw-semibold d-block">Ankara Belediyesi</span>
                   <small class="text-muted">Envanter Yöneticisi</small>
-                </li>
+                </li> -->
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="#" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                      <img src="../../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                      <img src="../admin/assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
@@ -313,7 +313,7 @@
 
                         <div class="d-flex justify-content-end gap-2">
                           <a href="#" class="btn btn-outline-secondary">Vazgeç</a>
-                          <button type="submit" class="btn btn-primary">Hareketi Kaydet</button>
+                          <button type="submit"  class="btn btn-primary">Hareketi Kaydet</button>
                         </div>
                       </form>
                     </div>
@@ -322,47 +322,6 @@
 
                 <!-- Right column: summary -->
                 <div class="col-lg-4">
-                  <div class="card mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                      <h6 class="mb-0">Varlık Özeti</h6>
-                      <span class="badge bg-label-primary">Canlı</span>
-                    </div>
-                    <div class="card-body">
-                      <div class="d-flex align-items-center mb-3">
-                        <div class="avatar me-3">
-                          <span class="avatar-initial rounded-circle bg-label-primary"><i class="ti ti-box"></i></span>
-                        </div>
-                        <div>
-                          <h6 class="mb-0" id="summaryName">Masaüstü Bilgisayar</h6>
-                          <small class="text-muted" id="summaryCode">Kod: 000123</small>
-                        </div>
-                      </div>
-                      <div class="list-group list-group-flush">
-                        <div class="list-group-item px-0 d-flex align-items-center">
-                          <i class="ti ti-building-bank text-primary me-2"></i>
-                          <div>
-                            <div class="text-muted">Mevcut Birim</div>
-                            <div class="fw-semibold" id="summaryDept">Bilgi İşlem</div>
-                          </div>
-                        </div>
-                        <div class="list-group-item px-0 d-flex align-items-center">
-                          <i class="ti ti-map-pin text-success me-2"></i>
-                          <div>
-                            <div class="text-muted">Mevcut Lokasyon</div>
-                            <div class="fw-semibold" id="summaryLocation">Ana Bina - 3. Kat</div>
-                          </div>
-                        </div>
-                        <div class="list-group-item px-0 d-flex align-items-center">
-                          <i class="ti ti-user-check text-info me-2"></i>
-                          <div>
-                            <div class="text-muted">Mevcut Sorumlu</div>
-                            <div class="fw-semibold" id="summaryOwner">Ahmet Yılmaz</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
                   <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                       <h6 class="mb-0">Son Hareketler</h6>
@@ -378,38 +337,11 @@
                             <th>Kullanıcı</th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr>
-                            <td>12.08.2024</td>
-                            <td><span class="badge bg-primary">Birim</span></td>
-                            <td>Bilgi İşlem &gt; Destek</td>
-                            <td>Sevgi Aydın</td>
-                          </tr>
-                          <tr>
-                            <td>02.08.2024</td>
-                            <td><span class="badge bg-warning text-dark">Lokasyon</span></td>
-                            <td>Ana Bina &gt; Depo 1</td>
-                            <td>Mehmet Kaya</td>
-                          </tr>
-                          <tr>
-                            <td>21.07.2024</td>
-                            <td><span class="badge bg-info text-dark">Sorumlu</span></td>
-                            <td>Ayşe K. &gt; Ahmet Y.</td>
-                            <td>Barış Koç</td>
-                          </tr>
-                          <tr>
-                            <td>18.07.2024</td>
-                            <td><span class="badge bg-label-success text-success border border-success">Bakım</span></td>
-                            <td>Servis Gönderimi</td>
-                            <td>Elif Demir</td>
-                          </tr>
-                          <tr>
-                            <td>01.07.2024</td>
-                            <td><span class="badge bg-danger">Hurda</span></td>
-                            <td>Hurdaya Ayrıldı</td>
-                            <td>Ahmet Yılmaz</td>
-                          </tr>
-                        </tbody>
+                        <tbody id="recentMovementsBody">
+                            <tr>
+                              <td colspan="4" class="text-center text-muted">Hareketler yükleniyor...</td>
+                            </tr>
+                          </tbody>
                       </table>
                     </div>
                   </div>
@@ -465,12 +397,10 @@
       const API_BASE_URL = 'http://localhost:4000';
 
 document.addEventListener('DOMContentLoaded', () => {
-  initMovementForm();
   populateDepartments();
   populateLocations();
   populateOwners();
 });
-
 
 const initMovementForm = () => {
   const assetSummary = {};
@@ -489,6 +419,7 @@ const initMovementForm = () => {
   const summaryDept = document.getElementById('summaryDept');
   const summaryLocation = document.getElementById('summaryLocation');
   const summaryOwner = document.getElementById('summaryOwner');
+  const recentMovementsBody = document.getElementById('recentMovementsBody');
 
   const currentDept = document.getElementById('currentDept');
   const currentLocation = document.getElementById('currentLocation');
@@ -498,7 +429,86 @@ const initMovementForm = () => {
     console.warn('movementForm veya assetSelect bulunamadı, hareket formu başlatılamadı.');
     return;
   }
+  const renderRecentMovements = (movements = []) => {
+  if (!recentMovementsBody) return;
 
+  if (!Array.isArray(movements) || movements.length === 0) {
+    recentMovementsBody.innerHTML =
+      '<tr><td colspan="4" class="text-center text-muted">Henüz hareket kaydı yok.</td></tr>';
+    return;
+  }
+
+  const rows = movements
+    .map((m) => {
+      const date = m.movement_date
+        ? new Date(m.movement_date).toLocaleDateString('tr-TR')
+        : '-';
+
+      // movement_type'i Türkçeleştirmek istersen burada map edebilirsin
+      const typeLabel = (() => {
+        switch (m.movement_type) {
+          case 'department': return 'Birim Değişikliği';
+          case 'location': return 'Lokasyon Değişikliği';
+          case 'owner': return 'Sorumlu Kişi';
+          case 'maintenance': return 'Bakım / Onarım';
+          case 'decommission': return 'Hurdaya Ayırma';
+          default: return m.movement_type || '-';
+        }
+      })();
+
+      const changeText =
+        m.to_department_name ||
+        m.to_location_name ||
+        m.notes ||
+        '-';
+
+      const userName = m.performed_by_name || '-';
+
+      return `
+        <tr>
+          <td>${date}</td>
+          <td>${typeLabel}</td>
+          <td>${changeText}</td>
+          <td>${userName}</td>
+        </tr>
+      `;
+    })
+    .join('');
+
+  recentMovementsBody.innerHTML = rows;
+};
+
+const loadRecentMovements = async () => {
+  if (recentMovementsBody) {
+    recentMovementsBody.innerHTML =
+      '<tr><td colspan="4" class="text-center text-muted">Hareketler yükleniyor...</td></tr>';
+  }
+
+  const token = localStorage.getItem('token');
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/asset-movements/recent`, {
+      method: 'GET',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      credentials: 'include',
+    });
+
+    const data = await response.json().catch(() => []);
+
+    if (!response.ok) {
+      throw new Error(data?.message || 'Hareketler alınamadı');
+    }
+
+    renderRecentMovements(Array.isArray(data) ? data : []);
+  } catch (error) {
+    console.error('Son hareketler alınamadı:', error);
+    if (recentMovementsBody) {
+      recentMovementsBody.innerHTML =
+        '<tr><td colspan="4" class="text-center text-danger">Hareketler yüklenemedi.</td></tr>';
+    }
+  }
+};
+          loadRecentMovements()
   // 1) Yardımcı: seçili varlığı özet alanlara yazar
   const setSelectedAsset = (assetId) => {
     const selected = assetSummary[assetId];
@@ -584,8 +594,15 @@ const initMovementForm = () => {
     }
   };
 
+  // Küçük yardımcı: toast göster
+  const showToast = (el) => {
+    if (!el || !window.bootstrap?.Toast) return;
+    const toast = new bootstrap.Toast(el);
+    toast.show();
+  };
+
   // 3) Yardımcı: form submit handler
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -638,11 +655,89 @@ const initMovementForm = () => {
     const isValid = movementForm.checkValidity() && !!movementTypeSelected;
 
     const toastEl = document.getElementById(isValid ? 'toastSuccess' : 'toastError');
-    if (toastEl && window.bootstrap?.Toast) {
-      const toast = new bootstrap.Toast(toastEl);
-      toast.show();
+
+    // Geçersiz ise: hata tostu göster, kaydetme
+    if (!isValid) {
+      showToast(toastEl);
+      return;
     }
-  };
+
+    const submitButton = movementForm.querySelector('button[type="submit"]');
+    const originalBtnText = submitButton?.innerHTML;
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.innerHTML =
+        '<span class="spinner-border spinner-border-sm me-2"></span>Kaydediliyor...';
+    }
+
+    const payload = {
+      asset_id: assetSelect.value,
+      movement_type: movementTypeSelected.value,
+      movement_date: movementDate?.value,
+    };
+
+    if (movementTypeSelected.value === 'department' && newDept?.value) {
+      payload.to_department_id = newDept.value;
+    }
+
+    if (movementTypeSelected.value === 'location' && newLocation?.value) {
+      payload.to_location_id = newLocation.value;
+    }
+
+    const descriptionField = document.getElementById('description');
+    if (descriptionField?.value?.trim()) {
+      payload.notes = descriptionField.value.trim();
+    }
+
+    const token = localStorage.getItem('token');
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/asset-movements`, {
+        method: 'POST',
+        headers,
+        credentials: 'include',
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        const message = result?.message || 'Hareket kaydedilemedi';
+        throw new Error(message);
+      }
+
+      showToast(document.getElementById('toastSuccess'));
+      movementForm.reset();
+      movementForm.classList.remove('was-validated');
+
+      if (movementDate) {
+        movementDate.value = new Date().toISOString().split('T')[0];
+      }
+
+      const firstAssetId = Object.keys(assetSummary)[0];
+      if (firstAssetId && assetSelect) {
+        assetSelect.value = firstAssetId;
+        setSelectedAsset(firstAssetId);
+      }
+    } catch (error) {
+      console.error('Varlık hareketi kaydedilemedi:', error);
+      const errorToast = document.getElementById('toastError');
+      const toastBody = errorToast?.querySelector('.toast-body');
+      if (toastBody && error?.message) {
+        toastBody.textContent = error.message;
+      }
+      showToast(errorToast);
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalBtnText;
+      }
+    }
+  }; // ← handleSubmit burada kapanıyor ✅
 
   // Başlangıç işleri
   loadAssets();
@@ -656,7 +751,10 @@ const initMovementForm = () => {
   });
 
   movementForm.addEventListener('submit', handleSubmit);
-};
+}; // ← initMovementForm burada kapanıyor ✅
+
+   initMovementForm();
+
 
   /************************************************************
    * 7) DEPARTMAN SELECT'İNİ DOLDURAN BAĞIMSIZ BLOK
@@ -849,6 +947,16 @@ populateLocations();
 populateOwners();
 
 </script>
+<!-- Vendor JS -->
+<script src="assets/vendor/libs/jquery/jquery.js"></script>
+<script src="assets/vendor/js/bootstrap.js"></script>
+<script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="assets/vendor/libs/node-waves/node-waves.js"></script>
+
+
+<!-- Vuexy core JS -->
+<script src="assets/vendor/js/menu.js"></script>
+<script src="assets/js/main.js"></script>
 
   </body>
 </html>

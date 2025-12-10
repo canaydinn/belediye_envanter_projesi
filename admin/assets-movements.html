@@ -132,14 +132,14 @@
             id="layout-navbar">
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
               <div class="navbar-nav align-items-center">
-                <div class="nav-item d-flex align-items-center">
+                <!--< div class="nav-item d-flex align-items-center">
                   <i class="ti ti-search ti-md me-2"></i>
                   <input
                     type="text"
                     class="form-control border-0 shadow-none"
                     placeholder="Arama..."
                     aria-label="Search" />
-                </div>
+                </div> -->
               </div>
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -194,15 +194,67 @@
                   <p class="text-muted mb-0">Belediyenize ait varlıklar üzerinde yapılan tüm hareketleri görüntüleyin.</p>
                 </div>
                 <div class="text-muted">
-                  <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-0">
-                      <li class="breadcrumb-item"><a href="dashboards-analytics.html">Dashboard</a></li>
-                      <li class="breadcrumb-item active">Varlık Hareketleri</li>
-                    </ol>
-                  </nav>
+                  
                 </div>
               </div>
-
+<div class="row g-3 mb-4">
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card">
+                    <div class="card-body d-flex align-items-start">
+                      <div class="avatar flex-shrink-0 me-3">
+                        <span class="avatar-initial rounded bg-label-primary"><i class="ti ti-activity"></i></span>
+                      </div>
+                      <div class="d-flex flex-column">
+                        <span class="fw-semibold">Son 30 Gündeki Hareketler</span>
+                        <h4 class="mb-1" id="last_30_movements">612</h4>
+                        <small class="text-muted">Son 30 günde gerçekleşen toplam hareket</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card">
+                    <div class="card-body d-flex align-items-start">
+                      <div class="avatar flex-shrink-0 me-3">
+                        <span class="avatar-initial rounded bg-label-success"><i class="ti ti-clock-hour-3"></i></span>
+                      </div>
+                      <div class="d-flex flex-column">
+                        <span class="fw-semibold">Bugünkü Hareketler</span>
+                        <h4 class="mb-1" id="today_movements">24</h4>
+                        <small class="text-muted">Bugün yapılan hareketler</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card">
+                    <div class="card-body d-flex align-items-start">
+                      <div class="avatar flex-shrink-0 me-3">
+                        <span class="avatar-initial rounded bg-label-warning"><i class="ti ti-tool"></i></span>
+                      </div>
+                      <div class="d-flex flex-column">
+                        <span class="fw-semibold">Bakım Hareketleri</span>
+                        <h4 class="mb-1" id="maintenance_movements">37</h4>
+                        <small class="text-muted">Bakım ile ilgili hareketler</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                  <div class="card">
+                    <div class="card-body d-flex align-items-start">
+                      <div class="avatar flex-shrink-0 me-3">
+                        <span class="avatar-initial rounded bg-label-info"><i class="ti ti-arrows-left-right"></i></span>
+                      </div>
+                      <div class="d-flex flex-column">
+                        <span class="fw-semibold">Zimmet / Devir İşlemleri</span>
+                        <h4 class="mb-1" id="zimmet_movements">198</h4>
+                        <small class="text-muted">Zimmet ve devir tipi hareketler</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <!-- Filters & Actions Card -->
               <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
@@ -223,34 +275,31 @@
                     <div class="col-12 col-md-4 col-xl-2">
                       <label for="movementType" class="form-label">İşlem Tipi</label>
                       <select id="movementType" class="form-select">
-                        <option>Tümü</option>
-                        <option>Zimmet</option>
-                        <option>Devir</option>
-                        <option>Lokasyon Değişikliği</option>
-                        <option>Bakım</option>
-                        <option>Hurda</option>
+                        <option value="">Tümü</option>
+                         <option value="dispose">Zimmet</option>
+                        <option value="transfer">Devir</option>
+                        <option value="location_change">Lokasyon Değişikliği</option>
+                        <option value="maintenance">Bakım</option>
+                        <option value="dispose">Hurda</option>
                       </select>
                     </div>
                     <div class="col-12 col-md-4 col-xl-3">
                       <label for="departmentSelect" class="form-label">Birim</label>
                       <select id="departmentSelect" class="form-select">
-                        <option>Tümü</option>
-                        <option>Mali Hizmetler</option>
-                        <option>Fen İşleri</option>
-                        <option>İnsan Kaynakları</option>
-                        <option>Temizlik İşleri</option>
+                        <option value="">Tümü</option>
+                        
                       </select>
                     </div>
-                    <div class="col-12 col-md-4 col-xl-2">
+                   <!--  <div class="col-12 col-md-4 col-xl-2">
                       <label for="userSearch" class="form-label">İşlemi Yapan Kullanıcı</label>
                       <input type="text" id="userSearch" class="form-control" placeholder="Ad veya e-posta" />
-                    </div>
+                    </div> -->
                     <div class="col-12 col-md-4 col-xl-2">
                       <label for="dateRange" class="form-label">Tarih Aralığı</label>
                       <input type="text" id="dateRange" class="form-control" placeholder="Başlangıç - Bitiş" />
                     </div>
                     <div class="col-12 d-flex gap-2 justify-content-end flex-wrap">
-                      <button type="button" class="btn btn-primary">Filtrele</button>
+                      <button type="button" class="btn btn-primary" id="filtrele">Filtrele</button>
                       <button type="button" class="btn btn-outline-secondary">Temizle</button>
                     </div>
                   </div>
@@ -258,64 +307,7 @@
               </div>
 
               <!-- KPI Cards Row (Optional) -->
-              <div class="row g-3 mb-4">
-                <div class="col-12 col-md-6 col-xl-3">
-                  <div class="card">
-                    <div class="card-body d-flex align-items-start">
-                      <div class="avatar flex-shrink-0 me-3">
-                        <span class="avatar-initial rounded bg-label-primary"><i class="ti ti-activity"></i></span>
-                      </div>
-                      <div class="d-flex flex-column">
-                        <span class="fw-semibold">Son 30 Gündeki Hareketler</span>
-                        <h4 class="mb-1">612</h4>
-                        <small class="text-muted">Son 30 günde gerçekleşen toplam hareket</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-6 col-xl-3">
-                  <div class="card">
-                    <div class="card-body d-flex align-items-start">
-                      <div class="avatar flex-shrink-0 me-3">
-                        <span class="avatar-initial rounded bg-label-success"><i class="ti ti-clock-hour-3"></i></span>
-                      </div>
-                      <div class="d-flex flex-column">
-                        <span class="fw-semibold">Bugünkü Hareketler</span>
-                        <h4 class="mb-1">24</h4>
-                        <small class="text-muted">Bugün yapılan hareketler</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-6 col-xl-3">
-                  <div class="card">
-                    <div class="card-body d-flex align-items-start">
-                      <div class="avatar flex-shrink-0 me-3">
-                        <span class="avatar-initial rounded bg-label-warning"><i class="ti ti-tool"></i></span>
-                      </div>
-                      <div class="d-flex flex-column">
-                        <span class="fw-semibold">Bakım Hareketleri</span>
-                        <h4 class="mb-1">37</h4>
-                        <small class="text-muted">Bakım ile ilgili hareketler</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-6 col-xl-3">
-                  <div class="card">
-                    <div class="card-body d-flex align-items-start">
-                      <div class="avatar flex-shrink-0 me-3">
-                        <span class="avatar-initial rounded bg-label-info"><i class="ti ti-arrows-left-right"></i></span>
-                      </div>
-                      <div class="d-flex flex-column">
-                        <span class="fw-semibold">Zimmet / Devir İşlemleri</span>
-                        <h4 class="mb-1">198</h4>
-                        <small class="text-muted">Zimmet ve devir tipi hareketler</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              
 
               <div class="row">
                 <div class="col-lg-8 col-xl-9">
@@ -344,153 +336,16 @@
                             <th>Eski Lokasyon / Birim</th>
                             <th>Yeni Lokasyon / Birim</th>
                             <th>İşlem Tipi</th>
-                            <th>İşlemi Yapan</th>
+                            <!-- <th>İşlemi Yapan</th>
                             <th>Açıklama</th>
-                            <th>İşlemler</th>
+                            <th>İşlemler</th> -->
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr data-movement-id="1001">
-                            <td>2025-03-12 14:35</td>
-                            <td>VRL-000245 – Dizüstü Bilgisayar</td>
-                            <td>Depo 1 / Bilgi Teknolojileri</td>
-                            <td>Merkez Bina – 3. Kat / Bilgi Teknolojileri</td>
-                            <td><span class="badge badge-light-primary">Zimmet</span></td>
-                            <td>Ahmet Yılmaz</td>
-                            <td>Yeni personel görevlendirilmesi...</td>
-                            <td class="text-nowrap">
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-detail.html?id=1001"><i class="feather icon-eye"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-detail.html?id=245"><i class="feather icon-package"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-print.html?id=1001"><i class="feather icon-file-text"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-movement-id="1002">
-                            <td>2025-03-11 10:12</td>
-                            <td>VRL-000198 – Hizmet Aracı</td>
-                            <td>Garaj / Ulaşım</td>
-                            <td>Garaj / Ulaşım</td>
-                            <td><span class="badge badge-light-info">Devir</span></td>
-                            <td>Selin Korkmaz</td>
-                            <td>Birimler arası araç devri tamamlandı...</td>
-                            <td class="text-nowrap">
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-detail.html?id=1002"><i class="feather icon-eye"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-detail.html?id=198"><i class="feather icon-package"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-print.html?id=1002"><i class="feather icon-file-text"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-movement-id="1003">
-                            <td>2025-03-10 09:05</td>
-                            <td>VRL-000312 – Jeneratör</td>
-                            <td>Atölye / Enerji Yönetimi</td>
-                            <td>Hurda Alanı / Depo</td>
-                            <td><span class="badge badge-light-danger">Hurda</span></td>
-                            <td>Mert Aksoy</td>
-                            <td>Generator 3 hurdaya ayrıldı...</td>
-                            <td class="text-nowrap">
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-detail.html?id=1003"><i class="feather icon-eye"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-detail.html?id=312"><i class="feather icon-package"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-print.html?id=1003"><i class="feather icon-file-text"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-movement-id="1004">
-                            <td>2025-03-09 16:40</td>
-                            <td>VRL-000410 – Hizmet Aracı</td>
-                            <td>Garaj / Ulaşım</td>
-                            <td>Garaj / Ulaşım</td>
-                            <td><span class="badge badge-light-info">Devir</span></td>
-                            <td>Gizem Aydın</td>
-                            <td>Hizmet aracı devri tamamlandı...</td>
-                            <td class="text-nowrap">
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-detail.html?id=1004"><i class="feather icon-eye"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-detail.html?id=410"><i class="feather icon-package"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-print.html?id=1004"><i class="feather icon-file-text"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-movement-id="1005">
-                            <td>2025-03-08 11:20</td>
-                            <td>VRL-000520 – Bina Asansörü</td>
-                            <td>Belediye Binası / Teknik İşler</td>
-                            <td>Belediye Binası / Teknik İşler</td>
-                            <td><span class="badge badge-light-warning">Bakım</span></td>
-                            <td>Kerem Demir</td>
-                            <td>Bina asansörü bakım kaydı oluşturuldu...</td>
-                            <td class="text-nowrap">
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-detail.html?id=1005"><i class="feather icon-eye"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-detail.html?id=520"><i class="feather icon-package"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-print.html?id=1005"><i class="feather icon-file-text"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-movement-id="1006">
-                            <td>2025-03-07 15:10</td>
-                            <td>VRL-000602 – Ofis Masası</td>
-                            <td>Depo 2 / Destek Hizmetleri</td>
-                            <td>Merkez Bina – 2. Kat / İnsan Kaynakları</td>
-                            <td><span class="badge badge-light-secondary">Lokasyon Değişikliği</span></td>
-                            <td>Esra Kaya</td>
-                            <td>Yeni yerleşim düzeni için lokasyon değişikliği...</td>
-                            <td class="text-nowrap">
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-detail.html?id=1006"><i class="feather icon-eye"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-detail.html?id=602"><i class="feather icon-package"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-print.html?id=1006"><i class="feather icon-file-text"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-movement-id="1007">
-                            <td>2025-03-06 13:50</td>
-                            <td>VRL-000715 – Yazıcı</td>
-                            <td>Merkez Bina – 1. Kat / Mali Hizmetler</td>
-                            <td>Merkez Bina – 1. Kat / Mali Hizmetler</td>
-                            <td><span class="badge badge-light-warning">Bakım</span></td>
-                            <td>Elif Çetin</td>
-                            <td>Yazıcı toner değişimi ve bakım kaydı...</td>
-                            <td class="text-nowrap">
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-detail.html?id=1007"><i class="feather icon-eye"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-detail.html?id=715"><i class="feather icon-package"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-print.html?id=1007"><i class="feather icon-file-text"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-movement-id="1008">
-                            <td>2025-03-05 09:30</td>
-                            <td>VRL-000845 – Klima Ünitesi</td>
-                            <td>Merkez Bina – Çatı / Teknik İşler</td>
-                            <td>Merkez Bina – Çatı / Teknik İşler</td>
-                            <td><span class="badge badge-light-warning">Bakım</span></td>
-                            <td>Barış Onur</td>
-                            <td>Sezon öncesi klima bakımı gerçekleştirildi...</td>
-                            <td class="text-nowrap">
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-detail.html?id=1008"><i class="feather icon-eye"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-detail.html?id=845"><i class="feather icon-package"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-print.html?id=1008"><i class="feather icon-file-text"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-movement-id="1009">
-                            <td>2025-03-04 17:05</td>
-                            <td>VRL-000920 – Sunucu</td>
-                            <td>Bilgi İşlem Odası / Bilgi Teknolojileri</td>
-                            <td>Bilgi İşlem Odası / Bilgi Teknolojileri</td>
-                            <td><span class="badge badge-light-primary">Zimmet</span></td>
-                            <td>Burak Şahin</td>
-                            <td>Yeni yedekleme sunucusu devreye alındı...</td>
-                            <td class="text-nowrap">
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-detail.html?id=1009"><i class="feather icon-eye"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-detail.html?id=920"><i class="feather icon-package"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-print.html?id=1009"><i class="feather icon-file-text"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-movement-id="1010">
-                            <td>2025-03-03 08:45</td>
-                            <td>VRL-001010 – Güvenlik Kamerası</td>
-                            <td>Merkez Bina – Dış Alan / Güvenlik</td>
-                            <td>Merkez Bina – Dış Alan / Güvenlik</td>
-                            <td><span class="badge badge-light-secondary">Lokasyon Değişikliği</span></td>
-                            <td>Ayşe Demirel</td>
-                            <td>Güvenlik kamerası açısının güncellenmesi...</td>
-                            <td class="text-nowrap">
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-detail.html?id=1010"><i class="feather icon-eye"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-detail.html?id=1010"><i class="feather icon-package"></i></a>
-                              <a class="btn btn-sm btn-icon btn-text-secondary" href="asset-movement-print.html?id=1010"><i class="feather icon-file-text"></i></a>
-                            </td>
-                          </tr>
-                        </tbody>
+                        <tbody id="movementTableBody">
+                            <tr>
+                              <td colspan="5" class="text-center text-muted">Kayıt bulunamadı</td>
+                            </tr>
+                          </tbody>
                       </table>
                     </div>
                     <div class="card-footer d-flex flex-wrap justify-content-between align-items-center">
@@ -520,7 +375,7 @@
                       <h6 class="mb-0">İşlem Tipi Dağılımı</h6>
                     </div>
                     <div class="card-body">
-                      <ul class="list-unstyled mb-0">
+                      <!-- <ul class="list-unstyled mb-0">
                         <li class="d-flex align-items-center justify-content-between mb-2">
                           <div><span class="badge badge-dot bg-primary me-2"></span>Zimmet</div>
                           <span class="fw-semibold">38%</span>
@@ -541,12 +396,14 @@
                           <div><span class="badge badge-dot bg-danger me-2"></span>Hurda</div>
                           <span class="fw-semibold">7%</span>
                         </li>
-                      </ul>
+                      </ul> -->
+                      <div data-role="movement-distribution-alert"></div>
+                      <div class="table-responsive" data-role="movement-distribution"></div>
                       <!-- Placeholder for movement type chart -->
                     </div>
                   </div>
 
-                  <div class="card">
+                  <!-- <div class="card">
                     <div class="card-header">
                       <h6 class="mb-0">Son Kritik Hareketler</h6>
                     </div>
@@ -572,7 +429,7 @@
                         <div class="text-muted small">2025-03-07</div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -608,5 +465,550 @@
     <!-- Main JS -->
     <script src="../admin/assets/js/main.js"></script>
     <!-- Page JS -->
+     <script>
+      const API_BASE_URL = 'http://localhost:4000/api';
+
+const createAlertContainer = () => {
+  let container = document.querySelector('[data-role="page-alerts"]');
+
+  if (!container) {
+    container = document.createElement('div');
+    container.className = 'container-xxl px-4 mt-3';
+    container.dataset.role = 'page-alerts';
+    document.body.prepend(container);
+  }
+
+  return container;
+};
+
+const showAlert = (message, variant = 'danger') => {
+  const container = createAlertContainer();
+  const alert = document.createElement('div');
+  alert.className = `alert alert-${variant} alert-dismissible fade show`;
+  alert.role = 'alert';
+  alert.textContent = message;
+
+  const closeButton = document.createElement('button');
+  closeButton.type = 'button';
+  closeButton.className = 'btn-close';
+  closeButton.dataset.bsDismiss = 'alert';
+  closeButton.setAttribute('aria-label', 'Close');
+
+  alert.appendChild(closeButton);
+  container.appendChild(alert);
+};
+
+const buildAuthHeaders = () => {
+  const token = localStorage.getItem('token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
+const parseJsonSafely = async (response) => {
+  try {
+    return await response.json();
+  } catch (error) {
+    throw new Error('Sunucudan geçersiz yanıt alındı');
+  }
+};
+
+const fetchMovementTotal = async (endpoint) => {
+  const url = `${API_BASE_URL}${endpoint}`;
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      ...buildAuthHeaders(),
+    },
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error(`İstek başarısız oldu (status: ${response.status})`);
+  }
+
+  const data = await parseJsonSafely(response);
+  return Number(data?.total ?? data?.count ?? 0);
+};
+
+const setCounterValue = (elementId, value) => {
+  const element = document.getElementById(elementId);
+
+  if (!element) {
+    console.warn(`Sayaç öğesi bulunamadı: ${elementId}`);
+    return;
+  }
+
+  element.textContent = value;
+};
+
+const loadMovementCounters = async () => {
+  const counters = [
+    { id: 'last_30_movements', endpoint: '/asset-movements/stats/last-30-days' },
+    { id: 'today_movements', endpoint: '/asset-movements/stats/today' },
+    { id: 'maintenance_movements', endpoint: '/asset-movements/stats/maintenance' },
+    { id: 'zimmet_movements', endpoint: '/asset-movements/stats/zimmet' },
+  ];
+
+  const results = await Promise.allSettled(
+    counters.map((counter) => fetchMovementTotal(counter.endpoint))
+  );
+
+  results.forEach((result, index) => {
+    const { id } = counters[index];
+
+    if (result.status === 'fulfilled') {
+      setCounterValue(id, result.value ?? 0);
+      return;
+    }
+
+    console.error(`Sayaç yüklenemedi (${id}):`, result.reason);
+    showAlert('Varlık hareketi istatistikleri alınırken bir sorun oluştu.');
+  });
+};
+
+const initPage = async () => {
+  try {
+    await loadMovementCounters();
+    await loadMovements();
+    bindEvents(); // 🔹 filtre butonu, select vs. burada bağlanacak
+    initDepartmentFilter();
+    initMovementDistribution(); // işlem tipi dağılımı kartı
+
+  } catch (error) {
+    console.error('asset-movements initPage hatası:', error);
+    showAlert('Varlık hareketi sayıları yüklenemedi.');
+  }
+};
+const parseDateRange = (value) => {
+  const trimmed = value?.trim();
+  if (!trimmed) return {};
+
+  const match = trimmed.match(/(\d{4}-\d{2}-\d{2})\s*-\s*(\d{4}-\d{2}-\d{2})/);
+  if (match) {
+    return { startDate: match[1], endDate: match[2] };
+  }
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    return { startDate: trimmed };
+  }
+
+  return {};
+};
+
+const renderMovements = (movements) => {
+  const tbody = document.getElementById('movementTableBody');
+  if (!tbody) return;
+
+  tbody.textContent = '';
+
+  if (!movements.length) {
+    const row = document.createElement('tr');
+    const cell = document.createElement('td');
+    cell.colSpan = 8;
+    cell.className = 'text-center text-muted';
+    cell.textContent = 'Kayıt bulunamadı';
+    row.append(cell);
+    tbody.append(row);
+    return;
+  }
+
+  movements.forEach((movement) => {
+    const row = document.createElement('tr');
+
+    const movementDate = document.createElement('td');
+    movementDate.textContent = movement.movement_date
+      ? new Date(movement.movement_date).toLocaleDateString('tr-TR')
+      : '-';
+
+    const assetCell = document.createElement('td');
+    assetCell.textContent = movement.asset_name
+      ? `${movement.asset_name} (${movement.asset_code || ''})`
+      : movement.asset_code || '-';
+
+    const typeCell = document.createElement('td');
+    typeCell.textContent = movement.movement_type || '-';
+
+    const changeCell = document.createElement('td');
+    const changes = [];
+    if (movement.from_department_name || movement.to_department_name) {
+      changes.push(
+        `${movement.from_department_name || '-'} → ${movement.to_department_name || '-'}`
+      );
+    }
+    if (movement.from_location_name || movement.to_location_name) {
+      changes.push(
+        `${movement.from_location_name || '-'} → ${movement.to_location_name || '-'}`
+      );
+    }
+    changeCell.textContent = changes.join(' | ') || '-';
+
+    const userCell = document.createElement('td');
+    userCell.textContent = movement.performer_name || '-';
+
+    [movementDate, assetCell, typeCell, changeCell, userCell].forEach((cell) => {
+      row.append(cell);
+    });
+
+    tbody.append(row);
+  });
+};
+// Basit JSON fetch helper
+const fetchJson = async (url, options = {}) => {
+  const response = await fetch(url, {
+    method: options.method || 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      ...buildAuthHeaders(),
+      ...(options.headers || {}),
+    },
+    credentials: 'include',
+    body: options.body ? JSON.stringify(options.body) : undefined,
+  });
+
+  if (!response.ok) {
+    let message = `İstek başarısız oldu (status: ${response.status})`;
+    try {
+      const errData = await response.json();
+      if (errData?.message) {
+        message = errData.message;
+      }
+    } catch (e) {
+      // JSON parse edilemezse ignore
+    }
+    throw new Error(message);
+  }
+
+  return response.json();
+};
+
+// Koleksiyon parse helper
+const parseCollection = (payload) => {
+  // payload doğrudan array ise
+  if (Array.isArray(payload)) return payload;
+
+  // payload.data array ise
+  if (payload && Array.isArray(payload.data)) return payload.data;
+
+  // payload.rows array ise (bazı endpointlerde böyle olur)
+  if (payload && Array.isArray(payload.rows)) return payload.rows;
+
+  return [];
+};
+const loadMovements = async () => {
+  const assetSearch = document.getElementById('assetSearch');
+  const movementType = document.getElementById('movementType');
+  const departmentSelect = document.getElementById('departmentSelect');
+  const dateRange = document.getElementById('dateRange');
+
+  const params = new URLSearchParams();
+
+  if (assetSearch?.value) params.append('assetSearch', assetSearch.value.trim());
+  if (movementType?.value) params.append('movementType', movementType.value);
+  if (departmentSelect?.value) params.append('departmentId', departmentSelect.value);
+
+  const { startDate, endDate } = parseDateRange(dateRange?.value);
+  if (startDate) params.append('startDate', startDate);
+  if (endDate) params.append('endDate', endDate);
+
+  const tbody = document.getElementById('movementTableBody');
+  if (tbody) {
+    tbody.textContent = '';
+    const row = document.createElement('tr');
+    const cell = document.createElement('td');
+    cell.colSpan = 8; // 8 sütun var
+    cell.className = 'text-center text-muted';
+    cell.textContent = 'Yükleniyor...';
+    row.append(cell);
+    tbody.append(row);
+  }
+
+  try {
+    const url = `${API_BASE_URL}/asset-movements/filter?${params.toString()}`;
+    console.log('loadMovements URL:', url);
+
+    const payload = await fetchJson(url);
+    console.log('loadMovements payload:', payload);
+
+    const movements = parseCollection(payload);
+    console.log('loadMovements parsed movements:', movements);
+
+    // 🔹 Asıl render burada
+    renderMovements(movements);
+  } catch (error) {
+    showAlert(error.message || 'Varlık hareketleri yüklenemedi.', 'danger');
+    renderMovements([]);
+  }
+};
+const createStatusContainer = (selectEl) => {
+        const helper = document.createElement('div');
+        helper.className = 'mt-2';
+        helper.setAttribute('data-role', 'department-status');
+        selectEl.insertAdjacentElement('afterend', helper);
+        return helper;
+      };
+
+      const setStatusMessage = (target, message, type = 'info') => {
+        if (!target) return;
+        target.className = `mt-2 alert alert-${type} py-2 mb-0`;
+        target.textContent = message;
+      };
+
+      const clearStatusMessage = (target) => {
+        if (!target) return;
+        target.className = 'mt-2';
+        target.textContent = '';
+      };
+
+      const populateDepartments = async (selectEl, statusTarget) => {
+        selectEl.replaceChildren();
+        selectEl.append(new Option('Birimler yükleniyor...', '', true, true));
+        selectEl.disabled = true;
+        clearStatusMessage(statusTarget);
+
+        const token = localStorage.getItem('token');
+        const headers = {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        };
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/departments`, {
+            method: 'GET',
+            headers,
+            credentials: 'include',
+          });
+
+          let payload;
+          try {
+            payload = await response.json();
+          } catch (parseError) {
+            throw new Error('Departman verisi çözümlenemedi');
+          }
+
+          if (!response.ok) {
+            const errorMessage = payload?.message || 'Birim listesi alınamadı';
+            throw new Error(errorMessage);
+          }
+
+          const departments = Array.isArray(payload?.data)
+            ? payload.data
+            : Array.isArray(payload)
+            ? payload
+            : [];
+
+          selectEl.replaceChildren();
+          selectEl.append(new Option('Tümü', '', true, true));
+
+          departments.forEach((dept) => {
+            if (!dept?.id) return;
+            const label = dept.code ? `${dept.name} (${dept.code})` : dept.name;
+            selectEl.append(new Option(label || 'Birim', dept.id));
+          });
+
+          selectEl.disabled = departments.length === 0;
+
+          if (departments.length === 0) {
+            selectEl.append(new Option('Herhangi bir birim bulunamadı', '', true, false));
+            setStatusMessage(statusTarget, 'Herhangi bir birim bulunamadı.', 'warning');
+          }
+        } catch (error) {
+          console.error('Birimler yüklenirken hata oluştu:', error);
+          selectEl.replaceChildren();
+          selectEl.append(new Option('Birimler yüklenemedi', '', true, true));
+          selectEl.disabled = true;
+          setStatusMessage(statusTarget, 'Birimler yüklenemedi. Lütfen daha sonra tekrar deneyin.', 'danger');
+        }
+      };
+const initDepartmentFilter = () => {
+        const departmentSelect = document.getElementById('departmentSelect');
+        if (!departmentSelect) return;
+
+        const statusContainer = createStatusContainer(departmentSelect);
+        populateDepartments(departmentSelect, statusContainer);
+      };
+const bindEvents = () => {
+  const form = document.getElementById('movementForm');
+  const assetSelect = document.getElementById('assetSelect');
+  const filterButton = document.getElementById('filtrele');
+  const movementDate = document.getElementById('movementDate');
+
+  if (form) {
+    form.addEventListener('submit', handleSubmit);
+  }
+
+  if (assetSelect) {
+    assetSelect.addEventListener('change', (event) => {
+      updateAssetSummary(event.target.value);
+    });
+  }
+
+  if (filterButton) {
+    filterButton.addEventListener('click', loadMovements);
+  }
+
+  if (movementDate) {
+    movementDate.value = new Date().toISOString().split('T')[0];
+  }
+};
+const initMovementDistribution = () => {
+    const distributionContainer = document.querySelector('[data-role="movement-distribution"]');
+    const alertContainer = document.querySelector('[data-role="movement-distribution-alert"]');
+    const filterForm = document.querySelector('[data-role="movement-filter-form"]');
+
+    if (!distributionContainer) {
+      return;
+    }
+
+    const clearLocalAlert = () => {
+      if (!alertContainer) return;
+      alertContainer.replaceChildren();
+    };
+
+    const showLocalAlert = (message, type = 'danger') => {
+      if (!alertContainer) return;
+
+      const alert = document.createElement('div');
+      alert.className = `alert alert-${type} alert-dismissible fade show`;
+      alert.setAttribute('role', 'alert');
+
+      const alertText = document.createElement('span');
+      alertText.textContent = message;
+
+      const closeButton = document.createElement('button');
+      closeButton.type = 'button';
+      closeButton.className = 'btn-close';
+      closeButton.setAttribute('data-bs-dismiss', 'alert');
+      closeButton.setAttribute('aria-label', 'Kapat');
+
+      alert.append(alertText, closeButton);
+
+      clearLocalAlert();
+      alertContainer.appendChild(alert);
+    };
+
+    const renderEmptyState = () => {
+      const emptyText = document.createElement('p');
+      emptyText.className = 'text-muted mb-0';
+      emptyText.textContent = 'İşlem tipi dağılımı için veri bulunamadı.';
+      distributionContainer.replaceChildren(emptyText);
+    };
+
+    const renderDistribution = (distribution = [], total = 0) => {
+      distributionContainer.replaceChildren();
+
+      if (!distribution.length) {
+        renderEmptyState();
+        return;
+      }
+
+      const table = document.createElement('table');
+      table.className = 'table table-sm mb-2';
+
+      const headerTitles = ['İşlem Tipi', 'Adet', 'Toplama Oran'];
+      const thead = document.createElement('thead');
+      const headerRow = document.createElement('tr');
+
+      headerTitles.forEach((title) => {
+        const th = document.createElement('th');
+        th.scope = 'col';
+        th.textContent = title;
+        headerRow.appendChild(th);
+      });
+
+      thead.appendChild(headerRow);
+
+      const tbody = document.createElement('tbody');
+
+      distribution.forEach(({ movement_type, count, percentage }) => {
+        const row = document.createElement('tr');
+
+        const typeCell = document.createElement('td');
+        typeCell.textContent = movement_type || 'Bilinmiyor';
+
+        const countCell = document.createElement('td');
+        const normalizedCount = Number.isFinite(Number(count)) ? Number(count) : 0;
+        countCell.textContent = normalizedCount.toString();
+
+        const percentageCell = document.createElement('td');
+        const normalizedPercentage = Number.isFinite(Number(percentage)) ? Number(percentage) : 0;
+        percentageCell.textContent = `${normalizedPercentage.toFixed(2)}%`;
+
+        row.append(typeCell, countCell, percentageCell);
+        tbody.appendChild(row);
+      });
+
+      table.append(thead, tbody);
+      distributionContainer.appendChild(table);
+
+      const totalText = document.createElement('p');
+      totalText.className = 'text-muted small mb-0';
+      totalText.textContent = `Toplam hareket: ${total}`;
+      distributionContainer.appendChild(totalText);
+    };
+
+    const fetchDistribution = async () => {
+      clearLocalAlert();
+
+      const token = localStorage.getItem('token');
+      if (!token) {
+        renderEmptyState();
+        showLocalAlert('Oturum bulunamadı. Lütfen yeniden giriş yapın.', 'warning');
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/asset-movements/movement-type-distribution`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          let message = 'İşlem tipi dağılımı alınamadı.';
+
+          try {
+            const errorBody = await response.json();
+            if (errorBody?.message) {
+              message = errorBody.message;
+            }
+          } catch (parseError) {
+            const fallbackMessage = await response.text();
+            if (fallbackMessage) {
+              message = fallbackMessage;
+            }
+          }
+
+          throw new Error(message);
+        }
+
+        const payload = await parseJsonSafely(response);
+        const distribution = Array.isArray(payload?.distribution) ? payload.distribution : [];
+        const totalMovements = Number.isFinite(Number(payload?.totalMovements))
+          ? Number(payload.totalMovements)
+          : 0;
+
+        renderDistribution(distribution, totalMovements);
+        showLocalAlert('İşlem tipi dağılımı başarıyla yüklendi.', 'success');
+
+        if (filterForm) {
+          filterForm.reset();
+        }
+      } catch (error) {
+        console.error('İşlem tipi dağılımı alınamadı:', error);
+        renderEmptyState();
+        showLocalAlert(error?.message || 'Veriler alınırken bir hata oluştu.', 'danger');
+      }
+    };
+
+    // İlk yüklemede dağılımı çek
+    fetchDistribution();
+  };
+document.addEventListener('DOMContentLoaded', initPage);
+     </script>
+     
   </body>
 </html>

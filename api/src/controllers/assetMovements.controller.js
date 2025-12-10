@@ -1,5 +1,41 @@
 const knex = require('../config/knex');
+const getCountFromRow = (row) => Number(row?.count) || 0;
+// Ortak hareket sorgusu
+const buildMovementQuery = (municipalityId) => {
+  const query = knex('asset_movements as am')
+    .leftJoin('assets as a', 'am.asset_id', 'a.id')
+    .leftJoin('departments as fd', 'am.from_department_id', 'fd.id')
+    .leftJoin('departments as td', 'am.to_department_id', 'td.id')
+    .leftJoin('locations as fl', 'am.from_location_id', 'fl.id')
+    .leftJoin('locations as tl', 'am.to_location_id', 'tl.id')
+    .leftJoin('users as u', 'am.performed_by_user_id', 'u.id')
+    .select(
+      'am.id',
+      'am.movement_date',
+      'am.movement_type',
+      'am.notes',
+      'a.id as asset_id',
+      'a.name as asset_name',
+      'a.asset_code',
+      'fd.name as from_department_name',
+      'td.name as to_department_name',
+      'fl.name as from_location_name',
+      'tl.name as to_location_name',
+      'u.full_name as performer_name'
+    )
+    .orderBy('am.movement_date', 'desc');
 
+  if (municipalityId) {
+    query.where((qb) => {
+      qb.where('am.municipality_id', municipalityId).orWhere(
+        'a.municipality_id',
+        municipalityId
+      );
+    });
+  }
+
+  return query;
+};
 // GET /api/asset-movements
 // Varlık hareketlerini filtreleyerek listeler
 exports.listAssetMovements = async (req, res) => {
@@ -139,22 +175,25 @@ exports.getMovementTypeDistribution = async (req, res) => {
       .count('* as count');
 
     const totalMovements = movementCounts.reduce(
-      (sum, row) => sum + Number(row.count),
+      (sum, row) => sum + Number(row.count || 0),
       0
     );
 
-    const distribution = movementCounts.map((row) => {
-      const count = Number(row.count);
-      const percentage = totalMovements === 0 ? 0 : Number(((count / totalMovements) * 100).toFixed(2));
+     const distribution = movementCounts
+      .map((row) => {
+        const count = Number(row.count || 0);
+        const percentage =
+          totalMovements === 0 ? 0 : Number(((count / totalMovements) * 100).toFixed(2));
 
-      return {
-        movement_type: row.movement_type,
-        count,
-        percentage,
-      };
-    });
+        return {
+          movement_type: row.movement_type || 'Bilinmiyor',
+          count,
+          percentage,
+        };
+      })
+      .sort((a, b) => b.count - a.count || a.movement_type.localeCompare(b.movement_type));
 
-    return res.json({
+   return res.status(200).json({
       totalMovements,
       distribution,
     });
@@ -166,7 +205,11 @@ exports.getMovementTypeDistribution = async (req, res) => {
 
 exports.getRecentAssetMovements = async (req, res) => {
   try {
-    const { municipality_id } = req.user;
+    const municipalityId = req.user?.municipality_id;
+
+    if (!municipalityId) {
+      return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
+    }
 
     const movements = await knex('asset_movements as am')
       .join('assets as a', 'am.asset_id', 'a.id')
@@ -175,7 +218,7 @@ exports.getRecentAssetMovements = async (req, res) => {
       .leftJoin('locations as fl', 'am.from_location_id', 'fl.id')
       .leftJoin('locations as tl', 'am.to_location_id', 'tl.id')
       .leftJoin('users as u', 'am.performed_by_user_id', 'u.id')
-      .where('am.municipality_id', municipality_id)
+      .where('am.municipality_id', municipalityId)
       .select(
         'am.id',
         'am.asset_id',
@@ -191,7 +234,10 @@ exports.getRecentAssetMovements = async (req, res) => {
         'am.to_location_id',
         'tl.name as to_location_name',
         'am.performed_by_user_id',
-        knex.raw("COALESCE(u.first_name || ' ' || u.last_name, u.username) as performed_by_name"),
+        // 🔴 ÖNCEKİ HATA KAYNAĞI: first_name / last_name yok
+        // knex.raw("COALESCE(u.first_name || ' ' || u.last_name, u.username) as performed_by_name"),
+        // ✅ users tablon FULL_NAME + USERNAME kullanıyor
+        knex.raw("COALESCE(u.full_name, u.username) as performed_by_name"),
         'am.movement_date',
         'am.notes',
         'am.created_at'
@@ -202,6 +248,8 @@ exports.getRecentAssetMovements = async (req, res) => {
     return res.json(movements);
   } catch (err) {
     console.error('assetMovements.getRecentAssetMovements hatası:', err);
+    // Geliştirme sırasında hata mesajını da görmek istersen:
+    // return res.status(500).json({ message: err.message });
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
@@ -285,7 +333,150 @@ exports.createAssetMovement = async (req, res) => {
 
     return res.status(201).json(created);
   } catch (err) {
-    console.error('assetMovements.createAssetMovement hatası:', err);
+    console.error('assetMovements.createAssetMovement hatası:', {message: err.message,
+    detail: err.detail,
+    code: err.code,
+    stack: err.stack,});
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
+
+exports.getLastThirtyDaysMovementsTotal = async (req, res) => {
+  try {
+    const { municipality_id: municipalityId } = req.user || {};
+
+    if (!municipalityId) {
+      return res.status(401).json({ message: 'Kullanıcı belediye bilgisi bulunamadı' });
+    }
+
+    const now = new Date();
+    const thirtyDaysAgo = new Date(now);
+    thirtyDaysAgo.setDate(now.getDate() - 30);
+
+    const [row] = await knex('asset_movements')
+      .where('municipality_id', municipalityId)
+      .andWhere('movement_date', '>=', thirtyDaysAgo)
+      .count('id as count');
+
+    return res.json({ total: getCountFromRow(row) });
+  } catch (err) {
+    console.error('assetMovements.getLastThirtyDaysMovementsTotal hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
+exports.getTodayMovementsTotal = async (req, res) => {
+  try {
+    const { municipality_id: municipalityId } = req.user || {};
+
+    if (!municipalityId) {
+      return res.status(401).json({ message: 'Kullanıcı belediye bilgisi bulunamadı' });
+    }
+
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfTomorrow = new Date(startOfToday);
+    startOfTomorrow.setDate(startOfToday.getDate() + 1);
+
+    const [row] = await knex('asset_movements')
+      .where('municipality_id', municipalityId)
+      .andWhere('movement_date', '>=', startOfToday)
+      .andWhere('movement_date', '<', startOfTomorrow)
+      .count('id as count');
+
+    return res.json({ total: getCountFromRow(row) });
+  } catch (err) {
+    console.error('assetMovements.getTodayMovementsTotal hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+exports.getMaintenanceMovementsTotal = async (req, res) => {
+  try {
+    const { municipality_id: municipalityId } = req.user || {};
+
+    if (!municipalityId) {
+      return res.status(401).json({ message: 'Kullanıcı belediye bilgisi bulunamadı' });
+    }
+
+    const [row] = await knex('asset_movements')
+      .where({ municipality_id: municipalityId, movement_type: 'maintenance' })
+      .count('id as count');
+
+    return res.json({ total: getCountFromRow(row) });
+  } catch (err) {
+    console.error('assetMovements.getMaintenanceMovementsTotal hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+exports.getZimmetMovementsTotal = async (req, res) => {
+  try {
+    const { municipality_id: municipalityId } = req.user || {};
+
+    if (!municipalityId) {
+      return res.status(401).json({ message: 'Kullanıcı belediye bilgisi bulunamadı' });
+    }
+
+    const [row] = await knex('asset_movements')
+      .where({ municipality_id: municipalityId, movement_type: 'assign' })
+      .count('id as count');
+
+    return res.json({ total: getCountFromRow(row) });
+  } catch (err) {
+    console.error('assetMovements.getZimmetMovementsTotal hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
+exports.filterMovements = async (req, res) => {
+  try {
+    const { municipality_id } = req.user || {};
+    const { assetSearch, movementType, departmentId, startDate, endDate } = req.query;
+
+    const query = buildMovementQuery(municipality_id);
+
+    const hasAnyFilter =
+      assetSearch || movementType || departmentId || startDate || endDate;
+
+    if (assetSearch) {
+      query.andWhere((builder) => {
+        builder
+          .whereILike('a.asset_code', `%${assetSearch}%`)
+          .orWhereILike('a.name', `%${assetSearch}%`);
+      });
+    }
+
+    if (movementType) {
+      query.andWhere('am.movement_type', movementType);
+    }
+
+    if (departmentId) {
+      query.andWhere((builder) => {
+        builder
+          .where('am.from_department_id', departmentId)
+          .orWhere('am.to_department_id', departmentId);
+      });
+    }
+
+    if (startDate && endDate) {
+      query.andWhereBetween('am.movement_date', [startDate, endDate]);
+    } else if (startDate) {
+      query.andWhere('am.movement_date', '>=', startDate);
+    } else if (endDate) {
+      query.andWhere('am.movement_date', '<=', endDate);
+    }
+
+    // Hiç filtre yoksa: son 100 hareket
+    if (!hasAnyFilter) {
+      query.limit(100);
+    }
+
+    const movements = await query;
+
+    return res.json({ data: movements });
+  } catch (error) {
+    console.error('assetMovement.filterMovements error:', error);
+    return res.status(500).json({ message: 'Varlık hareketleri alınamadı' });
+  }
+};
+
+

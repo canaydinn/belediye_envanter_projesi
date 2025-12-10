@@ -16,6 +16,7 @@ const LOCATION_COLUMNS = [
   'latitude',
   'longitude',
 ];
+const parseCount = (row) => Number(row?.total ?? row?.count ?? 0);
 
 exports.createLocation = async (req, res) => {
   try {
@@ -75,37 +76,199 @@ exports.createLocation = async (req, res) => {
 
 exports.listLocations = async (req, res) => {
   try {
-    
-    const { municipality_id } = req.user || {};
+    console.log('LIST_LOCATIONS req.user:', req.user); // geçici debug
+
+    const municipalityId = req.user?.municipality_id;
     const { type, department_id, is_active } = req.query;
+
+    if (!municipalityId) {
+      return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
+    }
 
     const query = knex('locations')
       .select(LOCATION_COLUMNS)
-      .modify((qb) => {
-        if (municipality_id) {
-          qb.where('municipality_id', municipality_id);
-        }
-      });
+      .where('municipality_id', municipalityId);
 
-    if (type) query.andWhere('type', type);
-    if (department_id) query.andWhere('department_id', department_id);
-    if (is_active !== undefined) {
-      const isActiveValue = ['1', 'true', 1, true].includes(is_active);
-      query.andWhere('is_active', isActiveValue);
+    // type integer (1: Ofis, 2: Depo, 3: Saha Ofisi, 4: Bina)
+    if (typeof type !== 'undefined' && type !== '') {
+      const typeInt = Number(type);
+      if (Number.isInteger(typeInt)) {
+        query.andWhere('type', typeInt);
+      }
     }
+
+    if (typeof department_id !== 'undefined' && department_id !== '') {
+      const deptId = Number(department_id);
+      if (Number.isInteger(deptId)) {
+        query.andWhere('department_id', deptId);
+      }
+    }
+
+    if (typeof is_active !== 'undefined' && is_active !== '') {
+  const normalized = String(is_active).toLowerCase().trim();
+
+  if (['1', 'true', 'yes', 'aktif', 'active'].includes(normalized)) {
+    query.andWhere('is_active', true);
+  } else if (['0', 'false', 'no', 'pasif', 'passive'].includes(normalized)) {
+    query.andWhere('is_active', false);
+  }
+}
 
     const data = await query.orderBy('name', 'asc');
 
-    return res.json({ data });
+    console.log(
+      'LIST_LOCATIONS municipalityId:',
+      municipalityId,
+      'rowCount:',
+      data.length
+    );
+
+    return res.json({
+      data,
+      total: data.length,
+    });
   } catch (err) {
     console.error('LIST_LOCATIONS_ERROR', err);
     return res.status(500).json({
       error: 'INTERNAL_SERVER_ERROR',
-      message: 'Lokasyon listesi alınırken bir hata oluştu.'
+      message: 'Lokasyon listesi alınırken bir hata oluştu.',
     });
   }
 };
+exports.getLocationStats = async (req, res) => {
+  try {
+        console.log('getLocationStats req.user:', req.user); // 🔍 GEÇİCİ LOG
 
+    const municipalityId = req.user?.municipality_id;
+
+    if (!municipalityId) {
+      return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
+    }
+
+    // Lokasyon tipi kodları (form ile uyumlu)
+    // 1: Ofis, 2: Depo, 3: Saha Ofisi, 4: Bina
+    const LOCATION_TYPES = {
+      OFFICE: 1,
+      WAREHOUSE: 2,
+      FIELD_OFFICE: 3,
+      BUILDING: 4,
+    };
+
+    const [totalLocationsRow, activeLocationsRow, warehouseRow] = await Promise.all([
+      // Toplam lokasyon
+      knex('locations')
+        .where({ municipality_id: municipalityId })
+        .count({ total: 'id' })
+        .first(),
+
+      // Aktif lokasyon
+      knex('locations')
+        .where({ municipality_id: municipalityId, is_active: true })
+        .count({ total: 'id' })
+        .first(),
+
+      // Depo sayısı (type = 2)
+      knex('locations')
+        .where({ municipality_id: municipalityId })
+        .andWhere('type', LOCATION_TYPES.WAREHOUSE)
+        .count({ total: 'id' })
+        .first(),
+    ]);
+
+    // Envanter yoğun lokasyon
+    const denseLocation = await knex('locations as l')
+      .leftJoin('assets as a', 'a.location_id', 'l.id')
+      .where('l.municipality_id', municipalityId)
+      .groupBy('l.id', 'l.name')
+      .select('l.id', 'l.name')
+      .count('a.id as asset_count')
+      .orderBy([
+        { column: 'asset_count', order: 'desc' },
+        { column: 'l.name', order: 'asc' },
+      ])
+      .first();
+
+    return res.json({
+      totals: {
+        locations: parseCount(totalLocationsRow),
+        active_locations: parseCount(activeLocationsRow),
+        warehouses: parseCount(warehouseRow),
+      },
+      dense_location: denseLocation
+        ? {
+            id: denseLocation.id,
+            name: denseLocation.name,
+            asset_count: Number(denseLocation.asset_count) || 0,
+          }
+        : null,
+    });
+  } catch (err) {
+    console.error('LOCATION_STATS_ERROR', err);
+    return res.status(500).json({
+      error: 'INTERNAL_SERVER_ERROR',
+      message: 'Lokasyon istatistikleri alınırken bir hata oluştu.',
+    });
+  }
+};
+exports.getLocationTypeDistribution = async (req, res) => {
+  try {
+    const { municipality_id } = req.user || {};
+
+    if (!municipality_id) {
+      return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
+    }
+
+    const rows = await knex('locations')
+      .where({ municipality_id })
+      .select('type')
+      .count({ count: 'id' })
+      .groupBy('type');
+
+    const distribution = {
+      building: 0,
+      warehouse: 0,
+      open_area: 0,
+      site_office: 0,
+      other: 0,
+    };
+
+    const typeMap = {
+      building: ['bina', 'building'],
+      warehouse: ['depo', 'warehouse'],
+      open_area: ['acik alan', 'açık alan', 'open_area', 'open area'],
+      site_office: ['saha ofisi', 'site_office', 'site office'],
+    };
+
+    const normalizeKey = (value) => {
+      const normalized = (value || '').toString().trim().toLowerCase();
+      const matchedEntry = Object.entries(typeMap).find(([, aliases]) =>
+        aliases.includes(normalized)
+      );
+
+      return matchedEntry ? matchedEntry[0] : 'other';
+    };
+
+    rows.forEach((row) => {
+      const key = normalizeKey(row?.type);
+      const count = Number(row?.count ?? row?.total ?? 0);
+      distribution[key] += Number.isFinite(count) ? count : 0;
+    });
+
+    const total = Object.values(distribution).reduce((sum, value) => sum + value, 0);
+
+    return res.json({
+      municipality_id,
+      distribution,
+      total,
+    });
+  } catch (err) {
+    console.error('LOCATION_TYPE_DISTRIBUTION_ERROR', err);
+    return res.status(500).json({
+      error: 'INTERNAL_SERVER_ERROR',
+      message: 'Lokasyon tipi dağılımı alınırken bir hata oluştu.'
+    });
+  }
+};
 exports.getLocationTree = async (req, res) => {
   try {
     
@@ -131,32 +294,46 @@ exports.getLocationTree = async (req, res) => {
 
 exports.getLocationById = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { municipality_id } = req.user || {};
+    const municipalityId = req.user?.municipality_id;
+    const idParam = req.params.id;
 
-    const loc = await knex('locations')
-      .select(LOCATION_COLUMNS)
-      .where({ id })
-      .modify((qb) => {
-        if (municipality_id) {
-          qb.andWhere('municipality_id', municipality_id);
-        }
-      })
-      .first();
-
-    if (!loc) {
-      return res.status(404).json({
-        error: 'LOCATION_NOT_FOUND',
-        message: 'Lokasyon bulunamadı.'
-      });
+    if (!municipalityId) {
+      return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
     }
 
-    return res.json(loc);
+    const locationId = Number(idParam);
+    if (!Number.isInteger(locationId)) {
+      return res.status(400).json({ message: 'Geçersiz lokasyon ID' });
+    }
+
+    const location = await knex('locations')
+      .select(
+        'id',
+        'code',
+        'name',
+        'address',
+        'department_id',
+        'is_active',
+        'created_at',
+        'updated_at',
+        'municipality_id',
+        'type',
+        'latitude',
+        'longitude'
+      )
+      .where({ id: locationId, municipality_id: municipalityId })
+      .first();
+
+    if (!location) {
+      return res.status(404).json({ message: 'Lokasyon bulunamadı' });
+    }
+
+    return res.json(location);
   } catch (err) {
     console.error('GET_LOCATION_ERROR', err);
     return res.status(500).json({
       error: 'INTERNAL_SERVER_ERROR',
-      message: 'Lokasyon bilgisi alınırken bir hata oluştu.'
+      message: 'Lokasyon alınırken bir hata oluştu.',
     });
   }
 };

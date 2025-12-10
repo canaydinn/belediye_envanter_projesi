@@ -13,6 +13,150 @@ exports.listCategories = async (req, res) => {
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
+exports.getCategoryStats = async (req, res) => {
+  try {
+    const municipalityId = req.user?.municipality_id;
+
+    if (!municipalityId) {
+      return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
+    }
+
+    const totalCategoriesRow = await knex('asset_categories')
+      .where({ municipality_id: municipalityId })
+      .count('id as count')
+      .first();
+
+    const totalActiveCategoriesRow = await knex('asset_categories as c')
+      .leftJoin('assets as a', function joinAssets() {
+        this.on('a.category_id', 'c.id').andOn('a.municipality_id', 'c.municipality_id');
+      })
+      .where('c.municipality_id', municipalityId)
+      .where('a.status', 'active')
+      .countDistinct('c.id as count')
+      .first();
+
+    const maxAssetCategoryRow = await knex('asset_categories as c')
+      .leftJoin('assets as a', function joinAssets() {
+        this.on('a.category_id', 'c.id').andOn('a.municipality_id', 'c.municipality_id');
+      })
+      .where('c.municipality_id', municipalityId)
+      .groupBy('c.id', 'c.name', 'c.code')
+      .count('a.id as asset_count')
+      .select('c.id', 'c.name', 'c.code')
+      .orderBy([{ column: 'asset_count', order: 'desc' }, { column: 'c.name', order: 'asc' }])
+      .first();
+
+    const emptyCategoriesRow = await knex('asset_categories as c')
+      .leftJoin('assets as a', function joinAssets() {
+        this.on('a.category_id', 'c.id').andOn('a.municipality_id', 'c.municipality_id');
+      })
+      .where('c.municipality_id', municipalityId)
+      .groupBy('c.id')
+      .havingRaw('COUNT(a.id) = 0')
+      .countDistinct('c.id as count')
+      .first();
+
+    return res.json({
+      total_categories: Number(totalCategoriesRow?.count || 0),
+      total_active_categories: Number(totalActiveCategoriesRow?.count || 0),
+      max_asset_category: maxAssetCategoryRow
+        ? {
+            id: maxAssetCategoryRow.id,
+            name: maxAssetCategoryRow.name,
+            code: maxAssetCategoryRow.code,
+            asset_count: Number(maxAssetCategoryRow.asset_count || 0),
+          }
+        : null,
+      total_empty_categories: Number(emptyCategoriesRow?.count || 0),
+    });
+  } catch (err) {
+    console.error('assetCategories.getCategoryStats hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+exports.createCategory = async (req, res) => {
+  try {
+    const municipalityId = req.user?.municipality_id;
+    const { code, name, description } = req.body || {};
+
+    if (!municipalityId) {
+      return res.status(401).json({ message: 'Belediye doğrulaması başarısız' });
+    }
+
+    const sanitizedCode = (code || '').trim();
+    const sanitizedName = (name || '').trim();
+    const sanitizedDescription = (description || '').trim();
+
+    if (!sanitizedCode || !sanitizedName) {
+      return res.status(400).json({ message: 'Kod ve ad alanları zorunludur' });
+    }
+
+    const duplicate = await knex('asset_categories')
+      .where({ municipality_id: municipalityId })
+      .andWhere((builder) =>
+        builder.where('code', sanitizedCode).orWhere('name', sanitizedName)
+      )
+      .first();
+
+    if (duplicate) {
+      return res.status(409).json({ message: 'Bu kod veya ad ile kayıtlı kategori zaten mevcut' });
+    }
+
+    const [createdCategory] = await knex('asset_categories')
+      .insert({
+        code: sanitizedCode,
+        name: sanitizedName,
+        description: sanitizedDescription || null,
+        municipality_id: municipalityId,
+      })
+      .returning(['id', 'code', 'name', 'description', 'municipality_id', 'created_at', 'updated_at']);
+
+    return res.status(201).json({
+      message: 'Kategori başarıyla oluşturuldu',
+      category: createdCategory,
+    });
+  } catch (err) {
+    console.error('assetCategories.createCategory hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+exports.getCategoryDistribution = async (req, res) => {
+  try {
+    const municipalityId = req.user?.municipality_id;
+
+    const distributionQuery = knex('asset_categories as c')
+      .leftJoin('assets as a', function () {
+        this.on('a.category_id', '=', 'c.id');
+
+        if (municipalityId) {
+          this.andOn('a.municipality_id', '=', municipalityId);
+        }
+      })
+      .modify((queryBuilder) => {
+        if (municipalityId) {
+          queryBuilder.where('c.municipality_id', municipalityId);
+        }
+      })
+      .select('c.id', 'c.name', 'c.code')
+      .count({ asset_count: 'a.id' })
+      .groupBy('c.id', 'c.name', 'c.code')
+      .orderBy('c.name', 'asc');
+
+    const distribution = await distributionQuery;
+
+    const normalizedDistribution = distribution.map((item) => ({
+      id: item.id,
+      name: item.name,
+      code: item.code,
+      asset_count: Number(item.asset_count) || 0,
+    }));
+
+    return res.json(normalizedDistribution);
+  } catch (err) {
+    console.error('assetCategories.getCategoryDistribution hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
 exports.deleteCategory = async (req, res) => {
   try {
     const municipalityId = req.user?.municipality_id;

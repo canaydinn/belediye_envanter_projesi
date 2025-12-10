@@ -92,12 +92,7 @@
           <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
               <div class="navbar-nav align-items-center">
-                <div class="nav-item navbar-search-wrapper mb-0">
-                  <a class="nav-item nav-link search-toggler px-0" href="#">
-                    <i class="ti ti-search ti-md"></i>
-                    <span class="d-none d-md-inline-block">Arama</span>
-                  </a>
-                </div>
+                
               </div>
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <li class="nav-item dropdown-user dropdown">
@@ -159,87 +154,17 @@
                   <p class="text-muted mb-0">Belediyenize ait tüm lokasyonları ve bu lokasyonlardaki varlık sayılarını görüntüleyin.</p>
                 </div>
                 <div class="d-none d-md-block">
-                  <ol class="breadcrumb breadcrumb-style2 mb-0">
-                    <li class="breadcrumb-item"><a href="dashboards-analytics.html">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Lokasyonlar</li>
-                  </ol>
+                 
                 </div>
               </div>
-
-              <!-- Filters & Actions Card -->
-              <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                  <div>
-                    <h5 class="card-title mb-0">Lokasyon Filtreleri</h5>
-                    <small class="text-muted">Lokasyon listesi üzerinde filtreleme ve hızlı işlemler.</small>
-                  </div>
-                  <div class="d-flex gap-2">
-                    <a href="locations-create.html" class="btn btn-primary">
-                      <i class="feather icon-plus me-1"></i>
-                      Yeni Lokasyon Ekle
-                    </a>
-                    <a href="/api/locations/export/excel" class="btn btn-outline-secondary">
-                      <i class="feather icon-download me-1"></i>
-                      Dışa Aktar (Excel)
-                    </a>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <form class="row g-3">
-                    <div class="col-12 col-md-4 col-xl-3">
-                      <label class="form-label" for="filter-name">Lokasyon Adı</label>
-                      <input type="text" id="filter-name" class="form-control" placeholder="Lokasyon adı ile ara" />
-                    </div>
-                    <div class="col-12 col-md-4 col-xl-3">
-                      <label class="form-label" for="filter-type">Lokasyon Tipi</label>
-                      <select id="filter-type" class="form-select">
-                        <option>Tümü</option>
-                        <option>Bina</option>
-                        <option>Depo</option>
-                        <option>Açık Alan</option>
-                        <option>Saha Ofisi</option>
-                        <option>Diğer</option>
-                      </select>
-                    </div>
-                    <div class="col-12 col-md-4 col-xl-3">
-                      <label class="form-label" for="filter-department">Birim</label>
-                      <select id="filter-department" class="form-select">
-                        <option>Tümü</option>
-                        <option>Mali Hizmetler</option>
-                        <option>Fen İşleri</option>
-                        <option>İnsan Kaynakları</option>
-                        <option>Temizlik İşleri</option>
-                      </select>
-                    </div>
-                    <div class="col-12 col-md-4 col-xl-3">
-                      <label class="form-label" for="filter-status">Durum</label>
-                      <select id="filter-status" class="form-select">
-                        <option>Tümü</option>
-                        <option>Aktif</option>
-                        <option>Pasif</option>
-                      </select>
-                    </div>
-                    <div class="col-12 col-md-8 col-xl-6">
-                      <label class="form-label" for="filter-address">Adres / Açıklama</label>
-                      <input type="text" id="filter-address" class="form-control" placeholder="Adres veya açıklama parçası" />
-                    </div>
-                    <div class="col-12 d-flex align-items-end gap-2">
-                      <button type="button" class="btn btn-primary">Filtrele</button>
-                      <button type="reset" class="btn btn-outline-secondary">Temizle</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-
-              <!-- KPI Cards Row (Optional) -->
-              <div class="row mb-4 g-3">
+<div class="row mb-4 g-3">
                 <div class="col-12 col-md-6 col-xl-3">
                   <div class="card card-border-shadow-primary h-100">
                     <div class="card-body">
                       <div class="d-flex align-items-start justify-content-between">
                         <div class="content-left">
                           <p class="text-muted mb-1">Toplam Lokasyon</p>
-                          <h4 class="mb-0">48</h4>
+                          <h4 class="mb-0" id="total_locations"></h4>
                           <small class="text-muted">Belediyeye kayıtlı tüm lokasyonlar</small>
                         </div>
                         <span class="badge bg-label-primary rounded p-2">
@@ -255,7 +180,7 @@
                       <div class="d-flex align-items-start justify-content-between">
                         <div class="content-left">
                           <p class="text-muted mb-1">Aktif Lokasyon</p>
-                          <h4 class="mb-0">42</h4>
+                          <h4 class="mb-0" id="total_active_location"></h4>
                           <small class="text-muted">Aktif olarak kullanılan lokasyonlar</small>
                         </div>
                         <span class="badge bg-label-success rounded p-2">
@@ -271,7 +196,7 @@
                       <div class="d-flex align-items-start justify-content-between">
                         <div class="content-left">
                           <p class="text-muted mb-1">Depo Sayısı</p>
-                          <h4 class="mb-0">5</h4>
+                          <h4 class="mb-0" id="total_warehouse"></h4>
                           <small class="text-muted">Depo veya ambar olarak kullanılan lokasyonlar</small>
                         </div>
                         <span class="badge bg-label-warning rounded p-2">
@@ -287,7 +212,7 @@
                       <div class="d-flex align-items-start justify-content-between">
                         <div class="content-left">
                           <p class="text-muted mb-1">Envanter Yoğun Lokasyon</p>
-                          <h4 class="mb-0">Merkez Bina</h4>
+                          <h4 class="mb-0" id="dense_location"></h4>
                           <small class="text-muted">En fazla varlık barındıran lokasyon</small>
                         </div>
                         <span class="badge bg-label-info rounded p-2">
@@ -298,6 +223,71 @@
                   </div>
                 </div>
               </div>
+              <div id="locationsAlerts" class="mb-3"></div>
+              <!-- Filters & Actions Card -->
+              <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5 class="card-title mb-0">Lokasyon Filtreleri</h5>
+                    <small class="text-muted">Lokasyon listesi üzerinde filtreleme ve hızlı işlemler.</small>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <a href="create-locations.html" class="btn btn-primary">
+                      <i class="feather icon-plus me-1"></i>
+                      Yeni Lokasyon Ekle
+                    </a>
+                    <!-- <a href="/api/locations/export/excel" class="btn btn-outline-secondary">
+                      <i class="feather icon-download me-1"></i>
+                      Dışa Aktar (Excel)
+                    </a> -->
+                  </div>
+                </div>
+                <div class="card-body">
+                  <form id="filter-form" class="row g-3">
+                    <div class="col-12 col-md-4 col-xl-3">
+                      <label class="form-label" for="filter-name">Lokasyon Adı</label>
+                      <input type="text" id="filter-name" class="form-control" placeholder="Lokasyon adı ile ara" />
+                    </div>
+                    <div class="col-12 col-md-4 col-xl-3">
+                      <label class="form-label" for="filter-type">Lokasyon Tipi</label>
+                      <select id="filter-type" class="form-select">
+                        <option value="">Tümü</option>
+                        <option value="1">Bina</option>
+                        <option value="2">Depo</option>
+                        <option value="3">Açık Alan</option>
+                        <option value="4">Saha Ofisi</option>
+                        <option value="5">Diğer</option>
+                      </select>
+                    </div>
+                    <div class="col-12 col-md-4 col-xl-3">
+                      <label class="form-label" for="filter-department">Birim</label>
+                      <select id="filter-department" class="form-select">
+                        <option>Tümü</option>
+                     
+                      </select>
+                    </div>
+                    <div class="col-12 col-md-4 col-xl-3">
+                      <label class="form-label" for="filter-status">Durum</label>
+                      <select id="filter-status" class="form-select">
+                        <option value="">Tümü</option>
+                        <option value="true">Aktif</option>
+                        <option value="false">Pasif</option>
+                      </select>
+                    </div>
+                    <!-- <div class="col-12 col-md-8 col-xl-6">
+                      <label class="form-label" for="filter-address">Adres / Açıklama</label>
+                      <input type="text" id="filter-address" class="form-control" placeholder="Adres veya açıklama parçası" />
+                    </div> -->
+                    <div class="col-12 d-flex align-items-end gap-2">
+                      <button type="button" class="btn btn-primary" id="filtrele">Filtrele</button>
+                      <button type="reset" class="btn btn-outline-secondary">Temizle</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <!-- KPI Cards Row (Optional) -->
+              
 
               <div class="row">
                 <div class="col-12 col-lg-8 col-xl-9">
@@ -309,7 +299,7 @@
                         <small class="text-muted">Lokasyon detaylarını görüntüleyin ve işlemlere erişin.</small>
                       </div>
                       <div class="d-flex align-items-center gap-2">
-                        <small class="text-muted">Gösterilen: 1–25 / 48</small>
+                         <small class="text-muted" data-role="locations-summary">Gösterilen: 0 / 0</small>
                         <div class="d-flex align-items-center">
                           <label for="page-size" class="form-label me-2 mb-0">Sayfa Boyutu</label>
                           <select id="page-size" class="form-select form-select-sm">
@@ -320,142 +310,24 @@
                         </div>
                       </div>
                     </div>
+                    <div id="alert-container" class="px-4 pt-3"></div>
                     <div class="table-responsive text-nowrap">
                       <table class="table table-hover table-striped mb-0">
                         <thead class="table-light">
                           <tr>
-                            <th>Kod</th>
-                            <th>Lokasyon Adı</th>
-                            <th>Tip</th>
-                            <th>Birim</th>
-                            <th>Adres / Açıklama</th>
-                            <th>Varlık Sayısı</th>
-                            <th>Durum</th>
-                            <th>İşlemler</th>
+                           <th>Kod</th>
+                          <th>Lokasyon Adı</th>
+                          <th>Tip</th>
+                          <th>Birim</th>
+                          <th>Adres / Açıklama</th>
+                          <th>Varlık Sayısı</th>
+                          <th>Durum</th>
+                          <th>İşlemler</th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr data-location-id="1">
-                            <td>LKS-001</td>
-                            <td>Merkez Bina</td>
-                            <td>Bina</td>
-                            <td>Mali Hizmetler</td>
-                            <td>Merkez Mah. Cumhuriyet Cad. No:10</td>
-                            <td>1.245</td>
-                            <td><span class="badge badge-light-success">Aktif</span></td>
-                            <td class="d-flex gap-1">
-                              <a href="location-detail.html?id=1" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="location-edit.html?id=1" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?location_id=1" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                              <a href="location-map.html?id=1" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-location-id="2">
-                            <td>LKS-002</td>
-                            <td>Şehir Kütüphanesi</td>
-                            <td>Bina</td>
-                            <td>Kültür</td>
-                            <td>Atatürk Bulvarı No:45</td>
-                            <td>562</td>
-                            <td><span class="badge badge-light-success">Aktif</span></td>
-                            <td class="d-flex gap-1">
-                              <a href="location-detail.html?id=2" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="location-edit.html?id=2" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?location_id=2" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                              <a href="location-map.html?id=2" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-location-id="3">
-                            <td>LKS-003</td>
-                            <td>Depo 1</td>
-                            <td>Depo</td>
-                            <td>Fen İşleri</td>
-                            <td>Sanayi Bölgesi 3. Sokak</td>
-                            <td>328</td>
-                            <td><span class="badge badge-light-success">Aktif</span></td>
-                            <td class="d-flex gap-1">
-                              <a href="location-detail.html?id=3" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="location-edit.html?id=3" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?location_id=3" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                              <a href="location-map.html?id=3" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-location-id="4">
-                            <td>LKS-004</td>
-                            <td>Depo 2</td>
-                            <td>Depo</td>
-                            <td>Temizlik İşleri</td>
-                            <td>Lojistik Merkezi 2. Blok</td>
-                            <td>190</td>
-                            <td><span class="badge badge-light-secondary">Pasif</span></td>
-                            <td class="d-flex gap-1">
-                              <a href="location-detail.html?id=4" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="location-edit.html?id=4" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?location_id=4" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                              <a href="location-map.html?id=4" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-location-id="5">
-                            <td>LKS-005</td>
-                            <td>Park ve Bahçeler Saha Ofisi</td>
-                            <td>Saha Ofisi</td>
-                            <td>Park ve Bahçeler</td>
-                            <td>Yeşil Vadi Parkı Yanı</td>
-                            <td>142</td>
-                            <td><span class="badge badge-light-success">Aktif</span></td>
-                            <td class="d-flex gap-1">
-                              <a href="location-detail.html?id=5" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="location-edit.html?id=5" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?location_id=5" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                              <a href="location-map.html?id=5" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-location-id="6">
-                            <td>LKS-006</td>
-                            <td>Atölye ve Tamirhane</td>
-                            <td>Açık Alan</td>
-                            <td>Fen İşleri</td>
-                            <td>Atölye Sok. No:8</td>
-                            <td>275</td>
-                            <td><span class="badge badge-light-success">Aktif</span></td>
-                            <td class="d-flex gap-1">
-                              <a href="location-detail.html?id=6" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="location-edit.html?id=6" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?location_id=6" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                              <a href="location-map.html?id=6" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-location-id="7">
-                            <td>LKS-007</td>
-                            <td>Bilgi İşlem Ofisi</td>
-                            <td>Bina</td>
-                            <td>Bilişim</td>
-                            <td>Teknokent Plaza Kat:3</td>
-                            <td>410</td>
-                            <td><span class="badge badge-light-success">Aktif</span></td>
-                            <td class="d-flex gap-1">
-                              <a href="location-detail.html?id=7" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="location-edit.html?id=7" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?location_id=7" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                              <a href="location-map.html?id=7" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
-                            </td>
-                          </tr>
-                          <tr data-location-id="8">
-                            <td>LKS-008</td>
-                            <td>Saha Ofisi Kuzey</td>
-                            <td>Saha Ofisi</td>
-                            <td>Fen İşleri</td>
-                            <td>Kuzey Çevre Yolu Şantiyesi</td>
-                            <td>96</td>
-                            <td><span class="badge badge-light-secondary">Pasif</span></td>
-                            <td class="d-flex gap-1">
-                              <a href="location-detail.html?id=8" class="btn btn-sm btn-icon btn-text-secondary" aria-label="Detay"><i class="feather icon-eye"></i></a>
-                              <a href="location-edit.html?id=8" class="btn btn-sm btn-icon btn-text-primary" aria-label="Düzenle"><i class="feather icon-edit"></i></a>
-                              <a href="assets.html?location_id=8" class="btn btn-sm btn-icon btn-text-info" aria-label="Varlıkları Görüntüle"><i class="feather icon-package"></i></a>
-                              <a href="location-map.html?id=8" class="btn btn-sm btn-icon btn-text-warning" aria-label="Haritada Aç"><i class="feather icon-map-pin"></i></a>
-                            </td>
-                          </tr>
-                        </tbody>
+                        <tbody id="locations-table-body" data-role="locations-body"></tbody>
+                        <div class="card-footer">
+                      <small class="text-muted">Liste, en fazla 100 kayıt gösterecek şekilde sınırlandırılmıştır.</small>
                       </table>
                     </div>
                     <div class="card-footer d-flex flex-wrap justify-content-between align-items-center gap-2">
@@ -480,41 +352,35 @@
                     </div>
                     <div class="card-body">
                       <ul class="list-unstyled mb-0">
-                        <li class="d-flex align-items-center justify-content-between mb-2">
-                          <div><span class="badge bg-label-primary me-2 rounded-pill">&bull;</span> Bina</div>
-                          <span class="fw-semibold">22</span>
+                        <li class="d-flex align-items-center justify-content-between mb-2">Bina
+                          <div><span class="fw-semibold" data-location-type="building"></span></div>
                         </li>
-                        <li class="d-flex align-items-center justify-content-between mb-2">
-                          <div><span class="badge bg-label-warning me-2 rounded-pill">&bull;</span> Depo</div>
-                          <span class="fw-semibold">5</span>
+                        <li class="d-flex align-items-center justify-content-between mb-2">Depo
+                          <div><span class="fw-semibold" data-location-type="warehouse"></span> </div>
                         </li>
-                        <li class="d-flex align-items-center justify-content-between mb-2">
-                          <div><span class="badge bg-label-success me-2 rounded-pill">&bull;</span> Açık Alan</div>
-                          <span class="fw-semibold">12</span>
+                        <li class="d-flex align-items-center justify-content-between mb-2">Açık Alan
+                          <div> <span class="fw-semibold" data-location-type="open_area"></span></div>
                         </li>
-                        <li class="d-flex align-items-center justify-content-between mb-2">
-                          <div><span class="badge bg-label-info me-2 rounded-pill">&bull;</span> Saha Ofisi</div>
-                          <span class="fw-semibold">9</span>
+                        <li class="d-flex align-items-center justify-content-between mb-2"> Saha Ofisi
+                          <div><span class="fw-semibold" data-location-type="site_office"></span></div>
                         </li>
-                        <li class="d-flex align-items-center justify-content-between">
-                          <div><span class="badge bg-label-secondary me-2 rounded-pill">&bull;</span> Diğer</div>
-                          <span class="fw-semibold">0</span>
+                        <li class="d-flex align-items-center justify-content-between">Diğer
+                          <div> <span class="fw-semibold" data-location-type="other"></span> </div>
                         </li>
                       </ul>
                       <!-- Placeholder for location type distribution chart -->
                     </div>
                   </div>
 
-                  <div class="card">
+                  <!-- <div class="card">
                     <div class="card-header">
                       <h6 class="mb-0">Harita Görünümü</h6>
                     </div>
                     <div class="card-body">
                       <div class="map-placeholder" style="height: 200px; background-color: #f0f2f5; border-radius: 0.5rem;">
-                        <!-- Map component will be injected here in the future -->
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -534,5 +400,542 @@
     <!-- / Layout wrapper -->
 
     <!-- Include Vuexy core JS and vendor scripts here -->
+  <script type="module">
+  const API_BASE_URL = 'http://localhost:4000/api';
+
+  // ------------------------------
+  // Lokasyon tipi dağılımı (KPI kartları - TYPE_LABELS)
+  // ------------------------------
+  const TYPE_LABELS = {
+    building: 'Bina',
+    warehouse: 'Depo',
+    open_area: 'Açık Alan',
+    site_office: 'Saha Ofisi',
+    other: 'Diğer',
+  };
+
+  const alertContainer = document.querySelector('[data-role="alert-container"]');
+
+  const showAlert = (message, variant = 'danger') => {
+    if (!alertContainer) return;
+
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${variant} alert-dismissible fade show`;
+    alert.setAttribute('role', 'alert');
+    alert.textContent = message;
+
+    const closeButton = document.createElement('button');
+    closeButton.type = 'button';
+    closeButton.className = 'btn-close';
+    closeButton.setAttribute('data-bs-dismiss', 'alert');
+    closeButton.setAttribute('aria-label', 'Kapat');
+
+    alert.appendChild(closeButton);
+    alertContainer.appendChild(alert);
+  };
+
+  const setCount = (key, value) => {
+    const countElement = document.querySelector(`[data-location-type="${key}"]`);
+    if (!countElement) return;
+
+    const numericValue = Number(value ?? 0);
+    countElement.textContent = Number.isFinite(numericValue)
+      ? numericValue.toLocaleString('tr-TR')
+      : '0';
+  };
+
+  const applyDistribution = (distribution = {}) => {
+    Object.keys(TYPE_LABELS).forEach((key) => {
+      setCount(key, distribution[key]);
+    });
+  };
+
+  const parseResponseJson = async (response) => {
+    try {
+      return await response.json();
+    } catch (error) {
+      showAlert('Sunucu yanıtı okunamadı. Lütfen daha sonra tekrar deneyin.', 'danger');
+      throw error;
+    }
+  };
+
+  const loadLocationTypeDistribution = async () => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      showAlert('Oturum bulunamadı. Lütfen yeniden giriş yapın.', 'warning');
+      applyDistribution();
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/locations/type-distribution`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: 'include',
+      });
+
+      const data = await parseResponseJson(response);
+
+      if (!response.ok) {
+        throw new Error(data?.message || 'Lokasyon tipi dağılımı alınamadı');
+      }
+
+      applyDistribution(data.distribution);
+    } catch (error) {
+      console.error('Lokasyon tipi dağılımı yüklenemedi:', error);
+      showAlert('Lokasyon tipi dağılımı yüklenirken bir hata oluştu.', 'danger');
+      applyDistribution();
+    }
+  };
+
+  const initLocationDistribution = () => {
+    applyDistribution();
+    loadLocationTypeDistribution();
+  };
+
+  // ------------------------------
+  // Filtre / tablo DOM referansları
+  // ------------------------------
+  const filterForm = document.getElementById('filter-form');
+  const filterButton = document.getElementById('filtrele');
+  const nameInput = document.getElementById('filter-name');
+  const typeSelect = document.getElementById('filter-type');
+  const departmentSelect = document.getElementById('filter-department');
+  const statusSelect = document.getElementById('filter-status');
+  const addressInput = document.getElementById('filter-address');
+  const tableBody = document.getElementById('locations-table-body');
+  const summaryText = document.querySelector('[data-role="locations-summary"]');
+  const tableAlertContainer = document.getElementById('alert-container');
+
+  // ------------------------------
+  // KPI kartları DOM referansları (istatistikler)
+  // ------------------------------
+  const kpiAlertContainer = document.getElementById('locationsAlerts');
+  const totalLocationsEl = document.getElementById('total_locations');
+  const activeLocationsEl = document.getElementById('total_active_location');
+  const warehouseCountEl = document.getElementById('total_warehouse');
+  const denseLocationEl = document.getElementById('dense_location');
+
+  // ------------------------------
+  // Ortak yapılar / yardımcılar
+  // ------------------------------
+  const departmentsMap = new Map();
+
+  const formatNumber = (value) => {
+    const numeric = Number(value);
+    return Number.isFinite(numeric) ? numeric.toLocaleString('tr-TR') : '-';
+  };
+
+  const formatText = (value) => (value ? String(value) : '-');
+
+  const parseJsonSafely = async (response) => {
+    try {
+      return await response.json();
+    } catch (error) {
+      showTableAlert('Sunucudan geçersiz yanıt alındı.', 'danger');
+      throw error;
+    }
+  };
+
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem('token');
+    return {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
+  };
+
+  // ------------------------------
+  // Tablo uyarıları
+  // ------------------------------
+  const showTableAlert = (message, variant = 'danger') => {
+    if (!tableAlertContainer) return;
+
+    tableAlertContainer.replaceChildren();
+
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${variant} alert-dismissible fade show`;
+    alert.setAttribute('role', 'alert');
+    alert.textContent = message;
+
+    const closeButton = document.createElement('button');
+    closeButton.type = 'button';
+    closeButton.className = 'btn-close';
+    closeButton.setAttribute('data-bs-dismiss', 'alert');
+    closeButton.setAttribute('aria-label', 'Kapat');
+
+    alert.appendChild(closeButton);
+    tableAlertContainer.appendChild(alert);
+  };
+
+  const clearTableAlert = () => {
+    if (tableAlertContainer) {
+      tableAlertContainer.replaceChildren();
+    }
+  };
+
+  const setButtonLoading = (isLoading) => {
+    if (!filterButton) return;
+    filterButton.disabled = isLoading;
+    filterButton.textContent = isLoading ? 'Yükleniyor...' : 'Filtrele';
+  };
+
+  const setSummary = (count) => {
+    if (summaryText) {
+      const safeCount = Number.isFinite(count) ? count : 0;
+      summaryText.textContent = `Gösterilen: ${safeCount} / ${safeCount}`;
+    }
+  };
+
+  const renderEmptyState = (message, isError = false) => {
+    if (!tableBody) return;
+    tableBody.replaceChildren();
+
+    const row = document.createElement('tr');
+    const cell = document.createElement('td');
+    cell.colSpan = 8;
+    cell.className = `text-center ${isError ? 'text-danger' : 'text-muted'}`;
+    cell.textContent = message;
+    row.appendChild(cell);
+    tableBody.appendChild(row);
+    setSummary(0);
+  };
+
+  const createStatusBadge = (isActive) => {
+    const badge = document.createElement('span');
+    const active = Boolean(isActive);
+    badge.className = active ? 'badge bg-label-success' : 'badge bg-label-secondary';
+    badge.textContent = active ? 'Aktif' : 'Pasif';
+    return badge;
+  };
+
+  const createIconLink = (href, title, iconClass) => {
+    const link = document.createElement('a');
+    link.href = href;
+    link.className = 'btn btn-sm btn-icon btn-text-secondary';
+    link.setAttribute('aria-label', title);
+    link.title = title;
+
+    const icon = document.createElement('i');
+    icon.className = iconClass;
+    link.appendChild(icon);
+
+    return link;
+  };
+
+  const buildRow = (location) => {
+    const tr = document.createElement('tr');
+    tr.dataset.locationId = location.id;
+
+    const codeCell = document.createElement('td');
+    codeCell.textContent = formatText(location.code);
+    tr.appendChild(codeCell);
+
+    const nameCell = document.createElement('td');
+    nameCell.textContent = formatText(location.name);
+    tr.appendChild(nameCell);
+
+    const typeCell = document.createElement('td');
+    typeCell.textContent = formatText(location.type);
+    tr.appendChild(typeCell);
+
+    const departmentCell = document.createElement('td');
+    const departmentName = departmentsMap.get(location.department_id) || '-';
+    departmentCell.textContent = departmentName;
+    tr.appendChild(departmentCell);
+
+    const addressCell = document.createElement('td');
+    addressCell.textContent = formatText(location.address);
+    tr.appendChild(addressCell);
+
+    const assetCountCell = document.createElement('td');
+    const assetCount = Number.isFinite(location.asset_count) ? location.asset_count : 0;
+    assetCountCell.textContent = formatNumber(assetCount);
+    tr.appendChild(assetCountCell);
+
+    const statusCell = document.createElement('td');
+    statusCell.appendChild(createStatusBadge(location.is_active));
+    tr.appendChild(statusCell);
+
+    const actionsCell = document.createElement('td');
+    actionsCell.className = 'd-flex gap-1';
+
+    const detailLink = createIconLink(
+      `location-detail.html?id=${location.id}`,
+      'Detay',
+      'feather icon-eye'
+    );
+    const editLink = createIconLink(
+      `location-edit.html?id=${location.id}`,
+      'Düzenle',
+      'feather icon-edit'
+    );
+    const assetsLink = createIconLink(
+      `assets.html?location_id=${location.id}`,
+      'Varlıkları Görüntüle',
+      'feather icon-package'
+    );
+    const mapLink = createIconLink(
+      `location-map.html?id=${location.id}`,
+      'Haritada Aç',
+      'feather icon-map-pin'
+    );
+
+    actionsCell.append(detailLink, editLink, assetsLink, mapLink);
+    tr.appendChild(actionsCell);
+
+    return tr;
+  };
+
+  const renderLocations = (locations) => {
+    if (!tableBody) return;
+
+    if (!Array.isArray(locations) || locations.length === 0) {
+      renderEmptyState('Henüz lokasyon bulunamadı.');
+      return;
+    }
+
+    tableBody.replaceChildren(...locations.map((location) => buildRow(location)));
+    setSummary(locations.length);
+  };
+
+  // ------------------------------
+  // Departman listesi
+  // ------------------------------
+  const fetchDepartments = async () => {
+    if (!departmentSelect) return;
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/departments?includeInactive=false`,
+        {
+          method: 'GET',
+          headers: getAuthHeaders(),
+          credentials: 'include',
+        }
+      );
+
+      const data = await parseJsonSafely(response);
+
+      if (!response.ok) {
+        throw new Error(data?.message || 'Birim listesi alınamadı');
+      }
+
+      departmentSelect.length = 0;
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.textContent = 'Tümü';
+      departmentSelect.appendChild(defaultOption);
+
+      if (Array.isArray(data)) {
+        data.forEach((department) => {
+          departmentsMap.set(department.id, department.name);
+          const option = document.createElement('option');
+          option.value = department.id;
+          option.textContent = department.name;
+          departmentSelect.appendChild(option);
+        });
+      }
+    } catch (error) {
+      console.error('Birimler yüklenirken hata oluştu:', error);
+      showTableAlert('Birim listesi yüklenemedi.', 'warning');
+    }
+  };
+
+  // ------------------------------
+  // Filtre query string
+  // ------------------------------
+  const buildQueryString = () => {
+    const params = new URLSearchParams();
+
+    const name = nameInput?.value.trim();
+    const type = typeSelect?.value;
+    const departmentId = departmentSelect?.value;
+    const status = statusSelect?.value;
+    const address = addressInput && addressInput.value
+      ? addressInput.value.trim()
+      : '';
+
+    if (name) params.set('name', name);
+    if (type) params.set('type', type);
+    if (departmentId) params.set('department_id', departmentId);
+
+    if (status === 'true') {
+      params.set('is_active', 'true');
+    } else if (status === 'false') {
+      params.set('is_active', 'false');
+    }
+
+    if (address) params.set('address', address);
+
+    return params.toString() ? `?${params.toString()}` : '';
+  };
+
+  // ------------------------------
+  // Lokasyon listesi yükleme
+  // ------------------------------
+  const loadLocations = async () => {
+    if (!tableBody) return;
+
+    setButtonLoading(true);
+    renderEmptyState('Lokasyonlar yükleniyor...');
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/locations${buildQueryString()}`,
+        {
+          method: 'GET',
+          headers: getAuthHeaders(),
+          credentials: 'include',
+        }
+      );
+
+      const data = await parseJsonSafely(response);
+
+      if (!response.ok) {
+        throw new Error(data?.message || 'Lokasyon listesi alınamadı');
+      }
+
+      renderLocations(data?.data || []);
+      clearTableAlert();
+    } catch (error) {
+      console.error('Lokasyonlar getirilirken hata oluştu:', error);
+      showTableAlert('Lokasyon listesi alınırken bir sorun oluştu.', 'danger');
+      renderEmptyState('Lokasyon listesi yüklenemedi.', true);
+    } finally {
+      setButtonLoading(false);
+    }
+  };
+
+  // ------------------------------
+  // KPI uyarıları (üst kartlar)
+  // ------------------------------
+  const clearKpiAlerts = () => {
+    if (!kpiAlertContainer) return;
+    while (kpiAlertContainer.firstChild) {
+      kpiAlertContainer.removeChild(kpiAlertContainer.firstChild);
+    }
+  };
+
+  const showKpiAlert = (message, type = 'danger') => {
+    if (!kpiAlertContainer) return;
+
+    kpiAlertContainer.replaceChildren();
+
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type} alert-dismissible fade show`;
+    alert.setAttribute('role', 'alert');
+    alert.textContent = message;
+
+    const closeButton = document.createElement('button');
+    closeButton.type = 'button';
+    closeButton.className = 'btn-close';
+    closeButton.setAttribute('data-bs-dismiss', 'alert');
+    closeButton.setAttribute('aria-label', 'Close');
+
+    alert.appendChild(closeButton);
+    kpiAlertContainer.appendChild(alert);
+  };
+
+  const setTextContent = (element, value) => {
+    if (!element) return;
+    element.textContent = value;
+  };
+
+  const applyDenseLocationTitle = (assetCount) => {
+    if (!denseLocationEl) return;
+    if (Number.isFinite(assetCount)) {
+      denseLocationEl.setAttribute('title', `Toplam envanter: ${formatNumber(assetCount)}`);
+    } else {
+      denseLocationEl.removeAttribute('title');
+    }
+  };
+
+  const fetchLocationStats = async () => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      showKpiAlert('Lokasyon istatistiklerini görüntülemek için lütfen giriş yapın.', 'warning');
+      return;
+    }
+
+    clearKpiAlerts();
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/locations/stats`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: 'include',
+      });
+
+      let payload = null;
+      try {
+        payload = await response.json();
+      } catch (parseError) {
+        showKpiAlert('Sunucu yanıtı okunamadı. Lütfen daha sonra tekrar deneyin.');
+        return;
+      }
+
+      if (!response.ok) {
+        const message = payload?.message || 'Lokasyon istatistikleri alınamadı.';
+        showKpiAlert(message);
+        return;
+      }
+
+      const totals = payload?.totals || {};
+      setTextContent(totalLocationsEl, formatNumber(totals.locations));
+      setTextContent(activeLocationsEl, formatNumber(totals.active_locations));
+      setTextContent(warehouseCountEl, formatNumber(totals.warehouses));
+
+      const denseLocation = payload?.dense_location;
+      setTextContent(denseLocationEl, denseLocation?.name || '-');
+      applyDenseLocationTitle(Number(denseLocation?.asset_count));
+    } catch (error) {
+      showKpiAlert('Lokasyon istatistikleri alınırken bir hata oluştu.');
+      console.error('Lokasyon istatistikleri alınamadı:', error);
+    }
+  };
+
+  // ------------------------------
+  // Sayfa başlangıcı (tek DOMContentLoaded)
+  // ------------------------------
+  const initLocationsTablePage = () => {
+    if (!filterForm || !tableBody) return;
+
+    filterForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      loadLocations();
+    });
+
+    if (filterButton) {
+      filterButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        loadLocations();
+      });
+    }
+
+    filterForm.addEventListener('reset', () => {
+      clearTableAlert();
+      setTimeout(() => loadLocations(), 0);
+    });
+
+    fetchDepartments();
+    loadLocations();
+    fetchLocationStats();
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initLocationDistribution();
+    initLocationsTablePage();
+  });
+</script>
+
+
   </body>
 </html>

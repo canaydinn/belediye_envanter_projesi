@@ -1,29 +1,30 @@
+// api/src/routes/locations.route.js
 const express = require('express');
 const router = express.Router();
 
 const locationsController = require('../controllers/locations.controller');
+const auth = require('../middleware/auth');
+// varsa auth middleware burada:
+// const auth = require('../middlewares/auth');
+router.use(auth);
 
-const { requireAuth } = require('../middleware/auth.middleware');
-const { requireRole } = require('../middleware/role.middleware');
+// 📌 ÖNEMLİ: Özel path'ler (stats vb.) mutlaka parametreli rotalardan ÖNCE gelmeli
 
-router.use(requireAuth);
+// İstatistikler
+router.get('/stats', locationsController.getLocationStats);
 
-// POST /api/locations
-router.post('/', requireRole(['admin']), locationsController.createLocation);
-
-// GET /api/locations
+// Liste (opsiyonel, varsa)
 router.get('/', locationsController.listLocations);
-
-// GET /api/locations/tree
-router.get('/tree', locationsController.getLocationTree);
-
-// GET /api/locations/:id
+// GET /api/locations/type-distribution
+router.get('/type-distribution', locationsController.getLocationTypeDistribution);
+// Tek lokasyon
 router.get('/:id', locationsController.getLocationById);
 
-// PATCH /api/locations/:id
-router.patch('/:id', requireRole(['admin']), locationsController.updateLocation);
+// Yeni lokasyon oluşturma
+router.post('/', locationsController.createLocation);
 
-// DELETE /api/locations/:id
-router.delete('/:id', requireRole(['admin']), locationsController.deleteLocation);
+// Diğer güncelleme/silme endpoint’lerin varsa burada:
+// router.put('/:id', locationsController.updateLocation);
+// router.delete('/:id', locationsController.deleteLocation);
 
 module.exports = router;

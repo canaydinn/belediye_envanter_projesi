@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="tr" class="light-style layout-navbar-fixed layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../admin/assets/" data-template="vertical-menu-template">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>Lokasyon Oluştur | Envanter360</title>
+    <meta name="description" content="Envanter360 lokasyon kayıt formu" />
+
+    <link rel="icon" type="image/x-icon" href="../admin/assets/img/favicon/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/tabler-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/flag-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../admin/assets/css/demo.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/node-waves/node-waves.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/typeahead-js/typeahead.css" />
+
+    <script src="../admin/assets/vendor/js/helpers.js"></script>
+    <script src="../admin/assets/vendor/js/template-customizer.js"></script>
+    <script src="../admin/assets/js/config.js"></script>
+  </head>
+  <body>
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+            <a href="index.html" class="app-brand-link">
+              <span class="app-brand-logo demo"></span>
+              <span class="app-brand-text demo menu-text fw-bold">Envanter360</span>
+            </a>
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+              <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+              <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
+            </a>
+          </div>
+          <div class="menu-inner-shadow"></div>
+          <ul class="menu-inner py-1 navigation navigation-main">
+            <li class="menu-item">
+              <a href="../admin/dashboard.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                <div>Dashboard</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/assets.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-package"></i>
+                <div>Varlıklar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/assets-movements.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-arrows-left-right"></i>
+                <div>Varlık Hareketleri</div>
+              </a>
+            </li>
+            <li class="menu-item active open">
+              <a href="../admin/locations.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-map-pin"></i>
+                <div>Lokasyonlar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/categories.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-category"></i>
+                <div>Kategoriler</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="../admin/users.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-users"></i>
+                <div>Kullanıcılar</div>
+              </a>
+            </li>
+          </ul>
+        </aside>
+
+        <div class="layout-page">
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+              <div class="navbar-nav align-items-center">
+                <div class="nav-item navbar-search-wrapper mb-0">
+                  <a class="nav-item nav-link search-toggler px-0" href="#">
+                    <i class="ti ti-search ti-md"></i>
+                    <span class="d-none d-md-inline-block">Arama</span>
+                  </a>
+                </div>
+              </div>
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <li class="nav-item dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="#" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                      <img src="../admin/assets/img/avatars/1.png" alt="Avatar" class="w-px-40 h-auto rounded-circle" />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar avatar-online">
+                              <img src="../admin/assets/img/avatars/1.png" alt="Avatar" class="w-px-40 h-auto rounded-circle" />
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <span class="fw-semibold d-block">Belediye Yöneticisi</span>
+                            <small class="text-muted">Municipality</small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li><div class="dropdown-divider"></div></li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <i class="ti ti-user-check me-2"></i>
+                        <span class="align-middle">Profil</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <i class="ti ti-settings me-2"></i>
+                        <span class="align-middle">Ayarlar</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <i class="ti ti-logout me-2"></i>
+                        <span class="align-middle">Çıkış Yap</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+
+          <div class="content-wrapper">
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="row mb-4 g-3 align-items-center">
+                <div class="col-lg-8">
+                  <h4 class="fw-bold mb-1">Lokasyon Oluştur</h4>
+                  <p class="text-muted mb-0">Yeni bir fiziksel lokasyon kaydedin ve ilgili birim ile belediyeye bağlayın.</p>
+                </div>
+                <div class="col-lg-4 d-flex justify-content-lg-end">
+                  <a href="../admin/locations.html" class="btn btn-outline-secondary">
+                    <i class="ti ti-arrow-left me-1"></i>Listeye Dön
+                  </a>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12 col-lg-8 col-xl-9">
+                  <div class="alert d-none" role="alert" id="formAlert"></div>
+                  <form id="locationForm" class="card mb-4" novalidate>
+                    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                      <div>
+                        <h5 class="card-title mb-1">Lokasyon Bilgileri</h5>
+                        <small class="text-muted">Kod, isim ve bağlı olduğu birimleri tanımlayın.</small>
+                      </div>
+                      
+                    </div>
+                    <div class="card-body">
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <label for="code" class="form-label">Lokasyon Kodu <span class="text-danger">*</span></label>
+                          <input type="text" id="code" name="code" class="form-control" placeholder="Örn: LKS-010" required />
+                          <div class="form-text">Kod benzersiz olmalı.</div>
+                        </div>
+                        <div class="col-md-6">
+                          <label for="name" class="form-label">Lokasyon Adı <span class="text-danger">*</span></label>
+                          <input type="text" id="name" name="name" class="form-control" placeholder="Örn: Merkez Depo" required />
+                        </div>
+                        <div class="col-md-12">
+                          <label for="address" class="form-label">Adres / Açıklama</label>
+                          <textarea id="address" name="address" rows="2" class="form-control" placeholder="Adres veya açıklama girin"></textarea>
+                        </div>
+                        
+                        <div class="col-md-6">
+                          <label for="department_id" class="form-label">Birim (Opsiyonel)</label>
+                          <select id="department_id" name="department_id" class="form-select">
+                            <option value="" selected>Birim seçiniz</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
+                          <label for="type" class="form-label">Lokasyon Tipi</label>
+                          <select id="type" name="type" class="form-select">
+                            <option value="" selected>Seçiniz</option>
+                            <option value="1">Ofis</option>
+                            <option value="2">Depo</option>
+                            <option value="3">Saha Ofisi</option>
+                            <option value="4">Bina</option>
+                          </select>
+                          <small class="text-muted">Sistem tipi tamsayı kodu olarak saklar.</small>
+                        </div>
+                        <!-- <div class="col-md-3">
+                          <label for="latitude" class="form-label">Enlem</label>
+                          <input type="text" id="latitude" name="latitude" class="form-control" placeholder="39.92077" />
+                        </div>
+                        <div class="col-md-3">
+                          <label for="longitude" class="form-label">Boylam</label>
+                          <input type="text" id="longitude" name="longitude" class="form-control" placeholder="32.85411" />
+                        </div> -->
+                        <div class="col-md-6">
+                          <div class="form-check form-switch mt-4 pt-2">
+                            <input class="form-check-input" type="checkbox" role="switch" id="is_active" name="is_active" checked />
+                            <label class="form-check-label" for="is_active">Aktif</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-end gap-2">
+                      <button type="reset" class="btn btn-outline-secondary">Temizle</button>
+                      <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="ti ti-device-floppy me-1"></i>Kaydı Oluştur
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="content-backdrop fade"></div>
+          </div>
+        </div>
+      </div>
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+
+    <script src="../admin/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../admin/assets/vendor/libs/popper/popper.js"></script>
+    <script src="../admin/assets/vendor/js/bootstrap.js"></script>
+    <script src="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../admin/assets/vendor/libs/node-waves/node-waves.js"></script>
+    <script src="../admin/assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="../admin/assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="../admin/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="../admin/assets/vendor/js/menu.js"></script>
+
+    <script type="module">
+  const API_BASE_URL = 'http://localhost:4000/api';
+
+  /**
+   * ------------------------------
+   *  UI Yardımcı Fonksiyonları
+   * ------------------------------
+   */
+
+  const showAlert = (message, type = 'danger') => {
+    const alertBox = document.getElementById('formAlert');
+    if (!alertBox) return;
+
+    alertBox.textContent = message;
+    alertBox.className = `alert alert-${type}`;
+    alertBox.classList.remove('d-none');
+
+    setTimeout(() => {
+      alertBox.classList.add('d-none');
+    }, 4000);
+  };
+
+  const disableButton = (btn) => {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Kaydediliyor...';
+  };
+
+  const enableButton = (btn) => {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-device-floppy me-1"></i>Kaydı Oluştur';
+  };
+
+  /**
+   * ------------------------------
+   *  API: Lokasyon Oluşturma
+   * ------------------------------
+   */
+
+  const submitLocationForm = async (event) => {
+    event.preventDefault();
+
+    const submitBtn = document.getElementById('submitBtn');
+    disableButton(submitBtn);
+
+    const token = localStorage.getItem('token');
+
+    const formData = {
+      code: document.getElementById('code').value.trim(),
+      name: document.getElementById('name').value.trim(),
+      address: document.getElementById('address').value.trim(),
+      department_id: document.getElementById('department_id').value || null,
+      type: document.getElementById('type').value || null,
+      is_active: document.getElementById('is_active').checked,
+    };
+
+    // Zorunlu alanlar kontrolü
+    if (!formData.code || !formData.name) {
+      showAlert('Lütfen gerekli alanları doldurun.', 'warning');
+      enableButton(submitBtn);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/locations`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        credentials: 'include',
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        let errorMsg = 'Kayıt başarısız oldu.';
+        try {
+          const errJson = await response.json();
+          errorMsg = errJson.message || errorMsg;
+        } catch (_) {}
+
+        showAlert(errorMsg, 'danger');
+        enableButton(submitBtn);
+        return;
+      }
+
+      const result = await response.json();
+      showAlert('Lokasyon başarıyla oluşturuldu.', 'success');
+
+      // İsteğe bağlı: form temizleme
+      document.getElementById('locationForm').reset();
+
+    } catch (err) {
+      console.error('LOCATION_CREATE_ERROR', err);
+      showAlert('Sunucuya bağlanırken hata oluştu.', 'danger');
+    } finally {
+      enableButton(submitBtn);
+    }
+  };
+
+  /**
+   * ------------------------------
+   *  Departmanları Yükleme (Opsiyonel)
+   * ------------------------------
+   */
+
+  const loadDepartments = async () => {
+    const select = document.getElementById('department_id');
+    if (!select) return;
+
+    const token = localStorage.getItem('token');
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/departments`, {
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        credentials: 'include',
+      });
+
+      if (!response.ok) return;
+
+      const departments = await response.json();
+
+      select.innerHTML = '<option value="">Birim seçiniz</option>';
+
+      departments.forEach((dept) => {
+        const opt = document.createElement('option');
+        opt.value = dept.id;
+        opt.textContent = dept.name;
+        select.appendChild(opt);
+      });
+    } catch (err) {
+      console.error('DEPARTMENT_LOAD_ERROR', err);
+    }
+  };
+
+  /**
+   * ------------------------------
+   *  Sayfa Başlatma
+   * ------------------------------
+   */
+
+  const initPage = () => {
+    const form = document.getElementById('locationForm');
+    if (form) {
+      form.addEventListener('submit', submitLocationForm);
+    }
+
+    loadDepartments();
+  };
+
+  document.addEventListener('DOMContentLoaded', initPage);
+</script>
+
+  </body>
+</html>
