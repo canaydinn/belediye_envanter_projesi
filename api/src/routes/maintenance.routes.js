@@ -1,29 +1,51 @@
+// api/src/routes/maintenance.routes.js
 const express = require('express');
 const router = express.Router();
 
 const maintenanceController = require('../controllers/maintenance.controller');
-const { requireAuth } = require('../../src/middleware/auth.middleware');
-const { requireRole } = require('../../src/middleware/role.middleware');
+const authorize = require('../middleware/authorize');
+const ROLES = require('../constants/roles');
 
-router.use(requireAuth);
+/**
+ * READ (Municipality Admin + User)
+ */
+router.get(
+  '/',
+  authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
+  maintenanceController.listTickets
+);
 
-// POST /api/maintenance
-router.post('/', maintenanceController.createTicket);
+router.get(
+  '/:id',
+  authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
+  maintenanceController.getTicketById
+);
 
-// GET /api/maintenance
-// Query: ?status=&departmentId=&priority=&page=&limit=
-router.get('/', maintenanceController.listTickets);
+/**
+ * WRITE (Municipality Admin only)
+ */
+router.post(
+  '/',
+  authorize(ROLES.MUNICIPALITY_ADMIN),
+  maintenanceController.createTicket
+);
 
-// GET /api/maintenance/:id
-router.get('/:id', maintenanceController.getTicketById);
+router.patch(
+  '/:id',
+  authorize(ROLES.MUNICIPALITY_ADMIN),
+  maintenanceController.updateTicket
+);
 
-// PATCH /api/maintenance/:id
-router.patch('/:id', requireRole(['admin', 'department_manager']), maintenanceController.updateTicket);
+router.post(
+  '/:id/complete',
+  authorize(ROLES.MUNICIPALITY_ADMIN),
+  maintenanceController.completeTicket
+);
 
-// POST /api/maintenance/:id/complete
-router.post('/:id/complete', requireRole(['admin', 'department_manager']), maintenanceController.completeTicket);
-
-// DELETE /api/maintenance/:id
-router.delete('/:id', requireRole(['admin']), maintenanceController.deleteTicket);
+router.delete(
+  '/:id',
+  authorize(ROLES.MUNICIPALITY_ADMIN),
+  maintenanceController.deleteTicket
+);
 
 module.exports = router;

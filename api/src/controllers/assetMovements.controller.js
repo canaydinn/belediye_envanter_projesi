@@ -9,6 +9,7 @@ const buildMovementQuery = (municipalityId) => {
     .leftJoin('locations as fl', 'am.from_location_id', 'fl.id')
     .leftJoin('locations as tl', 'am.to_location_id', 'tl.id')
     .leftJoin('users as u', 'am.performed_by_user_id', 'u.id')
+    .where('am.municipality_id', municipalityId)
     .select(
       'am.id',
       'am.movement_date',
@@ -24,23 +25,13 @@ const buildMovementQuery = (municipalityId) => {
       'u.full_name as performer_name'
     )
     .orderBy('am.movement_date', 'desc');
-
-  if (municipalityId) {
-    query.where((qb) => {
-      qb.where('am.municipality_id', municipalityId).orWhere(
-        'a.municipality_id',
-        municipalityId
-      );
-    });
-  }
-
   return query;
 };
 // GET /api/asset-movements
 // Varlık hareketlerini filtreleyerek listeler
 exports.listAssetMovements = async (req, res) => {
   try {
-    const { municipality_id } = req.user;
+    const municipalityId = req.tenantMunicipalityId;
     const {
       asset_code,
       movement_type,
@@ -57,7 +48,7 @@ exports.listAssetMovements = async (req, res) => {
       .leftJoin('locations as fl', 'am.from_location_id', 'fl.id')
       .leftJoin('locations as tl', 'am.to_location_id', 'tl.id')
       .leftJoin('users as pbu', 'am.performed_by_user_id', 'pbu.id')
-      .where('am.municipality_id', municipality_id)
+      .where('am.municipality_id', municipalityId)
       .select(
         'am.id',
         'am.asset_id',
@@ -118,7 +109,7 @@ exports.listAssetMovements = async (req, res) => {
 
 exports.getMovementStats = async (req, res) => {
   try {
-    const { municipality_id } = req.user;
+    const municipalityId = req.tenantMunicipalityId;
 
     const now = new Date();
     const thirtyDaysAgo = new Date(now);
@@ -129,22 +120,22 @@ exports.getMovementStats = async (req, res) => {
     startOfTomorrow.setDate(startOfToday.getDate() + 1);
 
     const [last30DaysRow] = await knex('asset_movements')
-      .where('municipality_id', municipality_id)
+      .where('municipality_id', municipalityId)
       .andWhere('movement_date', '>=', thirtyDaysAgo)
       .count('id as count');
 
     const [todayRow] = await knex('asset_movements')
-      .where('municipality_id', municipality_id)
+      .where('municipality_id', municipalityId)
       .andWhere('movement_date', '>=', startOfToday)
       .andWhere('movement_date', '<', startOfTomorrow)
       .count('id as count');
 
     const [maintenanceRow] = await knex('asset_movements')
-      .where({ municipality_id, movement_type: 'maintenance' })
+      .where({ municipality_id:municipalityId, movement_type: 'maintenance' })
       .count('id as count');
 
     const [assignmentTransferRow] = await knex('asset_movements')
-      .where('municipality_id', municipality_id)
+      .where('municipality_id', municipalityId)
       .whereIn('movement_type', ['assign', 'transfer'])
       .count('id as count');
 
@@ -162,14 +153,10 @@ exports.getMovementStats = async (req, res) => {
 
 exports.getMovementTypeDistribution = async (req, res) => {
   try {
-    const { municipality_id } = req.user || {};
-
-    if (!municipality_id) {
-      return res.status(400).json({ message: 'Kullanıcı belediye bilgisi bulunamadı' });
-    }
+    const municipalityId = req.tenantMunicipalityId;
 
     const movementCounts = await knex('asset_movements')
-      .where('municipality_id', municipality_id)
+      .where('municipality_id', municipalityId)
       .groupBy('movement_type')
       .select('movement_type')
       .count('* as count');
@@ -205,12 +192,7 @@ exports.getMovementTypeDistribution = async (req, res) => {
 
 exports.getRecentAssetMovements = async (req, res) => {
   try {
-    const municipalityId = req.user?.municipality_id;
-
-    if (!municipalityId) {
-      return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
-    }
-
+    const municipalityId = req.tenantMunicipalityId;
     const movements = await knex('asset_movements as am')
       .join('assets as a', 'am.asset_id', 'a.id')
       .leftJoin('departments as fd', 'am.from_department_id', 'fd.id')
@@ -256,7 +238,9 @@ exports.getRecentAssetMovements = async (req, res) => {
 
 exports.createAssetMovement = async (req, res) => {
   try {
-    const { municipality_id, id: performedByUserId } = req.user || {};
+    const municipalityId = req.tenantMunicipalityId;
+    const performedByUserId = req.user?.id;
+
     const {
       asset_id,
       movement_type,
@@ -268,7 +252,7 @@ exports.createAssetMovement = async (req, res) => {
       notes,
     } = req.body;
 
-    if (!municipality_id || !performedByUserId) {
+    if (!municipalityId || !performedByUserId) {
       return res.status(401).json({ message: 'Kullanıcı bilgisi bulunamadı' });
     }
 
@@ -291,8 +275,7 @@ exports.createAssetMovement = async (req, res) => {
     }
 
     const asset = await knex('assets')
-      .where({ id: asset_id, municipality_id })
-      .first();
+      .where({ id: asset_id, municipality_id: municipalityId }).first();
 
     if (!asset) {
       return res.status(404).json({ message: 'Varlık bulunamadı' });
@@ -306,7 +289,7 @@ exports.createAssetMovement = async (req, res) => {
       to_department_id: to_department_id || null,
       from_location_id: from_location_id || asset.location_id || null,
       to_location_id: to_location_id || null,
-      municipality_id,
+      municipality_id:municipalityId,
       performed_by_user_id: performedByUserId,
       created_by_user_id: performedByUserId,
       updated_by_user_id: performedByUserId,
@@ -343,12 +326,7 @@ exports.createAssetMovement = async (req, res) => {
 
 exports.getLastThirtyDaysMovementsTotal = async (req, res) => {
   try {
-    const { municipality_id: municipalityId } = req.user || {};
-
-    if (!municipalityId) {
-      return res.status(401).json({ message: 'Kullanıcı belediye bilgisi bulunamadı' });
-    }
-
+    const municipalityId = req.tenantMunicipalityId;
     const now = new Date();
     const thirtyDaysAgo = new Date(now);
     thirtyDaysAgo.setDate(now.getDate() - 30);
@@ -367,12 +345,7 @@ exports.getLastThirtyDaysMovementsTotal = async (req, res) => {
 
 exports.getTodayMovementsTotal = async (req, res) => {
   try {
-    const { municipality_id: municipalityId } = req.user || {};
-
-    if (!municipalityId) {
-      return res.status(401).json({ message: 'Kullanıcı belediye bilgisi bulunamadı' });
-    }
-
+    const municipalityId = req.tenantMunicipalityId;
     const now = new Date();
     const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const startOfTomorrow = new Date(startOfToday);
@@ -392,11 +365,8 @@ exports.getTodayMovementsTotal = async (req, res) => {
 };
 exports.getMaintenanceMovementsTotal = async (req, res) => {
   try {
-    const { municipality_id: municipalityId } = req.user || {};
+    const municipalityId = req.tenantMunicipalityId;
 
-    if (!municipalityId) {
-      return res.status(401).json({ message: 'Kullanıcı belediye bilgisi bulunamadı' });
-    }
 
     const [row] = await knex('asset_movements')
       .where({ municipality_id: municipalityId, movement_type: 'maintenance' })
@@ -410,12 +380,7 @@ exports.getMaintenanceMovementsTotal = async (req, res) => {
 };
 exports.getZimmetMovementsTotal = async (req, res) => {
   try {
-    const { municipality_id: municipalityId } = req.user || {};
-
-    if (!municipalityId) {
-      return res.status(401).json({ message: 'Kullanıcı belediye bilgisi bulunamadı' });
-    }
-
+    const municipalityId = req.tenantMunicipalityId;
     const [row] = await knex('asset_movements')
       .where({ municipality_id: municipalityId, movement_type: 'assign' })
       .count('id as count');
@@ -429,10 +394,10 @@ exports.getZimmetMovementsTotal = async (req, res) => {
 
 exports.filterMovements = async (req, res) => {
   try {
-    const { municipality_id } = req.user || {};
+    const municipalityId = req.tenantMunicipalityId;
     const { assetSearch, movementType, departmentId, startDate, endDate } = req.query;
 
-    const query = buildMovementQuery(municipality_id);
+    const query = buildMovementQuery(municipalityId);
 
     const hasAnyFilter =
       assetSearch || movementType || departmentId || startDate || endDate;

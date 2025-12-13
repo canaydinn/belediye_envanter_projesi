@@ -3,15 +3,16 @@ const express = require('express');
 const router = express.Router();
 
 const departmentsController = require('../controllers/departments.controller');
-const auth = require('../middleware/auth');
-const requireRole = require('../middleware/requireRole');
+const authorize = require('../middleware/authorize');
+const ROLES = require('../constants/roles');
 
-// Listeleme tüm oturum sahiplerine açık
-router.get('/', auth, departmentsController.getAll);
-router.get('/:id', auth, departmentsController.getById);
-// Yönetim işlemleri için rol kısıtları
-router.post('/', auth, requireRole([1, 2]), departmentsController.create);
-router.put('/:id', auth, requireRole([1, 2]), departmentsController.update);
-router.delete('/:id', auth, requireRole(1), departmentsController.remove);
+// READ
+router.get('/', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), departmentsController.getAll);
+router.get('/:id', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), departmentsController.getById);
+
+// WRITE (admin)
+router.post('/', authorize(ROLES.MUNICIPALITY_ADMIN), departmentsController.create);
+router.put('/:id', authorize(ROLES.MUNICIPALITY_ADMIN), departmentsController.update);
+router.delete('/:id', authorize(ROLES.MUNICIPALITY_ADMIN), departmentsController.remove);
 
 module.exports = router;

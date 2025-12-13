@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const superadminController = require('../controllers/superadmin.controller');
 const authMiddleware = require('../middleware/auth');
-const authorizeRole = require('../middleware/authorizeRole');
+const authorizeRole = require('../middleware/authorize');
 
 // router.use(authMiddleware, authorizeRole('superadmin'));
 

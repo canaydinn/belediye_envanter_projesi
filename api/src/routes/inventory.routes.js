@@ -1,26 +1,22 @@
+// api/src/routes/inventory.routes.js
 const express = require('express');
 const router = express.Router();
 
 const inventoryController = require('../controllers/inventory.controller');
-const { requireAuth } = require('../../src/middleware/auth.middleware');
-const { requireRole } = require('../../src/middleware/role.middleware');
+const authorize = require('../middleware/authorize');
+const ROLES = require('../constants/roles');
 
-router.use(requireAuth);
+/**
+ * READ (Municipality Admin + User)
+ */
+router.get('/', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), inventoryController.listInventory);
+router.get('/:id', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), inventoryController.getInventoryById);
 
-// POST /api/inventory
-router.post('/', requireRole(['admin', 'department_manager']), inventoryController.createInventoryItem);
-
-// GET /api/inventory
-// Query param: ?departmentId=&status=&search=&page=&limit=
-router.get('/', inventoryController.listInventory);
-
-// GET /api/inventory/:id
-router.get('/:id', inventoryController.getInventoryById);
-
-// PATCH /api/inventory/:id
-router.patch('/:id', requireRole(['admin', 'department_manager']), inventoryController.updateInventory);
-
-// DELETE /api/inventory/:id
-router.delete('/:id', requireRole(['admin']), inventoryController.deleteInventory);
+/**
+ * WRITE (Municipality Admin only)
+ */
+router.post('/', authorize(ROLES.MUNICIPALITY_ADMIN), inventoryController.createInventoryItem);
+router.patch('/:id', authorize(ROLES.MUNICIPALITY_ADMIN), inventoryController.updateInventory);
+router.delete('/:id', authorize(ROLES.MUNICIPALITY_ADMIN), inventoryController.deleteInventory);
 
 module.exports = router;

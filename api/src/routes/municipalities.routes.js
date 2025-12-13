@@ -4,13 +4,11 @@ const router = express.Router();
 
 const municipalitiesController = require('../controllers/municipalities.controller');
 const auth = require('../middleware/auth');
-const requireRole = require('../middleware/requireRole');
 
 // Tüm belediyeleri listele
 router.get(
   '/',
-  auth,
-  requireRole(1),           // Şimdilik sistem admin / belediye admin = role_id 1
+  auth,           // Şimdilik sistem admin / belediye admin = role_id 1
   municipalitiesController.getAll
 );
 
@@ -18,7 +16,7 @@ router.get(
 router.get(
   '/:id',
   auth,
-  requireRole(1),
+ 
   municipalitiesController.getById
 );
 
@@ -26,7 +24,7 @@ router.get(
 router.post(
   '/',
   auth,
-  requireRole(1),
+  
   municipalitiesController.create
 );
 
@@ -34,7 +32,7 @@ router.post(
 router.put(
   '/:id',
   auth,
-  requireRole(1),
+  
   municipalitiesController.update
 );
 
@@ -42,7 +40,7 @@ router.put(
 router.patch(
   '/:id/deactivate',
   auth,
-  requireRole(1),
+  
   municipalitiesController.deactivate
 );
 

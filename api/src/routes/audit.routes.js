@@ -1,23 +1,20 @@
-// api/routes/audit.routes.js
+// api/src/routes/audit.routes.js
 const express = require('express');
 const router = express.Router();
 
-// Controller’ı obje olarak alıyoruz
 const auditController = require('../controllers/audit.controller');
+const authorize = require('../middleware/authorize');
+const ROLES = require('../constants/roles');
 
-// Listeleme
-router.get('/', auditController.getAuditLogs);         // DİKKAT: Parantez yok
+// Audit ekranı genelde admin’e özel olmalı
+router.get('/', authorize(ROLES.MUNICIPALITY_ADMIN), auditController.getAuditLogs);
+router.get('/:id', authorize(ROLES.MUNICIPALITY_ADMIN), auditController.getAuditLogById);
 
-// Tek kayıt
-router.get('/:id', auditController.getAuditLogById);
+// Audit log insert'i normalde UI'a açılmaz; gerekiyorsa admin ile sınırla
+router.post('/', authorize(ROLES.MUNICIPALITY_ADMIN), auditController.createAuditLog);
 
-// Oluşturma
-router.post('/', auditController.createAuditLog);
-
-// Güncelleme
-router.put('/:id', auditController.updateAuditLog);
-
-// Silme
-router.delete('/:id', auditController.deleteAuditLog);
+// Append-only: kapalı
+router.put('/:id', authorize(ROLES.MUNICIPALITY_ADMIN), auditController.updateAuditLog);
+router.delete('/:id', authorize(ROLES.MUNICIPALITY_ADMIN), auditController.deleteAuditLog);
 
 module.exports = router;

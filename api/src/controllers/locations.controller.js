@@ -20,7 +20,7 @@ const parseCount = (row) => Number(row?.total ?? row?.count ?? 0);
 
 exports.createLocation = async (req, res) => {
   try {
-    const { municipality_id } = req.user || {};
+    const municipalityId = req.tenantMunicipalityId;
     const {
       name,
       code,
@@ -31,19 +31,23 @@ exports.createLocation = async (req, res) => {
       latitude,
       longitude,
     } = req.body;
-
-    
-    if (!municipality_id) {
-      return res.status(400).json({ message: 'municipality_id bulunamadı' });
-    }
-
-    
+   
     if (!name || !code) {
       return res.status(400).json({ message: 'name ve code alanları zorunludur' });
     }
+if (department_id) {
+      const dept = await knex('departments')
+        .where({ id: department_id, municipality_id: municipalityId })
+        .first();
 
+      if (!dept) {
+        return res
+          .status(400)
+          .json({ message: 'Departman bu belediyeye ait değil' });
+      }
+    }
     const [existingCode] = await knex('locations')
-      .where({ municipality_id, code })
+      .where({ municipalityId, code })
       .limit(1);
 
     if (existingCode) {
@@ -57,7 +61,7 @@ exports.createLocation = async (req, res) => {
         address: address || null,
         department_id: department_id || null,
         is_active: is_active ?? true,
-        municipality_id,
+        municipalityId,
         type: type || null,
         latitude: latitude ?? null,
         longitude: longitude ?? null,
@@ -76,14 +80,10 @@ exports.createLocation = async (req, res) => {
 
 exports.listLocations = async (req, res) => {
   try {
-    console.log('LIST_LOCATIONS req.user:', req.user); // geçici debug
-
-    const municipalityId = req.user?.municipality_id;
+    const municipalityId = req.tenantMunicipalityId;
     const { type, department_id, is_active } = req.query;
 
-    if (!municipalityId) {
-      return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
-    }
+    
 
     const query = knex('locations')
       .select(LOCATION_COLUMNS)
@@ -137,16 +137,9 @@ exports.listLocations = async (req, res) => {
 };
 exports.getLocationStats = async (req, res) => {
   try {
-        console.log('getLocationStats req.user:', req.user); // 🔍 GEÇİCİ LOG
-
-    const municipalityId = req.user?.municipality_id;
-
-    if (!municipalityId) {
-      return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
-    }
-
     // Lokasyon tipi kodları (form ile uyumlu)
     // 1: Ofis, 2: Depo, 3: Saha Ofisi, 4: Bina
+    const municipalityId = req.tenantMunicipalityId;
     const LOCATION_TYPES = {
       OFFICE: 1,
       WAREHOUSE: 2,
@@ -212,14 +205,10 @@ exports.getLocationStats = async (req, res) => {
 };
 exports.getLocationTypeDistribution = async (req, res) => {
   try {
-    const { municipality_id } = req.user || {};
-
-    if (!municipality_id) {
-      return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
-    }
+   const municipalityId = req.tenantMunicipalityId;
 
     const rows = await knex('locations')
-      .where({ municipality_id })
+      .where({ municipality_id: municipalityId })
       .select('type')
       .count({ count: 'id' })
       .groupBy('type');
@@ -271,16 +260,10 @@ exports.getLocationTypeDistribution = async (req, res) => {
 };
 exports.getLocationTree = async (req, res) => {
   try {
-    
-    const { municipality_id } = req.user || {};
+    const municipalityId = req.tenantMunicipalityId;
     const all = await knex('locations')
       .select(LOCATION_COLUMNS)
-      .modify((qb) => {
-        if (municipality_id) {
-          qb.where('municipality_id', municipality_id);
-        }
-      });
-
+      .where('municipality_id', municipalityId);
     // Ağaç mantığında parentId olmadığı için düz liste döndürülür
     return res.json({ data: all });
   } catch (err) {
@@ -294,13 +277,10 @@ exports.getLocationTree = async (req, res) => {
 
 exports.getLocationById = async (req, res) => {
   try {
-    const municipalityId = req.user?.municipality_id;
+     const municipalityId = req.tenantMunicipalityId;
     const idParam = req.params.id;
 
-    if (!municipalityId) {
-      return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
-    }
-
+   
     const locationId = Number(idParam);
     if (!Number.isInteger(locationId)) {
       return res.status(400).json({ message: 'Geçersiz lokasyon ID' });
@@ -340,12 +320,15 @@ exports.getLocationById = async (req, res) => {
 
 exports.updateLocation = async (req, res) => {
   try {
-    const { id } = req.params;
-   
-    const { municipality_id } = req.user || {};
-    const updates = {};
+    const municipalityId = req.tenantMunicipalityId;
 
-    [
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) {
+      return res.status(400).json({ message: 'Geçersiz lokasyon ID' });
+    }
+
+    const updates = {};
+    const allowedFields = [
       'name',
       'code',
       'address',
@@ -354,30 +337,54 @@ exports.updateLocation = async (req, res) => {
       'type',
       'latitude',
       'longitude',
-    ].forEach((field) => {
+    ];
+
+    allowedFields.forEach((field) => {
       if (req.body[field] !== undefined) updates[field] = req.body[field];
     });
 
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({ message: 'Güncellenecek alan bulunamadı' });
+    }
 
     const existing = await knex('locations')
-      .where({ id })
-      .modify((qb) => {
-        if (municipality_id) {
-          qb.andWhere('municipality_id', municipality_id);
-        }
-      })
+      .where({ id, municipality_id: municipalityId })
       .first();
 
-    
     if (!existing) {
       return res.status(404).json({
         error: 'LOCATION_NOT_FOUND',
-        message: 'Lokasyon bulunamadı.'
+        message: 'Lokasyon bulunamadı.',
       });
     }
 
+    // department_id verildiyse tenant doğrula
+    if (updates.department_id) {
+      const dept = await knex('departments')
+        .where({ id: updates.department_id, municipality_id: municipalityId })
+        .first();
+
+      if (!dept) {
+        return res.status(400).json({ message: 'Departman bu belediyeye ait değil' });
+      }
+    }
+
+    // code güncelleniyorsa aynı belediye içinde çakışma kontrolü
+    if (updates.code && updates.code !== existing.code) {
+      const conflict = await knex('locations')
+        .where({ municipality_id: municipalityId, code: updates.code })
+        .andWhereNot({ id })
+        .first();
+
+      if (conflict) {
+        return res.status(409).json({ message: 'Bu kod ile kayıt mevcut' });
+      }
+    }
+
+    updates.updated_at = knex.fn.now();
+
     const [updated] = await knex('locations')
-      .where({ id })
+      .where({ id, municipality_id: municipalityId })
       .update(updates)
       .returning(LOCATION_COLUMNS);
 
@@ -386,23 +393,21 @@ exports.updateLocation = async (req, res) => {
     console.error('UPDATE_LOCATION_ERROR', err);
     return res.status(500).json({
       error: 'INTERNAL_SERVER_ERROR',
-      message: 'Lokasyon güncellenirken bir hata oluştu.'
+      message: 'Lokasyon güncellenirken bir hata oluştu.',
     });
   }
 };
 
+
 exports.deleteLocation = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { municipality_id } = req.user || {};
-
+    const municipalityId = req.tenantMunicipalityId;
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) {
+      return res.status(400).json({ message: 'Geçersiz lokasyon ID' });
+    }
     const existing = await knex('locations')
-      .where({ id })
-      .modify((qb) => {
-        if (municipality_id) {
-          qb.andWhere('municipality_id', municipality_id);
-        }
-      })
+      .where({ id, municipality_id: municipalityId })
       .first();
 
     if (!existing) {
@@ -414,8 +419,8 @@ exports.deleteLocation = async (req, res) => {
 
     // TODO: Çocuk lokasyonları veya envanter bağlı mı kontrol edilebilir.
     await knex('locations')
-      .where({ id })
-      .del();
+    .where({ id, municipality_id: municipalityId })
+    .del();
 
     return res.status(204).send();
   } catch (err) {

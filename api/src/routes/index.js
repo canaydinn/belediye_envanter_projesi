@@ -1,22 +1,216 @@
 const express = require('express');
 const router = express.Router();
-const superadminRoutes = require('./superadmin.routes');
 
+// 🔐 Kimlik doğrulama middleware'i
+// - Token doğrular
+// - Kullanıcıyı DB’den çeker
+// - req.user set eder
+const auth = require('../middleware/auth');
+
+// 🔒 Rol bazlı yetkilendirme
+// - req.user.role_id üzerinden kontrol yapar
+const authorize = require('../middleware/authorize');
+
+// 🏢 Multi-tenant (belediye) sınırlandırması
+// - Superadmin hariç herkes municipality_id ile sınırlandırılır
+const tenantScope = require('../middleware/tenantScope');
+
+// 🎭 Sistem genelinde kullanılan rol sabitleri
+const ROLES = require('../constants/roles');
+
+/**
+ * ======================================================
+ * PUBLIC ROUTES (HERKESE AÇIK)
+ * ======================================================
+ * - Giriş
+ * - Kayıt
+ * - Şifre sıfırlama
+ *
+ * Bu endpoint'lerde:
+ * ❌ auth yok
+ * ❌ authorize yok
+ * ❌ tenantScope yok
+ */
 router.use('/auth', require('./auth.routes'));
-router.use('/users', require('./user.routes'));            // <- user.routes.js
-router.use('/assets', require('./assets.route'));          // <- assets.route.js
-router.use('/asset-categories', require('./asset.categories.routes'));
-router.use('/departments', require('./department.routes'));
-router.use('/locations', require('./locations.routes'));
-router.use('/inventory', require('./inventory.routes'));
-router.use('/maintenance', require('./maintenance.routes'));
-router.use('/reports', require('./reports.routes'));
-router.use('/uploads', require('./uploads.routes'));
-router.use('/audit', require('./audit.routes'));
-router.use('/qrcode', require('./qrcode.routes'));
-router.use('/admin/municipalities', require('./municipalities.routes'));
-router.use('/superadmin', superadminRoutes);
-router.use('/dashboard', require('./dashboard.routes'));
-router.use('/asset-movements', require('./asset.movements.route'));
 
+/**
+ * ======================================================
+ * SUPERADMIN ONLY
+ * ======================================================
+ * Sadece sistem yöneticisi (role_id = 1) erişebilir
+ *
+ * Akış:
+ * 1️⃣ auth → kimlik doğrulama
+ * 2️⃣ authorize → rol kontrolü (SUPERADMIN)
+ * 3️⃣ route handler
+ */
+
+/**
+ * Belediyeleri listeleme / yönetme
+ * Örn:
+ * - Yeni belediye ekleme
+ * - Lisans / kota işlemleri
+ */
+router.use(
+  '/admin/municipalities',
+  auth,                              // Token + kullanıcı doğrulama
+  authorize(ROLES.SUPERADMIN),       // Sadece superadmin
+  require('./municipalities.routes')
+);
+
+/**
+ * Superadmin paneline ait özel işlemler
+ * (istatistikler, sistem logları vb.)
+ */
+router.use(
+  '/superadmin',
+  auth,                              // Kimlik doğrulama
+  authorize(ROLES.SUPERADMIN),       // Rol kontrolü
+  require('./superadmin.routes')
+);
+
+/**
+ * ======================================================
+ * MULTI-TENANT ROUTES (BELEDİYE KAPSAMLI)
+ * ======================================================
+ * Bu bölüm sistemin KALBİ
+ *
+ * Kurallar:
+ * - auth ZORUNLU
+ * - tenantScope ZORUNLU
+ * - Kullanıcı sadece kendi belediyesinin verisini görür
+ * - Superadmin isterse tüm belediyeleri görür
+ */
+
+/**
+ * Kullanıcı yönetimi (belediye içi)
+ */
+router.use(
+  '/users',
+  auth,                // Kullanıcı doğrulama
+  tenantScope(),       // municipality_id sınırı
+  require('./user.routes')
+);
+
+/**
+ * Envanter (demirbaşlar)
+ */
+router.use(
+  '/assets',
+  auth,
+  tenantScope(),
+  require('./assets.route')
+);
+
+/**
+ * Envanter kategorileri
+ */
+router.use(
+  '/asset-categories',
+  auth,
+  tenantScope(),
+  require('./asset.categories.routes')
+);
+
+/**
+ * Müdürlükler / birimler
+ */
+router.use(
+  '/departments',
+  auth,
+  tenantScope(),
+  require('./department.routes')
+);
+
+/**
+ * Lokasyonlar (depo, bina, saha vb.)
+ */
+router.use(
+  '/locations',
+  auth,
+  tenantScope(),
+  require('./locations.routes')
+);
+
+/**
+ * Stok / envanter detay işlemleri
+ */
+router.use(
+  '/inventory',
+  auth,
+  tenantScope(),
+  require('./inventory.routes')
+);
+
+/**
+ * Bakım / arıza kayıtları
+ */
+router.use(
+  '/maintenance',
+  auth,
+  tenantScope(),
+  require('./maintenance.routes')
+);
+
+/**
+ * Raporlama
+ */
+router.use(
+  '/reports',
+  auth,
+  tenantScope(),
+  require('./reports.routes')
+);
+
+/**
+ * Sistem / kullanıcı hareket logları
+ */
+router.use(
+  '/audit',
+  auth,
+  tenantScope(),
+  require('./audit.routes')
+);
+
+/**
+ * QR kod işlemleri
+ */
+router.use(
+  '/qrcode',
+  auth,
+  tenantScope(),
+  require('./qrcode.routes')
+);
+
+/**
+ * Gösterge paneli (dashboard)
+ */
+router.use(
+  '/dashboard',
+  auth,
+  tenantScope(),
+  require('./dashboard.routes')
+);
+
+/**
+ * Varlık hareketleri (zimmet, transfer, bakım vb.)
+ */
+router.use(
+  '/asset-movements',
+  auth,
+  tenantScope(),
+  require('./asset.movements.route')
+);
+
+/**
+ * Dosya yükleme (resim, belge vb.)
+ */
+router.use(
+  '/uploads',
+  auth,
+  tenantScope(),
+  require('./uploads.routes')
+);
+
+// Ana router export
 module.exports = router;

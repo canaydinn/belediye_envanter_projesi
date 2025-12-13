@@ -2,63 +2,83 @@
 const knex = require('../config/knex');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const ROLES = require('../constants/roles');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-key';
+const IS_PROD = process.env.NODE_ENV === 'production';
+
+// Cookie ayarları: Prod ortamında HTTPS + daha sıkı ayar
+const buildAuthCookieOptions = () => {
+  // Eğer frontend ayrı domain/port ise ve cross-site gerekiyorsa:
+  // sameSite: 'none' + secure: true gerekir.
+  // Tek domain / aynı site ise 'lax' daha güvenli ve pratiktir.
+  const sameSite = IS_PROD ? 'lax' : 'lax';
+
+  return {
+    httpOnly: true,
+    secure: IS_PROD, // prod => true
+    sameSite,
+    // maxAge: 12 * 60 * 60 * 1000, // istersen cookie TTL
+  };
+};
+
+const signAccessToken = (user) => {
+  const payload = {
+    id: user.id,
+    role_id: user.role_id,
+    municipality_id: user.municipality_id || null,
+    username: user.username,
+  };
+
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: '12h' });
+};
 
 // POST /api/auth/login
-async function login (req, res){
+async function login(req, res) {
   try {
-    const { email, password } = req.body;
+    const email = (req.body?.email || '').trim().toLowerCase();
+    const password = req.body?.password;
 
     if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: 'Eposta ve şifre zorunludur' });
+      return res.status(400).json({ message: 'Eposta ve şifre zorunludur' });
     }
 
     const user = await knex('users')
       .where({ email })
+      .select(
+        'id',
+        'username',
+        'email',
+        'full_name',
+        'password_hash',
+        'role_id',
+        'municipality_id',
+        'is_active'
+      )
       .first();
 
-    if (!user) {
-      return res.status(401).json({ message: 'Kullanıcı bulunamadı' });
-    }
-
-    if (user.is_active === false) {
-      return res.status(403).json({ message: 'Kullanıcı pasif durumda' });
+    // Enum sızmasını azalt: kullanıcı yoksa da aynı mesaj
+    if (!user || user.is_active === false) {
+      return res.status(401).json({ message: 'Eposta veya şifre hatalı' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password_hash);
     if (!isMatch) {
-      return res.status(401).json({ message: 'Hatalı şifre' });
+      return res.status(401).json({ message: 'Eposta veya şifre hatalı' });
     }
 
-    // Çok belediyeli yapı için municipality_id de token'a dahil
-    const payload = {
-      id: user.id,
-      role_id: user.role_id,
-      role:user.role,
-      municipality_id: user.municipality_id,
-      username: user.username,
-    };
+    const token = signAccessToken(user);
 
-    const token = jwt.sign(payload, JWT_SECRET, {
-      expiresIn: '12h',
-    });
+    res.cookie('token', token, buildAuthCookieOptions());
 
-    // Geliştirme ortamı için cookie ayarları
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: false, // prod'da true yapılmalı (HTTPS)
-      sameSite: 'lax',
-    });
-
+    // Cookie kullandığın için token'ı response body'de döndürmüyoruz
     return res.json({
       message: 'Giriş başarılı',
-      token,
       user: {
         id: user.id,
         email: user.email,
+        username: user.username,
+        full_name: user.full_name,
         role_id: user.role_id,
         municipality_id: user.municipality_id || null,
       },
@@ -67,60 +87,56 @@ async function login (req, res){
     console.error('auth.login hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
-};
-// POST /api/auth/signup
-async function signup (req, res) {
+}
+
+// POST /api/auth/signup (Public)
+async function signup(req, res) {
   try {
-    const {
-      username: rawUsername,
-      email: rawEmail,
-      password,
-      full_name,
-      role_id,
-      municipality_id,
-    } = req.body;
+    const rawUsername = req.body?.username;
+    const rawEmail = req.body?.email;
 
     const username = rawUsername?.trim();
-    const email = rawEmail?.trim().toLowerCase();
+    const email = rawEmail?.trim()?.toLowerCase();
+    const password = req.body?.password;
+    const full_name = req.body?.full_name || null;
+    const municipality_id = req.body?.municipality_id;
 
-    if (!username || !password || !municipality_id) {
+    if (!username || !email || !password || !municipality_id) {
       return res.status(400).json({
-        message:
-          'username, password ve municipality_id alanları kayıt için zorunludur',
+        message: 'username, email, password ve municipality_id alanları zorunludur',
       });
     }
 
+    // Belediye aktif mi?
     const municipality = await knex('municipalities')
       .where({ id: municipality_id, is_active: true })
       .first();
 
     if (!municipality) {
-      return res
-        .status(400)
-        .json({ message: 'Geçerli ve aktif bir belediye bulunamadı' });
+      return res.status(400).json({ message: 'Geçerli ve aktif bir belediye bulunamadı' });
     }
 
-    const existsQuery = knex('users').where({ username });
-    if (email) {
-      existsQuery.orWhere({ email });
-    }
-
-    const exists = await existsQuery.first();
+    // username / email tekilliği
+    const exists = await knex('users')
+      .where({ username })
+      .orWhere({ email })
+      .first();
 
     if (exists) {
-      return res
-        .status(400)
-        .json({ message: 'Bu kullanıcı adı veya e-posta zaten kullanılıyor' });
+      return res.status(400).json({ message: 'Bu kullanıcı adı veya e-posta zaten kullanılıyor' });
     }
 
     const password_hash = await bcrypt.hash(password, 10);
+
+    // 🚫 role_id client’tan alınmaz (privilege escalation kapalı)
+    const role_id = ROLES.USER ?? 5;
 
     const [createdUser] = await knex('users')
       .insert({
         username,
         email,
         full_name,
-        role_id: role_id || 5, // default: standart kullanıcı
+        role_id,
         municipality_id,
         password_hash,
         is_active: true,
@@ -143,27 +159,21 @@ async function signup (req, res) {
     console.error('auth.signup hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
-};
+}
 
 // GET /api/auth/me
-async function me (req, res){
-  // auth middleware'de req.user set ediliyor
-  if (!req.user) {
-    return res.status(401).json({ message: 'Oturum bulunamadı' });
-  }
-
-  return res.json({
-    user: req.user,
-  });
-};
+async function me(req, res) {
+  if (!req.user) return res.status(401).json({ message: 'Oturum bulunamadı' });
+  return res.json({ user: req.user });
+}
 
 // POST /api/auth/logout
 async function logout(req, res) {
-  res.clearCookie('token');
+  res.clearCookie('token', buildAuthCookieOptions());
   return res.json({ message: 'Çıkış yapıldı' });
-};
-// api/src/controllers/auth.controller.js (içine ek)
+}
 
+// POST /api/auth/municipality-signup (Public)
 async function municipalitySignup(req, res) {
   const trx = await knex.transaction();
   try {
@@ -184,15 +194,22 @@ async function municipalitySignup(req, res) {
       admin_full_name,
       admin_email,
       admin_password,
-    } = req.body;
+    } = req.body || {};
 
-    // Basit zorunlu alan kontrolü
-    if (!municipality_name || !code || !province || !district || !admin_email || !admin_password) {
+    if (
+      !municipality_name ||
+      !code ||
+      !province ||
+      !district ||
+      !admin_email ||
+      !admin_password
+    ) {
       await trx.rollback();
       return res.status(400).json({ message: 'Zorunlu alanlar eksik' });
     }
 
-    const username = admin_username || admin_email?.split('@')[0];
+    const normalizedAdminEmail = String(admin_email).trim().toLowerCase();
+    const username = (admin_username || normalizedAdminEmail.split('@')[0] || '').trim();
 
     if (!username) {
       await trx.rollback();
@@ -200,12 +217,13 @@ async function municipalitySignup(req, res) {
     }
 
     // Aynı email ile kullanıcı var mı?
-    const existingUser = await trx('users').where({ email: admin_email }).first();
+    const existingUser = await trx('users').where({ email: normalizedAdminEmail }).first();
     if (existingUser) {
       await trx.rollback();
       return res.status(400).json({ message: 'Bu e-posta zaten kayıtlı' });
     }
 
+    // Municipality code tekil mi?
     const existingMunicipality = await trx('municipalities').where({ code }).first();
     if (existingMunicipality) {
       await trx.rollback();
@@ -221,7 +239,7 @@ async function municipalitySignup(req, res) {
         district,
         tax_number: tax_number || null,
         address: municipality_address || null,
-        contact_email: contact_email || admin_email || null,
+        contact_email: contact_email || normalizedAdminEmail || null,
         contact_phone: contact_phone || null,
         contact_person: contact_person || admin_full_name || null,
         status: 'pending',
@@ -232,61 +250,62 @@ async function municipalitySignup(req, res) {
       })
       .returning('*');
 
-    // Şifre hash vs. (bcrypt kullanıyorsan)
     const passwordHash = await bcrypt.hash(admin_password, 10);
 
-    // İlk admin kullanıcı
-    const [adminUser] = await trx('users')
-      .insert({
-        full_name: admin_full_name || contact_person || municipality_name,
-        username,
-        email: admin_email,
-        password_hash: passwordHash,
-        role_id: 1,
-        municipality_id: municipality.id,
-        is_active: false,
-      })
-      .returning('*');
+    // ✅ İlk admin kullanıcı: SUPERADMIN değil, MUNICIPALITY_ADMIN
+    const adminRoleId = ROLES.MUNICIPALITY_ADMIN;
+
+    if (!adminRoleId) {
+      await trx.rollback();
+      return res.status(500).json({
+        message: 'Rol tanımı eksik: ROLES.MUNICIPALITY_ADMIN bulunamadı',
+      });
+    }
+
+    await trx('users').insert({
+      full_name: admin_full_name || contact_person || municipality_name,
+      username,
+      email: normalizedAdminEmail,
+      password_hash: passwordHash,
+      role_id: adminRoleId,
+      municipality_id: municipality.id,
+      is_active: false, // onay sonrası true
+    });
 
     await trx.commit();
 
     return res.status(201).json({
-      message: 'Başvurunuz alındı, superadmin onayladıktan sonra giriş yapabilirsiniz.',
+      message: 'Başvurunuz alındı. Onaylandıktan sonra giriş yapabilirsiniz.',
     });
   } catch (err) {
     await trx.rollback();
     console.error('auth.municipalitySignup hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
-};
+}
 
-
-// POST /api/auth/change-password
-async function changePassword (req, res) {
+// POST /api/auth/change-password (Protected)
+async function changePassword(req, res) {
   try {
     const userId = req.user?.id;
-    const { current_password, new_password } = req.body;
+    const { current_password, new_password } = req.body || {};
 
-    if (!userId) {
-      return res.status(401).json({ message: 'Oturum bulunamadı' });
-    }
+    if (!userId) return res.status(401).json({ message: 'Oturum bulunamadı' });
 
     if (!current_password || !new_password) {
-      return res
-        .status(400)
-        .json({ message: 'Eski ve yeni şifre alanları zorunludur' });
+      return res.status(400).json({ message: 'Eski ve yeni şifre alanları zorunludur' });
+    }
+
+    // Basit policy (istersen güçlendir)
+    if (String(new_password).length < 8) {
+      return res.status(400).json({ message: 'Yeni şifre en az 8 karakter olmalıdır' });
     }
 
     const user = await knex('users').where({ id: userId }).first();
-
-    if (!user) {
-      return res.status(404).json({ message: 'Kullanıcı bulunamadı' });
-    }
+    if (!user) return res.status(404).json({ message: 'Kullanıcı bulunamadı' });
 
     const isMatch = await bcrypt.compare(current_password, user.password_hash);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Geçerli şifre hatalı' });
-    }
+    if (!isMatch) return res.status(400).json({ message: 'Geçerli şifre hatalı' });
 
     const password_hash = await bcrypt.hash(new_password, 10);
     await knex('users').where({ id: userId }).update({
@@ -299,21 +318,22 @@ async function changePassword (req, res) {
     console.error('auth.changePassword hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
-};
+}
 
-// POST /api/auth/request-password-reset
-async function requestPasswordReset  (req, res) {
+// POST /api/auth/request-password-reset (Public)
+async function requestPasswordReset(req, res) {
   try {
-    const { email } = req.body;
-
-    if (!email) {
-      return res.status(400).json({ message: 'E-posta zorunludur' });
-    }
+    const email = (req.body?.email || '').trim().toLowerCase();
+    if (!email) return res.status(400).json({ message: 'E-posta zorunludur' });
 
     const user = await knex('users').where({ email }).first();
 
+    // Enum sızmasını önle: kullanıcı yoksa da aynı yanıt
+    // Prod senaryoda token response ile dönmez; e-posta ile gönderilir.
     if (!user) {
-      return res.status(404).json({ message: 'Kullanıcı bulunamadı' });
+      return res.json({
+        message: 'Eğer hesap mevcutsa parola sıfırlama bağlantısı gönderilecektir.',
+      });
     }
 
     const resetToken = jwt.sign(
@@ -322,35 +342,41 @@ async function requestPasswordReset  (req, res) {
       { expiresIn: '1h' }
     );
 
-    // Normalde e-posta ile gönderilir; burada yanıt ile dönüyoruz
+    // TODO: burada mail gönderim servisine bağlanmalı.
+    // Dev ortamında kolaylık için token döndürülebilir:
+    if (!IS_PROD) {
+      return res.json({
+        message: 'Parola sıfırlama bağlantısı oluşturuldu (dev)',
+        reset_token: resetToken,
+      });
+    }
+
     return res.json({
-      message: 'Parola sıfırlama bağlantısı oluşturuldu',
-      reset_token: resetToken,
+      message: 'Eğer hesap mevcutsa parola sıfırlama bağlantısı gönderilecektir.',
     });
   } catch (err) {
     console.error('auth.requestPasswordReset hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
-};
+}
 
-// POST /api/auth/reset-password
-async function resetPassword(req, res){
+// POST /api/auth/reset-password (Public)
+async function resetPassword(req, res) {
   try {
-    const { token, new_password } = req.body;
-
+    const { token, new_password } = req.body || {};
     if (!token || !new_password) {
-      return res
-        .status(400)
-        .json({ message: 'token ve new_password zorunludur' });
+      return res.status(400).json({ message: 'token ve new_password zorunludur' });
+    }
+
+    if (String(new_password).length < 8) {
+      return res.status(400).json({ message: 'Yeni şifre en az 8 karakter olmalıdır' });
     }
 
     let payload;
     try {
       payload = jwt.verify(token, JWT_SECRET);
-    } catch (err) {
-      return res
-        .status(400)
-        .json({ message: 'Geçersiz veya süresi dolmuş parola sıfırlama isteği' });
+    } catch {
+      return res.status(400).json({ message: 'Geçersiz veya süresi dolmuş istek' });
     }
 
     if (payload.type !== 'password_reset') {
@@ -358,10 +384,7 @@ async function resetPassword(req, res){
     }
 
     const user = await knex('users').where({ id: payload.id }).first();
-
-    if (!user) {
-      return res.status(404).json({ message: 'Kullanıcı bulunamadı' });
-    }
+    if (!user) return res.status(404).json({ message: 'Kullanıcı bulunamadı' });
 
     const password_hash = await bcrypt.hash(new_password, 10);
     await knex('users').where({ id: payload.id }).update({
@@ -374,64 +397,35 @@ async function resetPassword(req, res){
     console.error('auth.resetPassword hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
-};
+}
 
-// POST /api/auth/refresh
-async function refreshToken (req, res) {
+// POST /api/auth/refresh (Protected via softAuth)
+async function refreshToken(req, res) {
   try {
-    const cookieToken = req.cookies?.token;
-    const authHeader = req.headers['authorization'];
-    let token = cookieToken;
-
-    if (!token && authHeader && authHeader.startsWith('Bearer ')) {
-      token = authHeader.replace('Bearer ', '');
-    }
-
-    if (!token) {
+    // Route: softAuth zaten req.user ve req.tokenPayload set ediyor olmalı.
+    // (Sende softAuth sürümü bu şekildeydi.)
+    const user = req.user;
+    if (!user || user.is_active === false) {
       return res.status(401).json({ message: 'Oturum bulunamadı' });
     }
 
-    let decoded;
-    try {
-      decoded = jwt.verify(token, JWT_SECRET, { ignoreExpiration: true });
-    } catch (err) {
-      return res.status(401).json({ message: 'Token doğrulanamadı' });
-    }
-
-    const user = await knex('users')
-      .where({ id: decoded.id })
-      .select('id', 'username', 'role_id', 'municipality_id', 'is_active')
-      .first();
-
-    if (!user || user.is_active === false) {
-      return res.status(401).json({ message: 'Kullanıcı pasif veya bulunamadı' });
-    }
-
-    const newPayload = {
-      id: user.id,
-      role_id: user.role_id,
-      municipality_id: user.municipality_id,
-      username: user.username,
-    };
-
-    const newToken = jwt.sign(newPayload, JWT_SECRET, { expiresIn: '12h' });
-
-    res.cookie('token', newToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
-    });
+    const newToken = signAccessToken(user);
+    res.cookie('token', newToken, buildAuthCookieOptions());
 
     return res.json({
       message: 'Token yenilendi',
-      token: newToken,
-      user: newPayload,
+      user: {
+        id: user.id,
+        role_id: user.role_id,
+        municipality_id: user.municipality_id || null,
+        username: user.username,
+      },
     });
   } catch (err) {
     console.error('auth.refreshToken hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
-};
+}
 
 module.exports = {
   login,

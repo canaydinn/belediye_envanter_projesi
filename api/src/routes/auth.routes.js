@@ -4,26 +4,19 @@ const router = express.Router();
 
 const authController = require('../controllers/auth.controller');
 const auth = require('../middleware/auth');
+const softAuth = require('../middleware/softAuth');
 
-// Giriş
+// Public
 router.post('/login', authController.login);
-
-// Kayıt
 router.post('/signup', authController.signup);
-
-// Belediye + admin kullanıcı kaydı
 router.post('/municipality-signup', authController.municipalitySignup);
-// Oturum bilgisi
-router.get('/me', auth, authController.me);
-// Şifre işlemleri
-router.post('/change-password', auth, authController.changePassword);
 router.post('/request-password-reset', authController.requestPasswordReset);
 router.post('/reset-password', authController.resetPassword);
 
-// Token yenileme
-router.post('/refresh', authController.refreshToken);
-// Çıkış
+// Protected (oturum gerekli)
+router.get('/me', auth, authController.me);
+router.post('/change-password', auth, authController.changePassword);
+router.post('/refresh', softAuth, authController.refreshToken);
 router.post('/logout', auth, authController.logout);
-router.post('/municipality-signup', authController.municipalitySignup);
 
 module.exports = router;

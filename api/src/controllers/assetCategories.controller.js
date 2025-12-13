@@ -6,7 +6,9 @@ exports.listCategories = async (req, res) => {
     const municipalityId = req.user?.municipality_id;
 
     const categories = await knex('asset_categories')
-      .select('id', 'code', 'name', 'description');
+  .where({ municipality_id: municipalityId })
+  .select('id', 'code', 'name', 'description')
+  .orderBy('name', 'asc');
     return res.json(categories);
   } catch (err) {
     console.error('assetCategories.listCategories hatası:', err);
@@ -123,26 +125,16 @@ exports.createCategory = async (req, res) => {
 exports.getCategoryDistribution = async (req, res) => {
   try {
     const municipalityId = req.user?.municipality_id;
-
-    const distributionQuery = knex('asset_categories as c')
-      .leftJoin('assets as a', function () {
-        this.on('a.category_id', '=', 'c.id');
-
-        if (municipalityId) {
-          this.andOn('a.municipality_id', '=', municipalityId);
-        }
-      })
-      .modify((queryBuilder) => {
-        if (municipalityId) {
-          queryBuilder.where('c.municipality_id', municipalityId);
-        }
-      })
-      .select('c.id', 'c.name', 'c.code')
-      .count({ asset_count: 'a.id' })
-      .groupBy('c.id', 'c.name', 'c.code')
-      .orderBy('c.name', 'asc');
-
-    const distribution = await distributionQuery;
+    const distribution = await knex('asset_categories as c')
+  .leftJoin('assets as a', function () {
+    this.on('a.category_id', '=', 'c.id')
+      .andOn('a.municipality_id', '=', 'c.municipality_id');
+  })
+  .where('c.municipality_id', municipalityId)
+  .select('c.id', 'c.name', 'c.code')
+  .count({ asset_count: 'a.id' })
+  .groupBy('c.id', 'c.name', 'c.code')
+  .orderBy('c.name', 'asc');
 
     const normalizedDistribution = distribution.map((item) => ({
       id: item.id,

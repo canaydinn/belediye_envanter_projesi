@@ -2,14 +2,42 @@
 const express = require('express');
 const router = express.Router();
 
-const auth = require('../middleware/auth');
 const assetCategoriesController = require('../controllers/assetCategories.controller');
+const authorize = require('../middleware/authorize');
+const ROLES = require('../constants/roles');
 
-// Kategori listesi
-router.get('/', auth,assetCategoriesController.listCategories);
-router.get('/stats', auth, assetCategoriesController.getCategoryStats);
-// Kategori dağılımı (kategori türü ve asset sayıları)
-router.get('/distribution', auth, assetCategoriesController.getCategoryDistribution);
-// Yeni kategori oluşturma
-router.post('/', auth, assetCategoriesController.createCategory);
+/**
+ * READ (Municipality Admin + User)
+ */
+router.get(
+  '/',
+  authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
+  assetCategoriesController.listCategories
+);
+
+router.get(
+  '/stats',
+  authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
+  assetCategoriesController.getCategoryStats
+);
+
+router.get(
+  '/distribution',
+  authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
+  assetCategoriesController.getCategoryDistribution
+);
+
+/**
+ * WRITE (Municipality Admin only)
+ */
+router.post(
+  '/',
+  authorize(ROLES.MUNICIPALITY_ADMIN),
+  assetCategoriesController.createCategory
+);
+router.delete(
+  '/:id',
+  authorize(ROLES.MUNICIPALITY_ADMIN),
+  assetCategoriesController.deleteCategory
+);
 module.exports = router;

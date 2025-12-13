@@ -1,129 +1,108 @@
-// api/controllers/audit.controller.js
-const knex = require('../db/knex');
+// api/src/controllers/audit.controller.js
+const knex = require('../config/knex');
 
-// Tablo adını kendi migration’ındaki isimle eşleştir:
-// Örn: 'audits', 'audit_logs' vs.
 const TABLE_NAME = 'audit_logs';
 
-// Ortak yardımcı
+// Yalnızca izin verilen alanlar (whitelist)
+const ALLOWED_FIELDS = [
+  'action',        // örn: "ASSET_CREATE"
+  'entity_type',   // örn: "asset"
+  'entity_id',     // örn: 123
+  'meta',          // jsonb ise detaylar
+];
+
 const sendServerError = (res, err, place) => {
   console.error(`Audit controller error [${place}]:`, err);
-  res.status(500).json({ message: 'Sunucu hatası', detail: place });
+  return res.status(500).json({ message: 'Sunucu hatası', detail: place });
 };
 
-// Tüm audit kayıtları
-const getAuditLogs = async (req, res) => {
+// GET /api/audit
+exports.getAuditLogs = async (req, res) => {
   try {
+    const municipalityId = req.tenantMunicipalityId;
+
     const logs = await knex(TABLE_NAME)
+      .where({ municipality_id: municipalityId })
       .select('*')
-      .orderBy('created_at', 'desc');
-    res.json(logs);
+      .orderBy('created_at', 'desc')
+      .limit(500); // ✅ sınırlama şart (performans + güvenlik)
+
+    return res.json(logs);
   } catch (err) {
-    sendServerError(res, err, 'getAuditLogs');
+    return sendServerError(res, err, 'getAuditLogs');
   }
 };
 
-// ID ile tek kayıt
-const getAuditLogById = async (req, res) => {
+// GET /api/audit/:id
+exports.getAuditLogById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const municipalityId = req.tenantMunicipalityId;
+    const id = Number(req.params.id);
+
+    if (!Number.isInteger(id)) {
+      return res.status(400).json({ message: 'Geçersiz ID' });
+    }
+
     const log = await knex(TABLE_NAME)
-      .where({ id })
+      .where({ id, municipality_id: municipalityId })
       .first();
 
     if (!log) {
       return res.status(404).json({ message: 'Kayıt bulunamadı' });
     }
 
-    res.json(log);
+    return res.json(log);
   } catch (err) {
-    sendServerError(res, err, 'getAuditLogById');
+    return sendServerError(res, err, 'getAuditLogById');
   }
 };
 
-// Yeni audit kaydı oluştur
-const createAuditLog = async (req, res) => {
+// POST /api/audit
+// Not: Audit log normalde sistem tarafından üretilir. UI’dan serbest insert genelde kapatılır.
+exports.createAuditLog = async (req, res) => {
   try {
-    const data = req.body;
+    const municipalityId = req.tenantMunicipalityId;
+    const userId = req.user?.id;
 
-    // İstersen burada zorunlu alan kontrolü yap:
-    // const { action, entity_type, entity_id, user_id } = data;
+    if (!municipalityId || !userId) {
+      return res.status(401).json({ message: 'Oturum doğrulanamadı' });
+    }
+
+    // ✅ req.body -> whitelist
+    const payload = {};
+    for (const key of ALLOWED_FIELDS) {
+      if (req.body?.[key] !== undefined) payload[key] = req.body[key];
+    }
+
+    // Basit zorunlu alan kontrolü
+    if (!payload.action || !payload.entity_type) {
+      return res.status(400).json({ message: 'action ve entity_type zorunludur' });
+    }
+
+    // ✅ spoof engelle: municipality_id / user_id backend’den set edilir
+    payload.municipality_id = municipalityId;
+    payload.user_id = userId;
+
+    // Ek güvenlik/izleme alanları (tablon varsa)
+    payload.ip = req.ip;
+    payload.user_agent = req.get('user-agent') || null;
 
     const [created] = await knex(TABLE_NAME)
-      .insert(data)
-      .returning('*'); // SQLite kullanıyorsan returning çalışmıyorsa, .returning'i kaldır
-
-    res.status(201).json(created || { success: true });
-  } catch (err) {
-    sendServerError(res, err, 'createAuditLog');
-  }
-};
-
-// Audit kaydı güncelle
-const updateAuditLog = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const data = req.body;
-
-    const updatedRows = await knex(TABLE_NAME)
-      .where({ id })
-      .update(data)
+      .insert(payload)
       .returning('*');
 
-    const updated = Array.isArray(updatedRows) ? updatedRows[0] : null;
-
-    if (!updated && !updatedRows) {
-      return res.status(404).json({ message: 'Kayıt bulunamadı' });
-    }
-
-    res.json(updated || { success: true });
+    return res.status(201).json(created);
   } catch (err) {
-    sendServerError(res, err, 'updateAuditLog');
+    return sendServerError(res, err, 'createAuditLog');
   }
 };
 
-// Audit kaydı sil
-const deleteAuditLog = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const deletedCount = await knex(TABLE_NAME)
-      .where({ id })
-      .del();
-
-    if (!deletedCount) {
-      return res.status(404).json({ message: 'Kayıt bulunamadı' });
-    }
-
-    res.json({ success: true });
-  } catch (err) {
-    sendServerError(res, err, 'deleteAuditLog');
-  }
+// PUT ve DELETE: Audit için önerilmez (append-only)
+// Eğer illa olacaksa yalnızca SUPERADMIN'e aç ve municipality scope kontrolünü asla kaldırma.
+exports.updateAuditLog = async (req, res) => {
+  return res.status(405).json({ message: 'Audit kayıtları güncellenemez (append-only)' });
 };
 
-/**
- * Farklı isimlendirmelerle route dosyasına uyum sağlamak için
- * aynı fonksiyonlara birden fazla alias veriyorum.
- * Böylece audit.routes.js içinde hangi isim kullanıldıysa büyük ihtimalle karşılığı olur.
- */
-module.exports = {
-  // Log listeleri
-  getAuditLogs,
-  getAudits: getAuditLogs,
-
-  // Tekil kayıt
-  getAuditLogById,
-  getAuditById: getAuditLogById,
-
-  // Oluşturma
-  createAuditLog,
-  createAudit: createAuditLog,
-
-  // Güncelleme
-  updateAuditLog,
-  updateAudit: updateAuditLog,
-
-  // Silme
-  deleteAuditLog,
-  deleteAudit: deleteAuditLog,
+exports.deleteAuditLog = async (req, res) => {
+  return res.status(405).json({ message: 'Audit kayıtları silinemez (append-only)' });
 };
