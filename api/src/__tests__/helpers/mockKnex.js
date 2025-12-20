@@ -45,6 +45,8 @@ function createMockKnex() {
           const context = {
             where: function() { return this; },
             orWhere: function() { return this; },
+            andOn: function() { return this; },
+            on: function() { return this; },
           };
           cb.call(context);
         }
@@ -52,11 +54,39 @@ function createMockKnex() {
       },
       andWhere() { return this; },
       andWhereNot() { return this; },
+      whereNot() { return this; },
+      whereNull() { return this; },
+      whereNotNull() { return this; },
       orWhere() { return this; },
+      whereRaw() { return this; },
+      orWhereRaw() { return this; },
       whereILike() { return this; },
       orWhereILike() { return this; },
+      ilike() { return this; },
+      modify(callback) {
+        if (typeof callback === 'function') {
+          const context = {
+            andWhere: () => this,
+            where: () => this,
+            orWhere: () => this,
+          };
+          callback.call(context, this);
+        }
+        return this;
+      },
       join() { return this; },
-      leftJoin() { return this; },
+      leftJoin(table, ...args) {
+        // Support callback: leftJoin('table', function() { this.on(...).andOn(...) })
+        if (args.length > 0 && typeof args[0] === 'function') {
+          const cb = args[0];
+          const context = {
+            on: function() { return this; },
+            andOn: function() { return this; },
+          };
+          cb.call(context);
+        }
+        return this;
+      },
       innerJoin() { return this; },
       orderBy() { return this; },
       groupBy() { return this; },
@@ -66,6 +96,8 @@ function createMockKnex() {
       count() { return this; },
       countDistinct() { return this; },
       havingRaw() { return this; },
+      clearSelect() { return this; },
+      clearOrder() { return this; },
       clone() { return this; }, // Clone returns same builder (shares state for mocking)
 
       // terminal-ish helpers
@@ -98,13 +130,10 @@ function createMockKnex() {
           const result = q.shift([]);
           return Promise.resolve(result);
         }
-        // Otherwise return an object with returning() method
-        return {
-          returning: () => {
-            const q = getQueue(table, 'update:returning');
-            return Promise.resolve(q.shift([]));
-          },
-        };
+        // Otherwise return the number of affected rows (for remove function)
+        const q = getQueue(table, 'update');
+        const affected = q.shift(0);
+        return Promise.resolve(affected);
       },
 
       // Make the builder awaitable: `await knex('table').select(...)`
@@ -162,3 +191,4 @@ function createMockKnex() {
 }
 
 module.exports = { createMockKnex };
+

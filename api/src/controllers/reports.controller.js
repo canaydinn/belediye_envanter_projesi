@@ -1,28 +1,38 @@
 // controllers/reports.controller.js
-//const Inventory = require('../models/Inventory');
-//const MaintenanceTicket = require('../models/MaintenanceTicket');
-// Excel & PDF export için paketleri ayrıca ekleyebilirsin (exceljs, pdfkit vs.)
+const knex = require('../config/knex');
 
 exports.getInventorySummary = async (req, res) => {
   try {
+    const municipalityId = req.tenantMunicipalityId;
+    if (!municipalityId) {
+      return res.status(400).json({
+        error: 'VALIDATION_ERROR',
+        message: 'Belediye kapsamı bulunamadı.'
+      });
+    }
+
     const { groupBy = 'department', status } = req.query;
 
-    const match = {};
-    if (status) match.status = status;
+    let query = knex('assets')
+      .where('municipality_id', municipalityId);
 
-    let group = {};
+    if (status) {
+      query = query.where('status', status);
+    }
+
+    let data;
     if (groupBy === 'department') {
-      group = {
-        _id: '$departmentId',
-        totalCount: { $sum: 1 },
-        totalValue: { $sum: '$value' }
-      };
+      data = await query
+        .select('department_id as _id')
+        .select(knex.raw('COUNT(*) as total_count'))
+        .select(knex.raw('COALESCE(SUM(purchase_price), 0) as total_value'))
+        .groupBy('department_id');
     } else if (groupBy === 'location') {
-      group = {
-        _id: '$locationId',
-        totalCount: { $sum: 1 },
-        totalValue: { $sum: '$value' }
-      };
+      data = await query
+        .select('location_id as _id')
+        .select(knex.raw('COUNT(*) as total_count'))
+        .select(knex.raw('COALESCE(SUM(purchase_price), 0) as total_value'))
+        .groupBy('location_id');
     } else {
       return res.status(400).json({
         error: 'VALIDATION_ERROR',
@@ -30,16 +40,18 @@ exports.getInventorySummary = async (req, res) => {
       });
     }
 
-    const data = await Inventory.aggregate([
-      { $match: match },
-      { $group: group }
-    ]);
+    // Normalize data format
+    const normalizedData = data.map(row => ({
+      _id: row._id,
+      totalCount: Number(row.total_count),
+      totalValue: Number(row.total_value)
+    }));
 
     return res.json({
       generatedAt: new Date().toISOString(),
       groupBy,
       filters: { status: status || null },
-      data
+      data: normalizedData
     });
   } catch (err) {
     console.error('INVENTORY_REPORT_ERROR', err);
@@ -52,24 +64,39 @@ exports.getInventorySummary = async (req, res) => {
 
 exports.getMaintenanceSummary = async (req, res) => {
   try {
-    const { from, to } = req.query;
-
-    const match = {};
-    if (from || to) {
-      match.createdAt = {};
-      if (from) match.createdAt.$gte = new Date(from);
-      if (to) match.createdAt.$lte = new Date(to);
+    const municipalityId = req.tenantMunicipalityId;
+    if (!municipalityId) {
+      return res.status(400).json({
+        error: 'VALIDATION_ERROR',
+        message: 'Belediye kapsamı bulunamadı.'
+      });
     }
 
-    const tickets = await MaintenanceTicket.find(match);
+    const { from, to } = req.query;
+
+    let query = knex('maintenance_requests')
+      .where('municipality_id', municipalityId);
+
+    if (from || to) {
+      if (from) {
+        query = query.where('created_at', '>=', new Date(from));
+      }
+      if (to) {
+        query = query.where('created_at', '<=', new Date(to));
+      }
+    }
+
+    const tickets = await query.select('status', 'priority');
 
     const totalTickets = tickets.length;
     const byStatus = {};
     const byPriority = {};
 
     tickets.forEach((t) => {
-      byStatus[t.status] = (byStatus[t.status] || 0) + 1;
-      byPriority[t.priority] = (byPriority[t.priority] || 0) + 1;
+      const status = t.status || 'unknown';
+      const priority = t.priority || 'unknown';
+      byStatus[status] = (byStatus[status] || 0) + 1;
+      byPriority[priority] = (byPriority[priority] || 0) + 1;
     });
 
     return res.json({

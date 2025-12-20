@@ -82,7 +82,7 @@ const updatePayload = {
     if (license_start_date !== undefined) updatePayload.license_start_date = license_start_date;
     if (license_end_date !== undefined) updatePayload.license_end_date = license_end_date;
     if (quota_end_date !== undefined) updatePayload.quota_end_date = quota_end_date;
-    const [updated] = await knex('municipalities')
+    const updated = await knex('municipalities')
       .where({ id })
       .update(updatePayload)
       .returning('*');

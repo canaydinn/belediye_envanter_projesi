@@ -1,12 +1,25 @@
 // controllers/qrcode.controller.js
 const QRCode = require('qrcode');
-//const Inventory = require('../models/Inventory');
+const knex = require('../config/knex');
+
+const TABLE = 'inventory_items';
 
 exports.generateInventoryQrCode = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const item = await Inventory.findById(id);
+    const itemId = Number(id);
+    if (!Number.isInteger(itemId)) {
+      return res.status(400).json({
+        error: 'VALIDATION_ERROR',
+        message: 'Geçersiz envanter ID'
+      });
+    }
+
+    const item = await knex(TABLE)
+      .where({ id: itemId })
+      .first();
+
     if (!item) {
       return res.status(404).json({
         error: 'INVENTORY_NOT_FOUND',
@@ -14,12 +27,12 @@ exports.generateInventoryQrCode = async (req, res) => {
       });
     }
 
-    const text = item.assetTag || item._id.toString();
+    const text = item.asset_tag || item.id.toString();
 
     res.setHeader('Content-Type', 'image/png');
     res.setHeader(
       'Content-Disposition',
-      `inline; filename="${item._id}_qr.png"`
+      `inline; filename="${item.id}_qr.png"`
     );
 
     // QR kodu doğrudan response stream'e yaz
@@ -70,9 +83,10 @@ exports.scanCodeAndResolveInventory = async (req, res) => {
       });
     }
 
-    const item = await Inventory.findOne({
-      $or: [{ assetTag: code }, { serialNumber: code }]
-    });
+    const item = await knex(TABLE)
+      .where('asset_tag', code)
+      .orWhere('serial_number', code)
+      .first();
 
     if (!item) {
       return res.status(404).json({

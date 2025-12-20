@@ -1,5 +1,5 @@
 // controllers/uploads.controller.js
-//const FileUpload = require('../models/FileUpload');
+const FileUpload = require('../models/FileUpload');
 const fs = require('fs');
 const path = require('path');
 
