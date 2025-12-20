@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="tr" class="light-style layout-navbar-fixed layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../admin/assets/" data-template="vertical-menu-template">
+<html lang="tr" class="light-style layout-navbar-fixed layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="/admin/assets/" data-template="vertical-menu-template">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
     <title>Varlıklar | Envanter360</title>
-
+<!-- Include Vuexy core CSS and vendor CSS here -->
     <link rel="icon" type="image/x-icon" href="../admin/assets/img/favicon/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -33,51 +33,71 @@
           <div class="app-brand demo">
             <a href="index.html" class="app-brand-link">
               <span class="app-brand-logo demo">
-                <!-- Logo Placeholder -->
+                 <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z"
+                    fill="#7367F0" />
+                  <path
+                    opacity="0.06"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z"
+                    fill="#161616" />
+                  <path
+                    opacity="0.06"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z"
+                    fill="#161616" />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z"
+                    fill="#7367F0" />
+                </svg>
               </span>
               <span class="app-brand-text demo menu-text fw-bold">Envanter360</span>
             </a>
-            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
-              <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
-              <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
-            </a>
+           
           </div>
 
           <div class="menu-inner-shadow"></div>
 
           <ul class="menu-inner py-1">
             <li class="menu-item">
-              <a href="../admin/dashboard.html" class="menu-link">
+              <a href="/admin/dashboard.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div>Dashboard</div>
               </a>
             </li>
             <li class="menu-item active">
-              <a href="../admin/assets.html" class="menu-link">
+              <a href="/admin/assets.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-archive"></i>
                 <div>Varlıklar</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="../admin/assets-movements.html" class="menu-link">
+              <a href="/admin/assets-movements.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-arrows-left-right"></i>
                 <div>Varlık Hareketleri</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="../admin/locations.html" class="menu-link">
+              <a href="/admin/locations.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-map-pin"></i>
                 <div>Lokasyonlar</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="../admin/categories.html" class="menu-link">
+              <a href="/admin/categories.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-folders"></i>
                 <div>Kategoriler</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="../admin/users.html" class="menu-link">
+              <a href="/admin/users.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-users"></i>
                 <div>Kullanıcılar</div>
               </a>
@@ -92,38 +112,45 @@
           <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
               <ul class="navbar-nav flex-row align-items-center ms-auto">
-                <li class="nav-item lh-1 me-3">
-                  <span class="fw-semibold">Belediye Yöneticisi</span>
-                </li>
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                      <img src="../admin/assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                      <img src="../admin/assets/img/avatars/1.png" alt="User" class="h-auto rounded-circle" />
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a class="dropdown-item" href="pages-account-settings-account.html">
+                      <a class="dropdown-item" href="javascript:void(0);">
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
-                              <img src="../admin/assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                              <img src="../admin/assets/img/avatars/1.png" alt="User" class="h-auto rounded-circle" />
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-semibold d-block">Ahmet Kaya</span>
-                            <small class="text-muted">Belediye Yöneticisi</small>
+                            <span class="fw-semibold d-block">Belediye Yöneticisi</span>
+                            <small class="text-muted" id="navbarMunicipalityName"></small>
                           </div>
                         </div>
                       </a>
                     </li>
+                    <li><div class="dropdown-divider"></div></li>
                     <li>
-                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <i class="ti ti-user-check me-2 ti-sm"></i>
+                        <span class="align-middle">Profil</span>
+                      </a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="auth-login-cover.html">
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <i class="ti ti-settings me-2 ti-sm"></i>
+                        <span class="align-middle">Ayarlar</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
                         <i class="ti ti-logout me-2 ti-sm"></i>
-                        <span class="align-middle">Çıkış Yap</span>
+                        <span class="align-middle">Çıkış</span>
                       </a>
                     </li>
                   </ul>
@@ -151,7 +178,7 @@
                     <h5 class="card-title mb-0">Varlık Filtreleri</h5>
                   </div>
                   <div class="d-flex flex-wrap gap-2">
-                    <a href="create-asset.html" class="btn btn-primary btn-sm">
+                    <a href="create_asset.html" class="btn btn-primary btn-sm">
                       <i class="ti ti-plus me-1"></i>Yeni Varlık Ekle
                     </a>
                    <!--  <a href="#" class="btn btn-outline-secondary btn-sm">
@@ -331,7 +358,8 @@
               </div>
             </div>
             <!-- /Page Header -->
-
+ <div class="text-center text-muted mt-4">Envanter360 • Belediye Envanter Yönetim Sistemi</div>
+            </div>
             <div class="content-backdrop fade"></div>
           </div>
           <!--/ Content wrapper -->
@@ -344,331 +372,254 @@
     <!-- / Layout wrapper -->
 
     <!-- Include Vuexy core JS and vendor JS here -->
+     <script src="/admin/assets/vendor/js/helpers.js"></script>
+
+<script src="/admin/assets/js/config.js"></script>
+
+<script src="/admin/assets/vendor/libs/jquery/jquery.js"></script>
+<script src="/admin/assets/vendor/libs/popper/popper.js"></script>
+<script src="/admin/assets/vendor/js/bootstrap.js"></script>
+<script src="/admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="/admin/assets/vendor/libs/node-waves/node-waves.js"></script>
+<script src="/admin/assets/vendor/libs/hammer/hammer.js"></script>
+<script src="/admin/assets/vendor/libs/i18n/i18n.js"></script>
+<script src="/admin/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+<script src="/admin/assets/vendor/js/menu.js"></script>
+
+<script src="/admin/assets/js/main.js"></script>
+
   </body>
   <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const categorySelect = document.getElementById('filterCategory');
-        const departmentSelect = document.getElementById('filterDepartment');
-        const locationSelect = document.getElementById('filterLocation');
-        const selects = [categorySelect, departmentSelect, locationSelect];
+  const API_BASE_URL = '/api';
 
-        const setSingleOption = (select, label) => {
-          if (!select) return;
-          select.innerHTML = '';
-          const option = document.createElement('option');
-          option.value = '';
-          option.textContent = label;
-          select.appendChild(option);
-        };
+  async function apiFetch(path, options = {}) {
+    const res = await fetch(`${API_BASE_URL}${path}`, {
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(options.headers || {})
+      },
+      ...options
+    });
 
-        const setLoadingState = () => {
-          setSingleOption(categorySelect, 'Kategoriler yükleniyor...');
-          setSingleOption(departmentSelect, 'Birimler yükleniyor...');
-          setSingleOption(locationSelect, 'Lokasyonlar yükleniyor...');
-          selects.forEach((select) => select && (select.disabled = true));
-        };
+    const data = await res.json().catch(() => ({}));
 
-        const setErrorState = (message) => {
-          setSingleOption(categorySelect, message || 'Filtreler yüklenemedi');
-          setSingleOption(departmentSelect, message || 'Filtreler yüklenemedi');
-          setSingleOption(locationSelect, message || 'Filtreler yüklenemedi');
-          selects.forEach((select) => select && (select.disabled = true));
-        };
+    if (!res.ok) {
+      if (res.status === 401) {
+        window.location.href = '/admin/login.html';
+        return;
+      }
+      throw new Error(data?.message || `İstek başarısız (status: ${res.status})`);
+    }
 
-        const populateSelect = (select, items, labelBuilder) => {
-          if (!select) return;
-          select.innerHTML = '';
+    return data;
+  }
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const categorySelect = document.getElementById('filterCategory');
+    const departmentSelect = document.getElementById('filterDepartment');
+    const locationSelect = document.getElementById('filterLocation');
+    const selects = [categorySelect, departmentSelect, locationSelect];
 
-          const allOption = document.createElement('option');
-          allOption.value = '';
-          allOption.textContent = 'Tümü';
-          select.appendChild(allOption);
+    const setSingleOption = (select, label) => {
+      if (!select) return;
+      select.innerHTML = '';
+      const option = document.createElement('option');
+      option.value = '';
+      option.textContent = label;
+      select.appendChild(option);
+    };
 
-          items.forEach((item) => {
-            const option = document.createElement('option');
-            option.value = item.id;
-            option.textContent = labelBuilder(item);
-            select.appendChild(option);
-          });
+    const setLoadingState = () => {
+      setSingleOption(categorySelect, 'Kategoriler yükleniyor...');
+      setSingleOption(departmentSelect, 'Birimler yükleniyor...');
+      setSingleOption(locationSelect, 'Lokasyonlar yükleniyor...');
+      selects.forEach((s) => s && (s.disabled = true));
+    };
 
-          select.disabled = false;
-        };
+    const setErrorState = (message) => {
+      const msg = message || 'Filtreler yüklenemedi';
+      setSingleOption(categorySelect, msg);
+      setSingleOption(departmentSelect, msg);
+      setSingleOption(locationSelect, msg);
+      selects.forEach((s) => s && (s.disabled = true));
+    };
 
-        const loadFilters = async () => {
-          const token = localStorage.getItem('token');
-          if (!token) {
-            setErrorState('Lütfen giriş yapın');
-            return;
-          }
+    const populateSelect = (select, items, labelBuilder) => {
+      if (!select) return;
+      select.innerHTML = '';
 
-          setLoadingState();
+      const allOption = document.createElement('option');
+      allOption.value = '';
+      allOption.textContent = 'Tümü';
+      select.appendChild(allOption);
 
-          try {
-            const response = await fetch('http://localhost:4000/api/assets/filters', {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-
-            if (!response.ok) {
-              throw new Error('Filtre verileri alınamadı');
-            }
-
-            const data = await response.json();
-            const categories = Array.isArray(data?.categories) ? data.categories : [];
-            const departments = Array.isArray(data?.departments) ? data.departments : [];
-            const locations = Array.isArray(data?.locations) ? data.locations : [];
-
-            populateSelect(categorySelect, categories, (item) =>
-              item.code ? `${item.name} (${item.code})` : item.name
-            );
-            populateSelect(departmentSelect, departments, (item) =>
-              item.code ? `${item.name} (${item.code})` : item.name
-            );
-            populateSelect(locationSelect, locations, (item) =>
-              item.code ? `${item.name} (${item.code})` : item.name
-            );
-          } catch (error) {
-            console.error('Filtre seçenekleri yüklenirken hata oluştu:', error);
-            setErrorState('Filtre verileri yüklenemedi');
-          }
-        };
-
-        loadFilters();
+      items.forEach((item) => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = labelBuilder(item);
+        select.appendChild(option);
       });
-    </script>
-     <script>
-      (function () {
-        const API_BASE_URL = 'http://localhost:4000/api';
-        const tableBody = document.querySelector('[data-role="assets-table-body"]');
-        const summary = document.querySelector('[data-role="assets-table-summary"]');
 
-        if (!tableBody) return;
+      select.disabled = false;
+    };
 
-        const token = localStorage.getItem('token');
+    setLoadingState();
 
-        if (!token) {
-          tableBody.innerHTML =
-            '<tr><td colspan="9" class="text-center text-muted">Oturum bulunamadı. Lütfen yeniden giriş yapın.</td></tr>';
-          if (summary) summary.textContent = 'Gösterilen: 0 / 0';
-          return;
-        }
+    try {
+      const data = await apiFetch('/assets/filters', { method: 'GET' });
 
-        const statusMap = {
-          active: { label: 'Aktif', className: 'badge bg-label-success badge-sm' },
-          maintenance: { label: 'Bakımda', className: 'badge bg-label-warning badge-sm' },
-          passive: { label: 'Pasif', className: 'badge bg-label-secondary badge-sm' },
-          scrap: { label: 'Hurda', className: 'badge bg-label-danger badge-sm' },
-        };
+      const categories = Array.isArray(data?.categories) ? data.categories : [];
+      const departments = Array.isArray(data?.departments) ? data.departments : [];
+      const locations = Array.isArray(data?.locations) ? data.locations : [];
 
-        const formatDate = (value) => {
-          if (!value) return '-';
-          const date = new Date(value);
-          return Number.isNaN(date.getTime())
-            ? '-'
-            : date.toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'short' });
-        };
-
-        const renderStatus = (status) => {
-          const normalized = (status || '').toLowerCase();
-          const mapping = statusMap[normalized] || {
-            label: status || 'Bilinmiyor',
-            className: 'badge bg-label-secondary badge-sm',
-          };
-
-          return `<span class="${mapping.className}">${mapping.label}</span>`;
-        };
-
-        const buildRow = (asset) => {
-          const updatedAt = formatDate(asset?.updated_at || asset?.created_at);
-          const statusBadge = renderStatus(asset?.status);
-          const assetCode = asset?.asset_code || '-';
-          const assetName = asset?.name || '-';
-          const category = asset?.category_name || '-';
-          const department = asset?.department_name || '-';
-          const location = asset?.location_name || '-';
-          const assignedUser = asset?.assigned_user_name || '-';
-
-          return `
-            <tr data-asset-id="${asset.id}">
-              <td>${assetCode}</td>
-              <td>${assetName}</td>
-              <td>${category}</td>
-              <td>${department}</td>
-              <td>${location}</td>
-              <td>${assignedUser}</td>
-              <td>${statusBadge}</td>
-              <td>${updatedAt}</td>
-              <td class="text-center">
-                <div class="d-inline-flex gap-1">
-                  <a href="asset-detail.html?id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
-                  <a href="asset-edit.html?id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
-                  <a href="asset-movement-create.html?asset_id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
-                  <a href="asset-qr.html?id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
-                </div>
-              </td>
-            </tr>
-          `;
-        };
-
-        fetch(`${API_BASE_URL}/assets`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          credentials: 'include',
-        })
-          .then(async (response) => {
-            if (!response.ok) {
-              const errorText = await response.text();
-              throw new Error(errorText || `Varlık listesi isteği başarısız (status: ${response.status})`);
-            }
-
-            return response.json();
-          })
-          .then((assets) => {
-            if (!Array.isArray(assets) || !assets.length) {
-              tableBody.innerHTML =
-                '<tr><td colspan="9" class="text-center text-muted">Henüz varlık bulunmuyor.</td></tr>';
-              if (summary) summary.textContent = 'Gösterilen: 0 / 0';
-              return;
-            }
-
-            tableBody.innerHTML = assets.map((asset) => buildRow(asset)).join('');
-            if (summary) summary.textContent = `Gösterilen: ${assets.length} / ${assets.length}`;
-          })
-          .catch((error) => {
-            console.error('Varlıklar yüklenemedi:', error);
-            tableBody.innerHTML =
-              '<tr><td colspan="9" class="text-center text-danger">Varlık listesi yüklenirken hata oluştu.</td></tr>';
-            if (summary) summary.textContent = 'Gösterilen: 0 / 0';
-          });
-      })();
-    </script>
-     <script>
-      (async function loadStatusDistribution() {
-        const API_BASE_URL = 'http://localhost:4000/api';
-        const token = localStorage.getItem('token');
-
-        const statusElements = {
-          active: document.querySelector('[data-status-count="active"]'),
-          in_maintenance: document.querySelector('[data-status-count="in_maintenance"]'),
-          disposed: document.querySelector('[data-status-count="disposed"]'),
-          lost: document.querySelector('[data-status-count="lost"]'),
-        };
-
-        const setCount = (element, value) => {
-          if (!element) return;
-          const numericValue = Number(value ?? 0);
-          element.textContent = Number.isFinite(numericValue)
-            ? numericValue.toLocaleString('tr-TR')
-            : '0';
-        };
-
-        const applyDistribution = (distribution = {}) => {
-          setCount(statusElements.active, distribution.active);
-          setCount(statusElements.in_maintenance, distribution.in_maintenance);
-          setCount(statusElements.disposed, distribution.disposed);
-          setCount(statusElements.lost, distribution.lost);
-        };
-
-        if (!token) {
-          console.warn('Kullanıcı oturumu bulunamadı, durum dağılımı gösterilemiyor.');
-          applyDistribution();
-          return;
-        }
-
-        try {
-          const response = await fetch(`${API_BASE_URL}/assets/status-distribution`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-            credentials: 'include',
-          });
-
-          const data = await response.json().catch(() => ({}));
-
-          if (!response.ok) {
-            throw new Error(data?.message || 'Durum dağılımı alınamadı');
-          }
-
-          applyDistribution(data.distribution);
-        } catch (error) {
-          console.error('Varlık durum dağılımı yüklenemedi:', error);
-          applyDistribution();
-        }
-      })();
-    </script>
-   <script>
-  (function () {
-    const tableBody = document.querySelector('[data-role="recent-assets-body"]');
-    const API_BASE_URL = 'http://localhost:4000/api';
-
+      populateSelect(categorySelect, categories, (i) => (i.code ? `${i.name} (${i.code})` : i.name));
+      populateSelect(departmentSelect, departments, (i) => (i.code ? `${i.name} (${i.code})` : i.name));
+      populateSelect(locationSelect, locations, (i) => (i.code ? `${i.name} (${i.code})` : i.name));
+    } catch (err) {
+      console.error('Filtre seçenekleri yüklenirken hata:', err);
+      setErrorState('Filtre verileri yüklenemedi');
+    }
+  });
+</script>
+<script>
+  (async () => {
+    const tableBody = document.querySelector('[data-role="assets-table-body"]');
+    const summary = document.querySelector('[data-role="assets-table-summary"]');
     if (!tableBody) return;
 
-    const token = localStorage.getItem('token');
-    const headers = {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    const statusMap = {
+      active: { label: 'Aktif', className: 'badge bg-label-success badge-sm' },
+      in_maintenance: { label: 'Bakımda', className: 'badge bg-label-warning badge-sm' },
+      disposed: { label: 'Hurda', className: 'badge bg-label-danger badge-sm' },
+      lost: { label: 'Pasif', className: 'badge bg-label-secondary badge-sm' }
     };
 
     const formatDate = (value) => {
       if (!value) return '-';
-      const date = new Date(value);
-      if (Number.isNaN(date.getTime())) return '-';
-      return date.toLocaleDateString('tr-TR');
+      const d = new Date(value);
+      return Number.isNaN(d.getTime())
+        ? '-'
+        : d.toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'short' });
     };
 
-    const renderRows = (assets) => {
-      if (!assets?.length) {
-        tableBody.innerHTML =
-          '<tr><td colspan="3" class="text-center text-muted">Henüz varlık eklenmemiş.</td></tr>';
+    const renderStatus = (status) => {
+      const key = (status || '').toLowerCase();
+      const m = statusMap[key] || { label: status || 'Bilinmiyor', className: 'badge bg-label-secondary badge-sm' };
+      return `<span class="${m.className}">${m.label}</span>`;
+    };
+
+    const buildRow = (asset) => {
+      const updatedAt = formatDate(asset?.updated_at || asset?.created_at);
+      return `
+        <tr data-asset-id="${asset.id}">
+          <td>${asset?.asset_code || '-'}</td>
+          <td>${asset?.name || '-'}</td>
+          <td>${asset?.category_name || '-'}</td>
+          <td>${asset?.department_name || '-'}</td>
+          <td>${asset?.location_name || '-'}</td>
+          <td>${asset?.assigned_user_name || '-'}</td>
+          <td>${renderStatus(asset?.status)}</td>
+          <td>${updatedAt}</td>
+          <td class="text-center">
+            <div class="d-inline-flex gap-1">
+              <a href="/admin/asset-detail.html?id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
+              <a href="/admin/asset-edit.html?id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
+              <a href="/admin/asset-movement-create.html?asset_id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
+              <a href="/admin/asset-qr.html?id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
+            </div>
+          </td>
+        </tr>
+      `;
+    };
+
+    tableBody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">Varlıklar yükleniyor...</td></tr>';
+
+    try {
+      const assets = await apiFetch('/assets', { method: 'GET' });
+
+      if (!Array.isArray(assets) || !assets.length) {
+        tableBody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">Henüz varlık bulunmuyor.</td></tr>';
+        if (summary) summary.textContent = 'Gösterilen: 0 / 0';
         return;
       }
 
-      const rows = assets
-        .map(
-          (asset) => `
-          <tr data-asset-id="${asset.id}">
-            <td>${asset.name || '-'}</td>
-            <td>${formatDate(asset.created_at)}</td>
-            <td>${asset.department_name || '-'}</td>
-          </tr>
-        `
-        )
-        .join('');
-
-      tableBody.innerHTML = rows;
-    };
-
-    const loadRecentAssets = async () => {
-      tableBody.innerHTML =
-        '<tr><td colspan="3" class="text-center text-muted">Son eklenen varlıklar yükleniyor...</td></tr>';
-
-      try {
-        const response = await fetch(`${API_BASE_URL}/assets/recent-assets`, {
-          method: 'GET',
-          headers,
-          credentials: 'include',
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text().catch(() => '');
-          throw new Error(errorText || `İstek başarısız (status: ${response.status})`);
-        }
-
-        const data = await response.json();
-        renderRows(data);
-      } catch (error) {
-        console.error('Son eklenen varlıklar alınamadı:', error);
-        tableBody.innerHTML =
-          '<tr><td colspan="3" class="text-center text-danger">Son eklenen varlıklar yüklenirken bir hata oluştu.</td></tr>';
-      }
-    };
-
-    document.addEventListener('DOMContentLoaded', loadRecentAssets);
+      tableBody.innerHTML = assets.map(buildRow).join('');
+      if (summary) summary.textContent = `Gösterilen: ${assets.length} / ${assets.length}`;
+    } catch (err) {
+      console.error('Varlıklar yüklenemedi:', err);
+      tableBody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">Varlık listesi yüklenirken hata oluştu.</td></tr>';
+      if (summary) summary.textContent = 'Gösterilen: 0 / 0';
+    }
   })();
 </script>
+<script>
+  (async () => {
+    const els = {
+      active: document.querySelector('[data-status-count="active"]'),
+      in_maintenance: document.querySelector('[data-status-count="in_maintenance"]'),
+      disposed: document.querySelector('[data-status-count="disposed"]'),
+      lost: document.querySelector('[data-status-count="lost"]'),
+    };
+
+    const setCount = (el, v) => { if (el) el.textContent = Number(v || 0).toLocaleString('tr-TR'); };
+
+    try {
+      const data = await apiFetch('/assets/status-distribution', { method: 'GET' });
+      const d = data?.distribution || {};
+      setCount(els.active, d.active);
+      setCount(els.in_maintenance, d.in_maintenance);
+      setCount(els.disposed, d.disposed);
+      setCount(els.lost, d.lost);
+    } catch (err) {
+      console.error('Durum dağılımı alınamadı:', err);
+      setCount(els.active, 0);
+      setCount(els.in_maintenance, 0);
+      setCount(els.disposed, 0);
+      setCount(els.lost, 0);
+    }
+  })();
+</script>
+<script>
+  (async () => {
+    const tableBody = document.querySelector('[data-role="recent-assets-body"]');
+    if (!tableBody) return;
+
+    const formatDate = (value) => {
+      if (!value) return '-';
+      const d = new Date(value);
+      return Number.isNaN(d.getTime()) ? '-' : d.toLocaleDateString('tr-TR');
+    };
+
+    tableBody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">Yükleniyor...</td></tr>';
+
+    try {
+      const assets = await apiFetch('/assets/recent-assets', { method: 'GET' });
+
+      if (!Array.isArray(assets) || !assets.length) {
+        tableBody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">Henüz varlık eklenmemiş.</td></tr>';
+        return;
+      }
+
+      tableBody.innerHTML = assets
+        .map(
+          (a) => `
+          <tr data-asset-id="${a.id}">
+            <td>${a.name || '-'}</td>
+            <td>${formatDate(a.created_at)}</td>
+            <td>${a.department_name || '-'}</td>
+          </tr>`
+        )
+        .join('');
+    } catch (err) {
+      console.error('Son eklenen varlıklar alınamadı:', err);
+      tableBody.innerHTML = '<tr><td colspan="3" class="text-center text-danger">Yüklenemedi</td></tr>';
+    }
+  })();
+</script>
+
+<script src="../admin/assets/js/app/logout.js"></script>
+
 
 </html>
