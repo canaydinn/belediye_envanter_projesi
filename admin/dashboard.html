@@ -69,11 +69,6 @@
               </span>
               <span class="app-brand-text demo menu-text fw-bold">Envanter360</span>
             </a>
-
-            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
-              <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
-              <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
-            </a>
           </div>
 
           <div class="menu-inner-shadow"></div>
@@ -149,19 +144,19 @@
                     </li>
                     <li><div class="dropdown-divider"></div></li>
                     <li>
-                      <a class="dropdown-item" href="javascript:void(0);">
+                      <a class="dropdown-item" href="profile.html">
                         <i class="ti ti-user-check me-2 ti-sm"></i>
                         <span class="align-middle">Profil</span>
                       </a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="javascript:void(0);">
+                      <a class="dropdown-item" href="settings.html">
                         <i class="ti ti-settings me-2 ti-sm"></i>
                         <span class="align-middle">Ayarlar</span>
                       </a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="javascript:void(0);">
+                      <a class="dropdown-item" href="logout.html">
                         <i class="ti ti-logout me-2 ti-sm"></i>
                         <span class="align-middle">Çıkış</span>
                       </a>
@@ -252,23 +247,29 @@
                           </a>
                         </div>
                         <div class="col-12 col-sm-6">
+                          <a href="bulk-import.html" class="btn btn-label-success w-100 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-file-upload me-2 ti-sm"></i>
+                            Toplu İçe Aktar
+                          </a>
+                        </div>
+                        <div class="col-12 col-sm-6">
                           <a href="qr-scan.html" class="btn btn-label-primary w-100 d-flex align-items-center justify-content-center">
                             <i class="ti ti-camera me-2 ti-sm"></i>
                             QR Kod Tara
                           </a>
                         </div>
                         <div class="col-12 col-sm-6">
-                          <a href="asset-movement-create.html" class="btn btn-label-info w-100 d-flex align-items-center justify-content-center">
+                          <a href="create-assets-movements.html" class="btn btn-label-info w-100 d-flex align-items-center justify-content-center">
                             <i class="ti ti-arrows-shuffle me-2 ti-sm"></i>
                             Varlık Hareketi Oluştur
                           </a>
                         </div>
-                        <div class="col-12 col-sm-6">
+                        <!-- <div class="col-12 col-sm-6">
                           <a href="reports.html" class="btn btn-label-secondary w-100 d-flex align-items-center justify-content-center">
                             <i class="ti ti-bar-chart-2 me-2 ti-sm"></i>
                             Raporları Görüntüle
                           </a>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
@@ -451,443 +452,20 @@
 
     <!-- Include Vuexy core JS and vendor JS here -->
   </body>
-  <script>
-      (async () => {
-        const API_BASE_URL = 'http://localhost:4000/api';
-        const municipalityNameEl = document.getElementById('municipalityName');
-        const municipalityLocationEl = document.getElementById('municipalityLocation');
-        const navbarMunicipalityEl = document.getElementById('navbarMunicipalityName');
+ <script src="../admin/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../admin/assets/vendor/libs/popper/popper.js"></script>
+    <script src="../admin/assets/vendor/js/bootstrap.js"></script>
+    <script src="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../admin/assets/vendor/libs/node-waves/node-waves.js"></script>
+    <script src="../admin/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+<script src="../admin/assets/vendor/js/helpers.js"></script>
+    <!-- Page JS -->
+    <script src="../admin/assets/js/app/api.js"></script>
+    <script src="../admin/assets/js/app/dashboard-municipality.js"></script>
+    <script src="../admin/assets/js/app/dashboard-stats.js"></script>
+    <script src="../admin/assets/js/app/dashboard-movements.js"></script>
+    <script src="../admin/assets/js/app/dashboard-categories.js"></script>
+    <script src="../admin/assets/js/app/dashboard-maintenance.js"></script>
+    <script src="../admin/assets/js/app/logout.js"></script>
 
-        const token = localStorage.getItem('token');
-        if (!token) {
-          console.warn('Kullanıcı oturumu bulunamadı.');
-          return;
-        }
-
-        try {
-          const response = await fetch(`${API_BASE_URL}/dashboard/municipality`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            credentials: 'include',
-          });
-
-          if (!response.ok) {
-            console.error('Belediye bilgisi alınamadı:', await response.text());
-            return;
-          }
-
-          const data = await response.json();
-          const displayName = data?.name || 'Belediye';
-          const locationText = [data?.province, data?.district]
-            .filter(Boolean)
-            .join(' / ');
-
-          if (municipalityNameEl) municipalityNameEl.textContent = displayName;
-          if (navbarMunicipalityEl) navbarMunicipalityEl.textContent = displayName;
-          if (municipalityLocationEl) municipalityLocationEl.textContent = locationText || '—';
-        } catch (error) {
-          console.error('Belediye bilgisi alınırken hata oluştu:', error);
-        }
-      })();
-    </script>
-     <script>
-      (() => {
-        const userCount = document.querySelector('[data-role="dashboard-total-users"]');
-        const departmentCount = document.querySelector('[data-role="dashboard-total-departments"]');
-        const locationCount = document.querySelector('[data-role="dashboard-total-locations"]');
-
-        const setCount = (element, value) => {
-          if (!element) return;
-          const numericValue = Number(value);
-          element.textContent = Number.isFinite(numericValue) ? numericValue : '-';
-        };
-
-        const token = localStorage.getItem('token');
-
-        if (!token) {
-          console.warn('Dashboard: token bulunamadı, istatistikler yüklenemiyor.');
-          return;
-        }
-
-        fetch('http://localhost:4000/api/dashboard/stats', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          credentials: 'include',
-        })
-          .then(async (response) => {
-            const data = await response.json().catch(() => ({}));
-
-            if (!response.ok) {
-              throw new Error(data?.message || 'İstatistikler alınamadı');
-            }
-
-            return data;
-          })
-          .then((data) => {
-            const totals = data?.totals || {};
-
-            setCount(userCount, totals.users);
-            setCount(departmentCount, totals.departments);
-            setCount(locationCount, totals.locations);
-          })
-          .catch((error) => {
-            console.error('Dashboard istatistikleri alınamadı:', error);
-            setCount(userCount, null);
-            setCount(departmentCount, null);
-            setCount(locationCount, null);
-          });
-      })();
-    </script>
-    <script>
-      (function () {
-        const totalAssetsEl = document.querySelector('[data-dashboard="total-assets"]');
-        const movedLast30DaysEl = document.querySelector('[data-dashboard="moved-last-30-days"]');
-        const maintenanceNeededEl = document.querySelector('[data-dashboard="maintenance-needed"]');
-        const qrRatioEl = document.querySelector('[data-dashboard="qr-ratio"]');
-
-        const token = localStorage.getItem('token');
-        const headers = {
-          'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        };
-
-        const formatNumber = (value, options = { maximumFractionDigits: 2 }) => {
-          if (!Number.isFinite(value)) return '-';
-          return value.toLocaleString('tr-TR', options);
-        };
-
-        const setMetric = (element, value, suffix = '') => {
-          if (!element) return;
-          const formatted = formatNumber(value);
-          element.textContent = formatted === '-' ? '-' : `${formatted}${suffix}`;
-        };
-
-        if (!token) {
-          console.warn('Dashboard: token bulunamadı, sayaçlar güncellenemiyor.');
-          return;
-        }
-
-        fetch('http://localhost:4000/api/dashboard/stats', {
-          method: 'GET',
-          headers,
-          credentials: 'include',
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`Dashboard istatistik isteği başarısız (status: ${response.status})`);
-            }
-            return response.json();
-          })
-          .then((data) => {
-            const assets = data?.assets || {};
-            const qrTagged = assets.qrTagged || {};
-
-            setMetric(totalAssetsEl, assets.total);
-            setMetric(movedLast30DaysEl, assets.movedLast30Days);
-            setMetric(maintenanceNeededEl, assets.maintenanceNeeded);
-
-            const qrPercentage = Number.isFinite(qrTagged.percentage) ? qrTagged.percentage : 0;
-            setMetric(qrRatioEl, qrPercentage, '%');
-          })
-          .catch((error) => {
-            console.error('Dashboard istatistikleri alınamadı:', error);
-          });
-      })();
-    </script>
-    <script>
-  (function () {
-    const tableBody = document.querySelector('[data-role="recent-movements-body"]');
-    const API_BASE = 'http://localhost:4000';
-
-    if (!tableBody) return;
-
-    const token = localStorage.getItem('token');
-    const headers = {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    };
-
-    const movementTypeMap = {
-      assign: { label: 'Zimmet', className: 'badge badge-light-primary' },
-      transfer: { label: 'Devir', className: 'badge badge-light-info' },
-      maintenance: { label: 'Bakım', className: 'badge badge-light-warning' },
-      disposal: { label: 'Hurda', className: 'badge badge-light-danger' },
-    };
-
-    function formatDate(value) {
-      if (!value) return '-';
-      const date = new Date(value);
-      if (Number.isNaN(date.getTime())) return '-';
-
-      return date.toLocaleString('tr-TR', {
-        dateStyle: 'short',
-        timeStyle: 'short',
-      });
-    }
-
-    function formatLocation(departmentName, locationName) {
-      const parts = [departmentName, locationName].filter(Boolean);
-      return parts.length ? parts.join(' / ') : '-';
-    }
-
-    function renderMovementTypeBadge(type) {
-      const normalized = (type || '').toLowerCase();
-      const config = movementTypeMap[normalized];
-
-      if (!config) {
-        return `<span class="badge bg-label-secondary">${type || 'Bilinmiyor'}</span>`;
-      }
-
-      return `<span class="${config.className}">${config.label}</span>`;
-    }
-
-    function renderRows(movements) {
-      if (!movements?.length) {
-        tableBody.innerHTML =
-          '<tr><td colspan="6" class="text-center text-muted">Henüz varlık hareketi bulunmuyor.</td></tr>';
-        return;
-      }
-
-      const rows = movements
-        .map((movement) => {
-          const fromLocation = formatLocation(
-            movement.from_department_name,
-            movement.from_location_name
-          );
-          const toLocation = formatLocation(
-            movement.to_department_name,
-            movement.to_location_name
-          );
-
-          const assetLabel = [movement.asset_name, movement.asset_code]
-            .filter(Boolean)
-            .join(' - ');
-
-          return `
-            <tr data-movement-id="${movement.id}">
-              <td>${formatDate(movement.movement_date)}</td>
-              <td>${assetLabel || '-'}</td>
-              <td>${fromLocation}</td>
-              <td>${toLocation}</td>
-              <td>${renderMovementTypeBadge(movement.movement_type)}</td>
-              <td>${movement.performed_by_name || '-'}</td>
-            </tr>
-          `;
-        })
-        .join('');
-
-      tableBody.innerHTML = rows;
-    }
-
-    async function loadRecentMovements() {
-      tableBody.innerHTML =
-        '<tr><td colspan="6" class="text-center text-muted">Son varlık hareketleri yükleniyor...</td></tr>';
-
-      try {
-        const response = await fetch(
-          `${API_BASE}/api/dashboard/recent-movements`,
-          {
-            method: 'GET',
-            headers,
-            // Eğer JWT Bearer kullanıyorsan credentials şart değil,
-            // HttpOnly cookie ile auth yapıyorsan CORS ayarları ile birlikte kullanabilirsin.
-            // credentials: 'include',
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`İstek başarısız (status: ${response.status})`);
-        }
-
-        const data = await response.json();
-        renderRows(data);
-      } catch (error) {
-        console.error('Son varlık hareketleri alınamadı:', error);
-        tableBody.innerHTML =
-          '<tr><td colspan="6" class="text-center text-danger">Son varlık hareketleri yüklenirken bir hata oluştu.</td></tr>';
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', loadRecentMovements);
-  })();
-</script>
-<script>
-  (function () {
-    const listEl = document.querySelector('[data-role="category-distribution-list"]');
-    const API_BASE = 'http://localhost:4000/api';
-    const badgeColors = ['primary', 'info', 'success', 'warning', 'secondary', 'dark'];
-
-    if (!listEl) return;
-
-    const setMessage = (message, className = 'text-muted') => {
-      listEl.innerHTML = `<li class="d-flex align-items-center justify-content-center py-2"><small class="${className}">${message}</small></li>`;
-    };
-
-    const formatPercentage = (value) => {
-      if (!Number.isFinite(value)) return '-';
-      return `${value.toLocaleString('tr-TR', { maximumFractionDigits: 2 })}%`;
-    };
-
-    const renderCategories = (categories) => {
-      if (!categories?.length) {
-        setMessage('Kategori kaydı bulunamadı.');
-        return;
-      }
-
-      const items = categories
-        .map((category, index) => {
-          const color = badgeColors[index % badgeColors.length];
-          const percentageText = formatPercentage(category?.percentage);
-
-          return `
-            <li class="d-flex align-items-center ${index === categories.length - 1 ? '' : 'mb-2'}">
-              <span class="badge rounded-pill bg-label-${color} me-3 p-2">
-                <i class="ti ti-point-filled"></i>
-              </span>
-              <div class="w-100 d-flex justify-content-between">
-                <span>${category?.category_name || 'Belirtilmemiş'}</span>
-                <small class="text-muted">${percentageText}</small>
-              </div>
-            </li>
-          `;
-        })
-        .join('');
-
-      listEl.innerHTML = items;
-    };
-
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      setMessage('Oturum bulunamadı. Lütfen giriş yapın.', 'text-danger');
-      return;
-    }
-
-    setMessage('Kategori dağılımı yükleniyor...');
-
-    fetch(`${API_BASE}/dashboard/category-distribution`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      credentials: 'include',
-    })
-      .then(async (response) => {
-        const data = await response.json().catch(() => ({}));
-
-        if (!response.ok) {
-          throw new Error(data?.message || 'Kategori dağılımı alınamadı');
-        }
-
-        return data;
-      })
-      .then((data) => {
-        // BACKEND: { distribution: [...] }
-        renderCategories(data?.distribution || []);
-      })
-      .catch((error) => {
-        console.error('Kategori dağılımı yüklenirken hata:', error);
-        setMessage('Kategori dağılımı yüklenirken hata oluştu.', 'text-danger');
-      });
-  })();
-</script>
-<script>
-    (function () {
-      const tableBody = document.querySelector('[data-role="upcoming-maintenance-body"]');
-      const API_BASE = 'http://localhost:4000/api';
-
-      if (!tableBody) return;
-
-      const token = localStorage.getItem('token');
-
-      const statusBadgeMap = {
-        overdue: { className: 'badge badge-light-danger', label: 'Gecikti' },
-        approaching: { className: 'badge badge-light-warning', label: 'Yaklaşıyor' },
-        planned: { className: 'badge badge-light-info', label: 'Planlandı' },
-      };
-
-      const formatDate = (value) => {
-        if (!value) return '-';
-        const date = new Date(value);
-        if (Number.isNaN(date.getTime())) return '-';
-
-        return date.toLocaleDateString('tr-TR', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-        });
-      };
-
-      const renderBadge = (state, fallbackLabel) => {
-        const config = statusBadgeMap[state] || statusBadgeMap.planned;
-        const label = fallbackLabel || config.label;
-        return `<span class="${config.className}">${label}</span>`;
-      };
-
-      const renderRows = (items) => {
-        if (!items?.length) {
-          tableBody.innerHTML =
-            '<tr><td colspan="3" class="text-center text-muted">Yaklaşan bakım kaydı bulunamadı.</td></tr>';
-          return;
-        }
-
-        const rows = items
-          .map((item) => {
-            const assetLabel = [item.asset_name, item.asset_code].filter(Boolean).join(' - ') || 'Bilinmeyen Varlık';
-            const dueDate = formatDate(item.due_date);
-            const badge = renderBadge(item.status_state, item.status_label);
-
-            return `
-              <tr data-maintenance-id="${item.id}">
-                <td>${assetLabel}</td>
-                <td>${dueDate}</td>
-                <td>${badge}</td>
-              </tr>
-            `;
-          })
-          .join('');
-
-        tableBody.innerHTML = rows;
-      };
-
-      const loadUpcomingMaintenance = async () => {
-        tableBody.innerHTML =
-          '<tr><td colspan="3" class="text-center text-muted">Bakım kayıtları yükleniyor...</td></tr>';
-
-        if (!token) {
-          tableBody.innerHTML =
-            '<tr><td colspan="3" class="text-center text-warning">Giriş yapmanız gerekiyor.</td></tr>';
-          return;
-        }
-
-        try {
-          const response = await fetch(`${API_BASE}/dashboard/upcoming-maintenance`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-
-          if (!response.ok) {
-            throw new Error(`İstek başarısız (status: ${response.status})`);
-          }
-
-          const data = await response.json();
-          renderRows(Array.isArray(data) ? data : []);
-        } catch (error) {
-          console.error('Yaklaşan bakım kayıtları alınamadı:', error);
-          tableBody.innerHTML =
-            '<tr><td colspan="3" class="text-center text-danger">Bakım kayıtları yüklenirken bir hata oluştu.</td></tr>';
-        }
-      };
-
-      document.addEventListener('DOMContentLoaded', loadUpcomingMaintenance);
-    })();
-  </script>
   </html>

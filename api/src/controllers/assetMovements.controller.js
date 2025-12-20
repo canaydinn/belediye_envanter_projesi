@@ -249,7 +249,12 @@ exports.createAssetMovement = async (req, res) => {
       to_department_id,
       from_location_id,
       to_location_id,
+      to_user_id,
       notes,
+      reason,
+      requested_by,
+      approved_by,
+      status,
     } = req.body;
 
     if (!municipalityId || !performedByUserId) {
@@ -289,11 +294,16 @@ exports.createAssetMovement = async (req, res) => {
       to_department_id: to_department_id || null,
       from_location_id: from_location_id || asset.location_id || null,
       to_location_id: to_location_id || null,
-      municipality_id:municipalityId,
+      to_user_id: to_user_id || null,
+      municipality_id: municipalityId,
       performed_by_user_id: performedByUserId,
       created_by_user_id: performedByUserId,
       updated_by_user_id: performedByUserId,
       notes: notes || null,
+      reason: reason || null,
+      requested_by: requested_by || null,
+      approved_by: approved_by || null,
+      status: status || null,
     };
 
     const [created] = await knex('asset_movements')
@@ -306,9 +316,14 @@ exports.createAssetMovement = async (req, res) => {
         'to_department_id',
         'from_location_id',
         'to_location_id',
+        'to_user_id',
         'performed_by_user_id',
         'movement_date',
         'notes',
+        'reason',
+        'requested_by',
+        'approved_by',
+        'status',
         'municipality_id',
         'created_at',
         'updated_at',

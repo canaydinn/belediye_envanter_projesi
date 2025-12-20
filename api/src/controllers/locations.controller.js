@@ -47,7 +47,7 @@ if (department_id) {
       }
     }
     const [existingCode] = await knex('locations')
-      .where({ municipalityId, code })
+      .where({ municipality_id:municipalityId, code })
       .limit(1);
 
     if (existingCode) {
@@ -61,7 +61,7 @@ if (department_id) {
         address: address || null,
         department_id: department_id || null,
         is_active: is_active ?? true,
-        municipalityId,
+        municipality_id: municipalityId,
         type: type || null,
         latitude: latitude ?? null,
         longitude: longitude ?? null,
@@ -135,6 +135,135 @@ exports.listLocations = async (req, res) => {
     });
   }
 };
+// Lokasyonları filtreli listeleme (name/type/department/is_active)
+// + department_name
+// + asset_count (lokasyondaki varlık sayısı)
+exports.listLocationsFiltered = async (req, res) => {
+  try {
+    const municipalityId = req.tenantMunicipalityId ?? req.user?.municipality_id;
+    if (!municipalityId) {
+      return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
+    }
+
+    // query params
+    const {
+      name,            // lokasyon adı (like)
+      type,            // 1/2/3/4
+      department_id,   // id
+      is_active,       // true/false/1/0
+      limit = 100,
+      offset = 0,
+      order_by = 'l.name',
+      order_dir = 'asc',
+    } = req.query;
+
+    const safeLimit = Math.min(Math.max(Number(limit) || 100, 1), 200);
+    const safeOffset = Math.max(Number(offset) || 0, 0);
+
+    // is_active normalize
+    let isActiveBool = undefined;
+    if (typeof is_active !== 'undefined' && is_active !== '') {
+      const normalized = String(is_active).toLowerCase().trim();
+      if (['1', 'true', 'yes', 'aktif', 'active'].includes(normalized)) isActiveBool = true;
+      if (['0', 'false', 'no', 'pasif', 'passive'].includes(normalized)) isActiveBool = false;
+    }
+
+    // type normalize
+    let typeInt = undefined;
+    if (typeof type !== 'undefined' && type !== '') {
+      const parsed = Number(type);
+      if (Number.isInteger(parsed)) typeInt = parsed;
+    }
+
+    // department normalize
+    let deptInt = undefined;
+    if (typeof department_id !== 'undefined' && department_id !== '') {
+      const parsed = Number(department_id);
+      if (Number.isInteger(parsed)) deptInt = parsed;
+    }
+
+    // ORDER whitelist (SQL injection önlemi)
+    const ORDER_MAP = {
+      name: 'l.name',
+      code: 'l.code',
+      type: 'l.type',
+      status: 'l.is_active',
+      department: 'd.name',
+      asset_count: 'asset_count',
+      created_at: 'l.created_at',
+    };
+
+    const orderCol = ORDER_MAP[String(order_by).toLowerCase()] || 'l.name';
+    const orderDir = String(order_dir).toLowerCase() === 'desc' ? 'desc' : 'asc';
+
+    // Base query
+    const base = knex('locations as l')
+      .leftJoin('departments as d', function () {
+        this.on('d.id', '=', 'l.department_id')
+          .andOn('d.municipality_id', '=', 'l.municipality_id');
+      })
+      .where('l.municipality_id', municipalityId);
+
+    // Filters
+    if (name && String(name).trim()) {
+      base.andWhere('l.name', 'ilike', `%${String(name).trim()}%`);
+    }
+
+    if (typeof typeInt !== 'undefined') {
+      base.andWhere('l.type', typeInt);
+    }
+
+    if (typeof deptInt !== 'undefined') {
+      base.andWhere('l.department_id', deptInt);
+    }
+
+    if (typeof isActiveBool !== 'undefined') {
+      base.andWhere('l.is_active', isActiveBool);
+    }
+
+    // Total count (pagination için)
+    const totalRow = await base.clone().clearSelect().clearOrder().count({ total: 'l.id' }).first();
+    const total = Number(totalRow?.total ?? 0);
+
+    // Data query
+    const rows = await base
+      .clone()
+      .select(
+        'l.id',
+        'l.code',
+        'l.name',
+        'l.type',
+        'l.department_id',
+        'd.name as department_name',
+        'l.address',
+        'l.is_active',
+        'l.created_at',
+        'l.updated_at',
+        knex.raw(`(
+          SELECT COUNT(*)::int
+          FROM assets a
+          WHERE a.location_id = l.id
+        ) as asset_count`)
+      )
+      .orderBy(orderCol, orderDir)
+      .limit(safeLimit)
+      .offset(safeOffset);
+
+    return res.json({
+      data: rows,
+      total,
+      limit: safeLimit,
+      offset: safeOffset,
+    });
+  } catch (err) {
+    console.error('LIST_LOCATIONS_FILTERED_ERROR', err);
+    return res.status(500).json({
+      error: 'INTERNAL_SERVER_ERROR',
+      message: 'Lokasyonlar filtrelenirken bir hata oluştu.',
+    });
+  }
+};
+
 exports.getLocationStats = async (req, res) => {
   try {
     // Lokasyon tipi kodları (form ile uyumlu)
@@ -205,7 +334,7 @@ exports.getLocationStats = async (req, res) => {
 };
 exports.getLocationTypeDistribution = async (req, res) => {
   try {
-   const municipalityId = req.tenantMunicipalityId;
+    const municipalityId = req.tenantMunicipalityId ?? req.user?.municipality_id;
 
     const rows = await knex('locations')
       .where({ municipality_id: municipalityId })
@@ -214,39 +343,27 @@ exports.getLocationTypeDistribution = async (req, res) => {
       .groupBy('type');
 
     const distribution = {
-      building: 0,
-      warehouse: 0,
-      open_area: 0,
-      site_office: 0,
-      other: 0,
-    };
-
-    const typeMap = {
-      building: ['bina', 'building'],
-      warehouse: ['depo', 'warehouse'],
-      open_area: ['acik alan', 'açık alan', 'open_area', 'open area'],
-      site_office: ['saha ofisi', 'site_office', 'site office'],
-    };
-
-    const normalizeKey = (value) => {
-      const normalized = (value || '').toString().trim().toLowerCase();
-      const matchedEntry = Object.entries(typeMap).find(([, aliases]) =>
-        aliases.includes(normalized)
-      );
-
-      return matchedEntry ? matchedEntry[0] : 'other';
+      office: 0,       // type=1
+      warehouse: 0,    // type=2
+      open_area: 0,    // type=3
+      building: 0,     // type=4
     };
 
     rows.forEach((row) => {
-      const key = normalizeKey(row?.type);
-      const count = Number(row?.count ?? row?.total ?? 0);
-      distribution[key] += Number.isFinite(count) ? count : 0;
+      const t = Number(row?.type);
+      const c = Number(row?.count ?? 0);
+
+      if (t === 1) distribution.office += c;
+      else if (t === 2) distribution.warehouse += c;
+      else if (t === 3) distribution.open_area += c;
+      else if (t === 4) distribution.building += c;
+      else distribution.other += c;
     });
 
-    const total = Object.values(distribution).reduce((sum, value) => sum + value, 0);
+    const total = Object.values(distribution).reduce((s, v) => s + v, 0);
 
     return res.json({
-      municipality_id,
+      municipality_id: municipalityId,
       distribution,
       total,
     });
@@ -254,10 +371,11 @@ exports.getLocationTypeDistribution = async (req, res) => {
     console.error('LOCATION_TYPE_DISTRIBUTION_ERROR', err);
     return res.status(500).json({
       error: 'INTERNAL_SERVER_ERROR',
-      message: 'Lokasyon tipi dağılımı alınırken bir hata oluştu.'
+      message: 'Lokasyon tipi dağılımı alınırken bir hata oluştu.',
     });
   }
 };
+
 exports.getLocationTree = async (req, res) => {
   try {
     const municipalityId = req.tenantMunicipalityId;
@@ -397,7 +515,6 @@ exports.updateLocation = async (req, res) => {
     });
   }
 };
-
 
 exports.deleteLocation = async (req, res) => {
   try {

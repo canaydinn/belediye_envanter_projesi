@@ -94,6 +94,7 @@ exports.getMunicipalityInfo = async (req, res) => {
 exports.getRecentAssetMovements = async (req, res) => {
   try {
     const municipalityId = req.tenantMunicipalityId;
+    console.log('[RECENT MOVEMENTS] tenantMunicipalityId =', municipalityId);
 
     const movements = await knex('asset_movements as am')
       .join('assets as a', 'am.asset_id', 'a.id')
@@ -102,7 +103,7 @@ exports.getRecentAssetMovements = async (req, res) => {
       .leftJoin('locations as fl', 'am.from_location_id', 'fl.id')
       .leftJoin('locations as tl', 'am.to_location_id', 'tl.id')
       .leftJoin('users as u', 'am.performed_by_user_id', 'u.id')
-      .where('am.municipality_id', municipalityId)
+      .where('a.municipality_id', municipalityId)
       .select(
         'am.id',
         'am.asset_id',
@@ -120,6 +121,7 @@ exports.getRecentAssetMovements = async (req, res) => {
       )
       .orderBy('am.movement_date', 'desc')
       .limit(5);
+    console.log('[RECENT MOVEMENTS] raw count =', movements.length);
 
     return res.json(movements);
   } catch (err) {
@@ -173,40 +175,39 @@ exports.getUpcomingMaintenance = async (req, res) => {
   try {
     const municipalityId = req.tenantMunicipalityId;
 
-    // Güvenli tenant filtreli sürüm (maintenance_requests + assets join)
-    const logs = await knex('maintenance_logs as ml')
-      .leftJoin('maintenance_requests as mr', 'ml.maintenance_request_id', 'mr.id')
+    if (!municipalityId) {
+      return res.status(400).json({ message: 'Belediye kapsamı bulunamadı' });
+    }
+
+    // Yaklaşan bakımlar: pending, planned, in_progress durumundaki bakım talepleri
+    const requests = await knex('maintenance_requests as mr')
       .leftJoin('assets as a', 'mr.asset_id', 'a.id')
-      .where(function () {
-        this.where('mr.municipality_id', municipalityId).orWhere('a.municipality_id', municipalityId);
-      })
+      .where('mr.municipality_id', municipalityId)
+      .whereIn('mr.status', ['open', 'planned', 'in_progress'])
       .select(
-        'ml.id',
-        'ml.maintenance_request_id',
-        'ml.log_date',
-        'ml.description as log_description',
-        'ml.created_at',
-        'a.id as asset_id',
-        'a.name as asset_name',
-        'a.asset_code',
+        'mr.id',
+        'mr.asset_id',
         'mr.title',
-        'mr.due_date',
+        'mr.description',
         'mr.status',
-        'mr.priority'
+        'mr.priority',
+        'mr.requested_at',
+        'mr.started_at',
+        'mr.created_at',
+        'a.name as asset_name',
+        'a.asset_code'
       )
-      .orderBy('ml.log_date', 'desc')
+      .orderByRaw('COALESCE(mr.started_at, mr.requested_at, mr.created_at) ASC')
       .limit(5);
 
-    const payload = logs.map((row) => ({
+    const payload = requests.map((row) => ({
       id: row.id,
-      maintenance_request_id: row.maintenance_request_id,
-      log_date: row.log_date,
-      description: row.log_description,
+      maintenance_request_id: row.id,
       asset_id: row.asset_id || null,
       asset_name: row.asset_name || 'Bilinmeyen Varlık',
       asset_code: row.asset_code || null,
       title: row.title || null,
-      due_date: row.due_date || row.log_date,
+      due_date: row.started_at || row.requested_at || row.created_at,
       status: row.status || 'planned',
       priority: row.priority || 'medium',
     }));

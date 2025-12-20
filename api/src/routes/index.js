@@ -212,5 +212,12 @@ router.use(
   require('./uploads.routes')
 );
 
+
+router.use(
+  '/profile',
+  auth, // Kullanıcı doğrulama
+  tenantScope({ allowSuperadmin: true }),
+  require('./profile.routes')
+);
 // Ana router export
 module.exports = router;

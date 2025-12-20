@@ -27,6 +27,12 @@ router.get(
   assetCategoriesController.getCategoryDistribution
 );
 
+router.get(
+  '/:id',
+  authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
+  assetCategoriesController.getCategoryById
+);
+
 /**
  * WRITE (Municipality Admin only)
  */
@@ -34,6 +40,11 @@ router.post(
   '/',
   authorize(ROLES.MUNICIPALITY_ADMIN),
   assetCategoriesController.createCategory
+);
+router.put(
+  '/:id',
+  authorize(ROLES.MUNICIPALITY_ADMIN),
+  assetCategoriesController.updateCategory
 );
 router.delete(
   '/:id',

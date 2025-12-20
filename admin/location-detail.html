@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html
+  lang="tr"
+  class="light-style layout-navbar-fixed layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="../admin/assets/"
+  data-template="vertical-menu-template">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Lokasyon Detayı | Envanter360</title>
+
+    <meta name="description" content="Lokasyon detay bilgilerini görüntüleyin." />
+
+    <link rel="icon" type="image/x-icon" href="../admin/assets/img/favicon/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/tabler-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/flag-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../admin/assets/css/demo.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/node-waves/node-waves.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/typeahead-js/typeahead.css" />
+  </head>
+
+  <body>
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+            <a href="index.html" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z"
+                    fill="#7367F0" />
+                  <path
+                    opacity="0.06"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z"
+                    fill="#161616" />
+                  <path
+                    opacity="0.06"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z"
+                    fill="#161616" />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z"
+                    fill="#7367F0" />
+                </svg>
+              </span>
+              <span class="app-brand-text demo menu-text fw-bold">Envanter360</span>
+            </a>
+          </div>
+
+          <div class="menu-inner-shadow"></div>
+
+          <ul class="menu-inner py-1">
+            <li class="menu-item">
+              <a href="/admin/dashboard.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                <div>Dashboard</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="/admin/assets.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-archive"></i>
+                <div>Varlıklar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="/admin/assets-movements.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-arrows-left-right"></i>
+                <div>Varlık Hareketleri</div>
+              </a>
+            </li>
+            <li class="menu-item active">
+              <a href="/admin/locations.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-map-pin"></i>
+                <div>Lokasyonlar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="/admin/categories.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-folders"></i>
+                <div>Kategoriler</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="/admin/users.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-users"></i>
+                <div>Kullanıcılar</div>
+              </a>
+            </li>
+          </ul>
+        </aside>
+
+        <div class="layout-page">
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                      <img src="../admin/assets/img/avatars/1.png" alt="User" class="h-auto rounded-circle" />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar avatar-online">
+                              <img src="../admin/assets/img/avatars/1.png" alt="User" class="h-auto rounded-circle" />
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <span class="fw-semibold d-block">Belediye Yöneticisi</span>
+                            <small class="text-muted" id="navbarMunicipalityName"></small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li><div class="dropdown-divider"></div></li>
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <i class="ti ti-user-check me-2 ti-sm"></i>
+                        <span class="align-middle">Profil</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <i class="ti ti-settings me-2 ti-sm"></i>
+                        <span class="align-middle">Ayarlar</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <i class="ti ti-logout me-2 ti-sm"></i>
+                        <span class="align-middle">Çıkış</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+
+          <div class="content-wrapper">
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="row">
+                <div class="col-12">
+                  <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                      <h4 class="fw-bold mb-1" data-role="location-name">Lokasyon Detayı</h4>
+                      <p class="text-muted mb-0">Lokasyon bilgilerini görüntüleyin.</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                      <a href="/admin/locations.html" class="btn btn-outline-secondary">Listeye Dön</a>
+                      <a href="#" class="btn btn-primary" data-role="edit-link">Düzenle</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12">
+                  <div class="alert d-none" role="alert" data-role="feedback"></div>
+                </div>
+              </div>
+
+              <div class="row g-4">
+                <div class="col-12 col-lg-8">
+                  <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <div>
+                        <h5 class="mb-1">Lokasyon Bilgileri</h5>
+                        <p class="mb-0 text-muted">Lokasyon detay bilgileri.</p>
+                      </div>
+                      <span class="badge bg-label-info" data-role="location-code">-</span>
+                    </div>
+                    <div class="card-body">
+                      <div class="row g-4">
+                        <div class="col-12 col-md-6">
+                          <small class="text-muted d-block">Lokasyon Kodu</small>
+                          <p class="mb-0 fw-semibold" data-role="location-code-detail">-</p>
+                        </div>
+                        <div class="col-12 col-md-6">
+                          <small class="text-muted d-block">Lokasyon Adı</small>
+                          <p class="mb-0 fw-semibold" data-role="location-name-detail">-</p>
+                        </div>
+                        <div class="col-12 col-md-6">
+                          <small class="text-muted d-block">Lokasyon Tipi</small>
+                          <p class="mb-0" data-role="location-type">-</p>
+                        </div>
+                        <div class="col-12 col-md-6">
+                          <small class="text-muted d-block">Birim</small>
+                          <p class="mb-0" data-role="location-department">-</p>
+                        </div>
+                        <div class="col-12">
+                          <small class="text-muted d-block">Adres / Açıklama</small>
+                          <p class="mb-0" data-role="location-address">-</p>
+                        </div>
+                        <div class="col-12 col-md-6">
+                          <small class="text-muted d-block">Enlem</small>
+                          <p class="mb-0" data-role="location-latitude">-</p>
+                        </div>
+                        <div class="col-12 col-md-6">
+                          <small class="text-muted d-block">Boylam</small>
+                          <p class="mb-0" data-role="location-longitude">-</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-lg-4">
+                  <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <div>
+                        <h5 class="mb-1">Durum Bilgileri</h5>
+                        <p class="mb-0 text-muted">Lokasyon durumu ve sistem bilgileri.</p>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Durum</span>
+                        <span class="badge" data-role="location-status">-</span>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Oluşturulma</span>
+                        <span data-role="location-created">-</span>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Son Güncelleme</span>
+                        <span data-role="location-updated">-</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <footer class="content-footer footer bg-footer-theme">
+              <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                <div class="mb-2 mb-md-0">© 2025 Envantor</div>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Core JS -->
+    <script src="../admin/assets/vendor/js/helpers.js"></script>
+    <script src="../admin/assets/js/config.js"></script>
+    <script src="../admin/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../admin/assets/vendor/libs/popper/popper.js"></script>
+    <script src="../admin/assets/vendor/js/bootstrap.js"></script>
+    <script src="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../admin/assets/vendor/libs/node-waves/node-waves.js"></script>
+    <script src="../admin/assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="../admin/assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="../admin/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="../admin/assets/vendor/js/menu.js"></script>
+    <script src="../admin/assets/js/main.js"></script>
+    <script src="../admin/assets/js/app/api.js"></script>
+    <script src="../admin/assets/js/app/logout.js"></script>
+    <!-- Page JS -->
+    <script src="../admin/assets/js/app/location-detail.js"></script>
+  </body>
+</html>
+

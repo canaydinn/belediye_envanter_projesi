@@ -1,5 +1,6 @@
 // api/src/controllers/assets.controller.js
 const knex = require('../config/knex');
+const QRCode = require('qrcode');
 
 /**
  * Multi-tenant standartları (BU DOSYA İÇİN KURAL):
@@ -279,10 +280,20 @@ exports.createAsset = async (req, res) => {
       const paddedId = String(inserted.id).padStart(6, '0');
       const generatedAssetCode = `AS-${municipalityId}-${year}-${paddedId}`;
 
-      // 3) asset_code update
+      // 3) QR kod oluştur (eğer qrcode alanı boşsa)
+      let qrCodeData = qrcode;
+      if (!qrCodeData) {
+        // QR kod içeriği: asset_code veya asset ID
+        qrCodeData = generatedAssetCode;
+      }
+
+      // 4) asset_code ve qrcode update
       const [updated] = await trx('assets')
         .where({ id: inserted.id, municipality_id: municipalityId })
-        .update({ asset_code: generatedAssetCode })
+        .update({ 
+          asset_code: generatedAssetCode,
+          qrcode: qrCodeData
+        })
         .returning('*');
 
       return updated;
@@ -485,6 +496,104 @@ exports.getRecentAssets = async (req, res) => {
     return res.json(assets);
   } catch (err) {
     console.error('assets.getRecentAssets hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
+/**
+ * GET /api/assets/:id/qrcode
+ * Varlık için QR kod görseli oluşturur ve döner.
+ */
+exports.generateAssetQRCode = async (req, res) => {
+  try {
+    const municipalityId = req.tenantMunicipalityId;
+    const { id } = req.params;
+    const { data } = req.query;
+
+    // Varlığı bul
+    const asset = await knex('assets')
+      .where({ id, municipality_id: municipalityId })
+      .first();
+
+    if (!asset) {
+      return res.status(404).json({ message: 'Varlık bulunamadı' });
+    }
+
+    // QR kod verisi: query parametresinden veya asset'ten
+    const qrData = data || asset.qrcode || asset.asset_code || `ASSET-${asset.id}`;
+
+    // QR kod görselini oluştur
+    try {
+      const qrCodeBuffer = await QRCode.toBuffer(qrData, {
+        errorCorrectionLevel: 'M',
+        type: 'png',
+        width: 300,
+        margin: 1
+      });
+
+      res.setHeader('Content-Type', 'image/png');
+      res.setHeader('Content-Disposition', `inline; filename="asset-${asset.id}-qr.png"`);
+      res.setHeader('Cache-Control', 'public, max-age=3600');
+      
+      return res.send(qrCodeBuffer);
+    } catch (qrError) {
+      console.error('QR kod oluşturma hatası:', qrError);
+      return res.status(500).json({ message: 'QR kod oluşturulamadı' });
+    }
+  } catch (err) {
+    console.error('assets.generateAssetQRCode hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
+/**
+ * GET /api/assets/qr/:code
+ * QR kod ile varlık bilgisini getirir.
+ * QR kod verisi asset_code, qrcode veya id olabilir.
+ */
+exports.getAssetByQRCode = async (req, res) => {
+  try {
+    const municipalityId = req.tenantMunicipalityId;
+    const { code } = req.params;
+
+    if (!code) {
+      return res.status(400).json({ message: 'QR kod verisi gerekli' });
+    }
+
+    // QR kod ile eşleşen varlığı bul
+    // Önce qrcode alanına bak, sonra asset_code'a bak, son olarak ID'ye bak
+    const asset = await knex('assets as e')
+      .leftJoin('asset_categories as c', function () {
+        this.on('e.category_id', 'c.id').andOn('e.municipality_id', 'c.municipality_id');
+      })
+      .leftJoin('departments as d', function () {
+        this.on('e.department_id', 'd.id').andOn('e.municipality_id', 'd.municipality_id');
+      })
+      .leftJoin('locations as l', function () {
+        this.on('e.location_id', 'l.id').andOn('e.municipality_id', 'l.municipality_id');
+      })
+      .leftJoin('users as u', function () {
+        this.on('e.assigned_user_id', 'u.id').andOn('e.municipality_id', 'u.municipality_id');
+      })
+      .where('e.municipality_id', municipalityId)
+      .where(function() {
+        this.where('e.qrcode', code)
+          .orWhere('e.asset_code', code)
+          .orWhere('e.id', code);
+      })
+      .select([
+        ...ASSET_SELECT_COLUMNS,
+        knex.raw("COALESCE(u.full_name, u.username) as assigned_user_name"),
+      ])
+      .first();
+
+    if (!asset) {
+      return res.status(404).json({ message: 'Bu QR kod ile eşleşen varlık bulunamadı' });
+    }
+
+    return res.json(asset);
+  } catch (err) {
+    console.error('assets.getAssetByQRCode hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };

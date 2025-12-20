@@ -5,8 +5,11 @@ exports.listMunicipalities = async (req, res) => {
   try {
     const municipalities = await knex('municipalities')
       .select(
-        '*'
-      )
+  'id','code','name','province','district','status','is_active',
+  'license_start_date','license_end_date','quota_end_date',
+  'plan_type','logo_url','domain_url','max_users','max_assets',
+  'created_at','updated_at'
+)
       .orderBy('created_at', 'desc');
 
     return res.json(municipalities);
@@ -21,8 +24,8 @@ exports.listActiveMunicipalities = async (req, res) => {
       .select(
         'id',
         'name',
-        'email',
-        'phone',
+        'contact_email',
+        'contact_phone',
         'status',
         'license_end_date',
         'is_active',
@@ -61,7 +64,9 @@ exports.listPendingMunicipalities = async (req, res) => {
 };
 exports.updateMunicipalityStatus = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = Number(req.params.id);
+if (!Number.isInteger(id)) return res.status(400).json({ message:'Geçersiz ID' });
+
     const { status, license_start_date, license_end_date, quota_end_date } = req.body; // 'pending' | 'active' | 'suspended'
 if (status && !['pending', 'active', 'suspended'].includes(status)) {
    return res.status(400).json({ message: 'Geçersiz status değeri' });}
@@ -188,11 +193,11 @@ exports.createMunicipality = async (req, res) => {
         'plan_type',
         'logo_url',
         'domain_url',
-        'api_key',
+        
         'max_users',
         'max_assets',
         'notes',
-        'activation_token',
+        
         'created_at',
         'updated_at',
       ]);
@@ -205,12 +210,17 @@ exports.createMunicipality = async (req, res) => {
 };
 exports.getMunicipalityById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = Number(req.params.id);
+if (!Number.isInteger(id)) return res.status(400).json({ message:'Geçersiz ID' });
+
 
     const municipality = await knex('municipalities')
       .select(
-        '*'
-      )
+  'id','code','name','province','district','status','is_active',
+  'license_start_date','license_end_date','quota_end_date',
+  'plan_type','logo_url','domain_url','max_users','max_assets',
+  'created_at','updated_at'
+)
       .where({ id })
       .first();
 
@@ -258,6 +268,50 @@ exports.listUsersByMunicipality = async (req, res) => {
     return res.json(users);
   } catch (err) {
     console.error('superadmin.listUsersByMunicipality hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
+// Superadmin için kullanıcı detayını getir (tenant scope olmadan)
+exports.getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = Number(id);
+
+    if (!id || Number.isNaN(userId)) {
+      return res.status(400).json({ message: 'Geçersiz kullanıcı ID' });
+    }
+
+    const user = await knex('users as u')
+      .leftJoin('roles as r', 'u.role_id', 'r.id')
+      .leftJoin('municipalities as m', 'u.municipality_id', 'm.id')
+      .select(
+        'u.id',
+        'u.username',
+        'u.email',
+        'u.full_name',
+        'u.role_id',
+        'u.municipality_id',
+        'u.is_active',
+        'u.phone',
+        'u.email_verified_at',
+        'u.last_login_at',
+        'u.created_at',
+        'u.updated_at',
+        'r.name as role_name',
+        'm.name as municipality_name'
+      )
+      .where('u.id', userId)
+      .whereNull('u.deleted_at')
+      .first();
+
+    if (!user) {
+      return res.status(404).json({ message: 'Kullanıcı bulunamadı' });
+    }
+
+    return res.json(user);
+  } catch (err) {
+    console.error('superadmin.getUserById hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
@@ -391,7 +445,9 @@ exports.getTotalCount = async (_req, res) => {
 // Belediye bilgilerini güncelle
 exports.updateMunicipality = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = Number(req.params.id);
+if (!Number.isInteger(id)) return res.status(400).json({ message:'Geçersiz ID' });
+
     const {
       name,
       province,
@@ -493,7 +549,9 @@ exports.updateMunicipality = async (req, res) => {
 };
 exports.deactivateMunicipality = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = Number(req.params.id);
+if (!Number.isInteger(id)) return res.status(400).json({ message:'Geçersiz ID' });
+
 
     const [updated] = await knex('municipalities')
       .where({ id })

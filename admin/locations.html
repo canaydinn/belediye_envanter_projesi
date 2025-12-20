@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <title>Lokasyonlar | Envanter360</title>
     <meta name="description" content="Envanter360 lokasyon listesi" />
-
+   <!-- Include Vuexy core CSS and vendor CSS here -->
     <link rel="icon" type="image/x-icon" href="../admin/assets/img/favicon/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,10 +21,7 @@
     <link rel="stylesheet" href="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="../admin/assets/vendor/libs/node-waves/node-waves.css" />
     <link rel="stylesheet" href="../admin/assets/vendor/libs/typeahead-js/typeahead.css" />
-
-    <script src="../admin/assets/vendor/js/helpers.js"></script>
-    <script src="../admin/assets/vendor/js/template-customizer.js"></script>
-    <script src="../admin/assets/js/config.js"></script>
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/sweetalert2/sweetalert2.css" />
   </head>
   <body>
     <!-- Layout wrapper -->
@@ -35,14 +32,34 @@
           <div class="app-brand demo">
             <a href="index.html" class="app-brand-link">
               <span class="app-brand-logo demo">
-                <!-- Logo placeholder -->
+                 <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z"
+                    fill="#7367F0" />
+                  <path
+                    opacity="0.06"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z"
+                    fill="#161616" />
+                  <path
+                    opacity="0.06"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z"
+                    fill="#161616" />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z"
+                    fill="#7367F0" />
+                </svg>
               </span>
               <span class="app-brand-text demo menu-text fw-bold">Envanter360</span>
             </a>
-            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
-              <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
-              <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
-            </a>
+           
           </div>
           <div class="menu-inner-shadow"></div>
           <ul class="menu-inner py-1 navigation navigation-main">
@@ -89,50 +106,46 @@
         <!-- Layout container -->
         <div class="layout-page">
           <!-- Navbar -->
-          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+           <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-              <div class="navbar-nav align-items-center">
-                
-              </div>
               <ul class="navbar-nav flex-row align-items-center ms-auto">
-                <li class="nav-item dropdown-user dropdown">
-                  <a class="nav-link dropdown-toggle hide-arrow" href="#" data-bs-toggle="dropdown">
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                      <img src="../admin/assets/img/avatars/1.png" alt="Avatar" class="w-px-40 h-auto rounded-circle" />
+                      <img src="../admin/assets/img/avatars/1.png" alt="User" class="h-auto rounded-circle" />
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a class="dropdown-item" href="#">
+                      <a class="dropdown-item" href="javascript:void(0);">
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
-                              <img src="../admin/assets/img/avatars/1.png" alt="Avatar" class="w-px-40 h-auto rounded-circle" />
+                              <img src="../admin/assets/img/avatars/1.png" alt="User" class="h-auto rounded-circle" />
                             </div>
                           </div>
                           <div class="flex-grow-1">
                             <span class="fw-semibold d-block">Belediye Yöneticisi</span>
-                            <small class="text-muted">Municipality</small>
+                            <small class="text-muted" id="navbarMunicipalityName"></small>
                           </div>
                         </div>
                       </a>
                     </li>
                     <li><div class="dropdown-divider"></div></li>
                     <li>
-                      <a class="dropdown-item" href="#">
-                        <i class="ti ti-user me-2 ti-sm"></i>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <i class="ti ti-user-check me-2 ti-sm"></i>
                         <span class="align-middle">Profil</span>
                       </a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="#">
+                      <a class="dropdown-item" href="javascript:void(0);">
                         <i class="ti ti-settings me-2 ti-sm"></i>
                         <span class="align-middle">Ayarlar</span>
                       </a>
                     </li>
-                    <li><div class="dropdown-divider"></div></li>
                     <li>
-                      <a class="dropdown-item" href="auth-login-cover.html">
+                      <a class="dropdown-item" href="javascript:void(0);">
                         <i class="ti ti-logout me-2 ti-sm"></i>
                         <span class="align-middle">Çıkış</span>
                       </a>
@@ -278,10 +291,10 @@
                       <label class="form-label" for="filter-address">Adres / Açıklama</label>
                       <input type="text" id="filter-address" class="form-control" placeholder="Adres veya açıklama parçası" />
                     </div> -->
-                    <div class="col-12 d-flex align-items-end gap-2">
+                    <!-- <div class="col-12 d-flex align-items-end gap-2">
                       <button type="button" class="btn btn-primary" id="filtrele">Filtrele</button>
                       <button type="reset" class="btn btn-outline-secondary">Temizle</button>
-                    </div>
+                    </div> -->
                   </form>
                 </div>
               </div>
@@ -352,21 +365,19 @@
                     </div>
                     <div class="card-body">
                       <ul class="list-unstyled mb-0">
-                        <li class="d-flex align-items-center justify-content-between mb-2">Bina
-                          <div><span class="fw-semibold" data-location-type="building"></span></div>
+                        <li class="d-flex align-items-center justify-content-between mb-2">Ofis
+                          <div><span class="fw-semibold" data-location-type="office"></span></div>
                         </li>
                         <li class="d-flex align-items-center justify-content-between mb-2">Depo
                           <div><span class="fw-semibold" data-location-type="warehouse"></span> </div>
                         </li>
-                        <li class="d-flex align-items-center justify-content-between mb-2">Açık Alan
+                        <li class="d-flex align-items-center justify-content-between mb-2">Saha Ofisi
                           <div> <span class="fw-semibold" data-location-type="open_area"></span></div>
                         </li>
-                        <li class="d-flex align-items-center justify-content-between mb-2"> Saha Ofisi
-                          <div><span class="fw-semibold" data-location-type="site_office"></span></div>
+                        <li class="d-flex align-items-center justify-content-between mb-2"> Bina
+                          <div><span class="fw-semibold" data-location-type="building"></span></div>
                         </li>
-                        <li class="d-flex align-items-center justify-content-between">Diğer
-                          <div> <span class="fw-semibold" data-location-type="other"></span> </div>
-                        </li>
+                      
                       </ul>
                       <!-- Placeholder for location type distribution chart -->
                     </div>
@@ -385,6 +396,7 @@
               </div>
             </div>
             <!-- / Content -->
+              <div class="text-center text-muted mt-4">Envanter360 • Belediye Envanter Yönetim Sistemi</div>
 
             <div class="content-backdrop fade"></div>
           </div>
@@ -400,542 +412,22 @@
     <!-- / Layout wrapper -->
 
     <!-- Include Vuexy core JS and vendor scripts here -->
-  <script type="module">
-  const API_BASE_URL = 'http://localhost:4000/api';
-
-  // ------------------------------
-  // Lokasyon tipi dağılımı (KPI kartları - TYPE_LABELS)
-  // ------------------------------
-  const TYPE_LABELS = {
-    building: 'Bina',
-    warehouse: 'Depo',
-    open_area: 'Açık Alan',
-    site_office: 'Saha Ofisi',
-    other: 'Diğer',
-  };
-
-  const alertContainer = document.querySelector('[data-role="alert-container"]');
-
-  const showAlert = (message, variant = 'danger') => {
-    if (!alertContainer) return;
-
-    const alert = document.createElement('div');
-    alert.className = `alert alert-${variant} alert-dismissible fade show`;
-    alert.setAttribute('role', 'alert');
-    alert.textContent = message;
-
-    const closeButton = document.createElement('button');
-    closeButton.type = 'button';
-    closeButton.className = 'btn-close';
-    closeButton.setAttribute('data-bs-dismiss', 'alert');
-    closeButton.setAttribute('aria-label', 'Kapat');
-
-    alert.appendChild(closeButton);
-    alertContainer.appendChild(alert);
-  };
-
-  const setCount = (key, value) => {
-    const countElement = document.querySelector(`[data-location-type="${key}"]`);
-    if (!countElement) return;
-
-    const numericValue = Number(value ?? 0);
-    countElement.textContent = Number.isFinite(numericValue)
-      ? numericValue.toLocaleString('tr-TR')
-      : '0';
-  };
-
-  const applyDistribution = (distribution = {}) => {
-    Object.keys(TYPE_LABELS).forEach((key) => {
-      setCount(key, distribution[key]);
-    });
-  };
-
-  const parseResponseJson = async (response) => {
-    try {
-      return await response.json();
-    } catch (error) {
-      showAlert('Sunucu yanıtı okunamadı. Lütfen daha sonra tekrar deneyin.', 'danger');
-      throw error;
-    }
-  };
-
-  const loadLocationTypeDistribution = async () => {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      showAlert('Oturum bulunamadı. Lütfen yeniden giriş yapın.', 'warning');
-      applyDistribution();
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/locations/type-distribution`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: 'include',
-      });
-
-      const data = await parseResponseJson(response);
-
-      if (!response.ok) {
-        throw new Error(data?.message || 'Lokasyon tipi dağılımı alınamadı');
-      }
-
-      applyDistribution(data.distribution);
-    } catch (error) {
-      console.error('Lokasyon tipi dağılımı yüklenemedi:', error);
-      showAlert('Lokasyon tipi dağılımı yüklenirken bir hata oluştu.', 'danger');
-      applyDistribution();
-    }
-  };
-
-  const initLocationDistribution = () => {
-    applyDistribution();
-    loadLocationTypeDistribution();
-  };
-
-  // ------------------------------
-  // Filtre / tablo DOM referansları
-  // ------------------------------
-  const filterForm = document.getElementById('filter-form');
-  const filterButton = document.getElementById('filtrele');
-  const nameInput = document.getElementById('filter-name');
-  const typeSelect = document.getElementById('filter-type');
-  const departmentSelect = document.getElementById('filter-department');
-  const statusSelect = document.getElementById('filter-status');
-  const addressInput = document.getElementById('filter-address');
-  const tableBody = document.getElementById('locations-table-body');
-  const summaryText = document.querySelector('[data-role="locations-summary"]');
-  const tableAlertContainer = document.getElementById('alert-container');
-
-  // ------------------------------
-  // KPI kartları DOM referansları (istatistikler)
-  // ------------------------------
-  const kpiAlertContainer = document.getElementById('locationsAlerts');
-  const totalLocationsEl = document.getElementById('total_locations');
-  const activeLocationsEl = document.getElementById('total_active_location');
-  const warehouseCountEl = document.getElementById('total_warehouse');
-  const denseLocationEl = document.getElementById('dense_location');
-
-  // ------------------------------
-  // Ortak yapılar / yardımcılar
-  // ------------------------------
-  const departmentsMap = new Map();
-
-  const formatNumber = (value) => {
-    const numeric = Number(value);
-    return Number.isFinite(numeric) ? numeric.toLocaleString('tr-TR') : '-';
-  };
-
-  const formatText = (value) => (value ? String(value) : '-');
-
-  const parseJsonSafely = async (response) => {
-    try {
-      return await response.json();
-    } catch (error) {
-      showTableAlert('Sunucudan geçersiz yanıt alındı.', 'danger');
-      throw error;
-    }
-  };
-
-  const getAuthHeaders = () => {
-    const token = localStorage.getItem('token');
-    return {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    };
-  };
-
-  // ------------------------------
-  // Tablo uyarıları
-  // ------------------------------
-  const showTableAlert = (message, variant = 'danger') => {
-    if (!tableAlertContainer) return;
-
-    tableAlertContainer.replaceChildren();
-
-    const alert = document.createElement('div');
-    alert.className = `alert alert-${variant} alert-dismissible fade show`;
-    alert.setAttribute('role', 'alert');
-    alert.textContent = message;
-
-    const closeButton = document.createElement('button');
-    closeButton.type = 'button';
-    closeButton.className = 'btn-close';
-    closeButton.setAttribute('data-bs-dismiss', 'alert');
-    closeButton.setAttribute('aria-label', 'Kapat');
-
-    alert.appendChild(closeButton);
-    tableAlertContainer.appendChild(alert);
-  };
-
-  const clearTableAlert = () => {
-    if (tableAlertContainer) {
-      tableAlertContainer.replaceChildren();
-    }
-  };
-
-  const setButtonLoading = (isLoading) => {
-    if (!filterButton) return;
-    filterButton.disabled = isLoading;
-    filterButton.textContent = isLoading ? 'Yükleniyor...' : 'Filtrele';
-  };
-
-  const setSummary = (count) => {
-    if (summaryText) {
-      const safeCount = Number.isFinite(count) ? count : 0;
-      summaryText.textContent = `Gösterilen: ${safeCount} / ${safeCount}`;
-    }
-  };
-
-  const renderEmptyState = (message, isError = false) => {
-    if (!tableBody) return;
-    tableBody.replaceChildren();
-
-    const row = document.createElement('tr');
-    const cell = document.createElement('td');
-    cell.colSpan = 8;
-    cell.className = `text-center ${isError ? 'text-danger' : 'text-muted'}`;
-    cell.textContent = message;
-    row.appendChild(cell);
-    tableBody.appendChild(row);
-    setSummary(0);
-  };
-
-  const createStatusBadge = (isActive) => {
-    const badge = document.createElement('span');
-    const active = Boolean(isActive);
-    badge.className = active ? 'badge bg-label-success' : 'badge bg-label-secondary';
-    badge.textContent = active ? 'Aktif' : 'Pasif';
-    return badge;
-  };
-
-  const createIconLink = (href, title, iconClass) => {
-    const link = document.createElement('a');
-    link.href = href;
-    link.className = 'btn btn-sm btn-icon btn-text-secondary';
-    link.setAttribute('aria-label', title);
-    link.title = title;
-
-    const icon = document.createElement('i');
-    icon.className = iconClass;
-    link.appendChild(icon);
-
-    return link;
-  };
-
-  const buildRow = (location) => {
-    const tr = document.createElement('tr');
-    tr.dataset.locationId = location.id;
-
-    const codeCell = document.createElement('td');
-    codeCell.textContent = formatText(location.code);
-    tr.appendChild(codeCell);
-
-    const nameCell = document.createElement('td');
-    nameCell.textContent = formatText(location.name);
-    tr.appendChild(nameCell);
-
-    const typeCell = document.createElement('td');
-    typeCell.textContent = formatText(location.type);
-    tr.appendChild(typeCell);
-
-    const departmentCell = document.createElement('td');
-    const departmentName = departmentsMap.get(location.department_id) || '-';
-    departmentCell.textContent = departmentName;
-    tr.appendChild(departmentCell);
-
-    const addressCell = document.createElement('td');
-    addressCell.textContent = formatText(location.address);
-    tr.appendChild(addressCell);
-
-    const assetCountCell = document.createElement('td');
-    const assetCount = Number.isFinite(location.asset_count) ? location.asset_count : 0;
-    assetCountCell.textContent = formatNumber(assetCount);
-    tr.appendChild(assetCountCell);
-
-    const statusCell = document.createElement('td');
-    statusCell.appendChild(createStatusBadge(location.is_active));
-    tr.appendChild(statusCell);
-
-    const actionsCell = document.createElement('td');
-    actionsCell.className = 'd-flex gap-1';
-
-    const detailLink = createIconLink(
-      `location-detail.html?id=${location.id}`,
-      'Detay',
-      'feather icon-eye'
-    );
-    const editLink = createIconLink(
-      `location-edit.html?id=${location.id}`,
-      'Düzenle',
-      'feather icon-edit'
-    );
-    const assetsLink = createIconLink(
-      `assets.html?location_id=${location.id}`,
-      'Varlıkları Görüntüle',
-      'feather icon-package'
-    );
-    const mapLink = createIconLink(
-      `location-map.html?id=${location.id}`,
-      'Haritada Aç',
-      'feather icon-map-pin'
-    );
-
-    actionsCell.append(detailLink, editLink, assetsLink, mapLink);
-    tr.appendChild(actionsCell);
-
-    return tr;
-  };
-
-  const renderLocations = (locations) => {
-    if (!tableBody) return;
-
-    if (!Array.isArray(locations) || locations.length === 0) {
-      renderEmptyState('Henüz lokasyon bulunamadı.');
-      return;
-    }
-
-    tableBody.replaceChildren(...locations.map((location) => buildRow(location)));
-    setSummary(locations.length);
-  };
-
-  // ------------------------------
-  // Departman listesi
-  // ------------------------------
-  const fetchDepartments = async () => {
-    if (!departmentSelect) return;
-
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/departments?includeInactive=false`,
-        {
-          method: 'GET',
-          headers: getAuthHeaders(),
-          credentials: 'include',
-        }
-      );
-
-      const data = await parseJsonSafely(response);
-
-      if (!response.ok) {
-        throw new Error(data?.message || 'Birim listesi alınamadı');
-      }
-
-      departmentSelect.length = 0;
-      const defaultOption = document.createElement('option');
-      defaultOption.value = '';
-      defaultOption.textContent = 'Tümü';
-      departmentSelect.appendChild(defaultOption);
-
-      if (Array.isArray(data)) {
-        data.forEach((department) => {
-          departmentsMap.set(department.id, department.name);
-          const option = document.createElement('option');
-          option.value = department.id;
-          option.textContent = department.name;
-          departmentSelect.appendChild(option);
-        });
-      }
-    } catch (error) {
-      console.error('Birimler yüklenirken hata oluştu:', error);
-      showTableAlert('Birim listesi yüklenemedi.', 'warning');
-    }
-  };
-
-  // ------------------------------
-  // Filtre query string
-  // ------------------------------
-  const buildQueryString = () => {
-    const params = new URLSearchParams();
-
-    const name = nameInput?.value.trim();
-    const type = typeSelect?.value;
-    const departmentId = departmentSelect?.value;
-    const status = statusSelect?.value;
-    const address = addressInput && addressInput.value
-      ? addressInput.value.trim()
-      : '';
-
-    if (name) params.set('name', name);
-    if (type) params.set('type', type);
-    if (departmentId) params.set('department_id', departmentId);
-
-    if (status === 'true') {
-      params.set('is_active', 'true');
-    } else if (status === 'false') {
-      params.set('is_active', 'false');
-    }
-
-    if (address) params.set('address', address);
-
-    return params.toString() ? `?${params.toString()}` : '';
-  };
-
-  // ------------------------------
-  // Lokasyon listesi yükleme
-  // ------------------------------
-  const loadLocations = async () => {
-    if (!tableBody) return;
-
-    setButtonLoading(true);
-    renderEmptyState('Lokasyonlar yükleniyor...');
-
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/locations${buildQueryString()}`,
-        {
-          method: 'GET',
-          headers: getAuthHeaders(),
-          credentials: 'include',
-        }
-      );
-
-      const data = await parseJsonSafely(response);
-
-      if (!response.ok) {
-        throw new Error(data?.message || 'Lokasyon listesi alınamadı');
-      }
-
-      renderLocations(data?.data || []);
-      clearTableAlert();
-    } catch (error) {
-      console.error('Lokasyonlar getirilirken hata oluştu:', error);
-      showTableAlert('Lokasyon listesi alınırken bir sorun oluştu.', 'danger');
-      renderEmptyState('Lokasyon listesi yüklenemedi.', true);
-    } finally {
-      setButtonLoading(false);
-    }
-  };
-
-  // ------------------------------
-  // KPI uyarıları (üst kartlar)
-  // ------------------------------
-  const clearKpiAlerts = () => {
-    if (!kpiAlertContainer) return;
-    while (kpiAlertContainer.firstChild) {
-      kpiAlertContainer.removeChild(kpiAlertContainer.firstChild);
-    }
-  };
-
-  const showKpiAlert = (message, type = 'danger') => {
-    if (!kpiAlertContainer) return;
-
-    kpiAlertContainer.replaceChildren();
-
-    const alert = document.createElement('div');
-    alert.className = `alert alert-${type} alert-dismissible fade show`;
-    alert.setAttribute('role', 'alert');
-    alert.textContent = message;
-
-    const closeButton = document.createElement('button');
-    closeButton.type = 'button';
-    closeButton.className = 'btn-close';
-    closeButton.setAttribute('data-bs-dismiss', 'alert');
-    closeButton.setAttribute('aria-label', 'Close');
-
-    alert.appendChild(closeButton);
-    kpiAlertContainer.appendChild(alert);
-  };
-
-  const setTextContent = (element, value) => {
-    if (!element) return;
-    element.textContent = value;
-  };
-
-  const applyDenseLocationTitle = (assetCount) => {
-    if (!denseLocationEl) return;
-    if (Number.isFinite(assetCount)) {
-      denseLocationEl.setAttribute('title', `Toplam envanter: ${formatNumber(assetCount)}`);
-    } else {
-      denseLocationEl.removeAttribute('title');
-    }
-  };
-
-  const fetchLocationStats = async () => {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      showKpiAlert('Lokasyon istatistiklerini görüntülemek için lütfen giriş yapın.', 'warning');
-      return;
-    }
-
-    clearKpiAlerts();
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/locations/stats`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: 'include',
-      });
-
-      let payload = null;
-      try {
-        payload = await response.json();
-      } catch (parseError) {
-        showKpiAlert('Sunucu yanıtı okunamadı. Lütfen daha sonra tekrar deneyin.');
-        return;
-      }
-
-      if (!response.ok) {
-        const message = payload?.message || 'Lokasyon istatistikleri alınamadı.';
-        showKpiAlert(message);
-        return;
-      }
-
-      const totals = payload?.totals || {};
-      setTextContent(totalLocationsEl, formatNumber(totals.locations));
-      setTextContent(activeLocationsEl, formatNumber(totals.active_locations));
-      setTextContent(warehouseCountEl, formatNumber(totals.warehouses));
-
-      const denseLocation = payload?.dense_location;
-      setTextContent(denseLocationEl, denseLocation?.name || '-');
-      applyDenseLocationTitle(Number(denseLocation?.asset_count));
-    } catch (error) {
-      showKpiAlert('Lokasyon istatistikleri alınırken bir hata oluştu.');
-      console.error('Lokasyon istatistikleri alınamadı:', error);
-    }
-  };
-
-  // ------------------------------
-  // Sayfa başlangıcı (tek DOMContentLoaded)
-  // ------------------------------
-  const initLocationsTablePage = () => {
-    if (!filterForm || !tableBody) return;
-
-    filterForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      loadLocations();
-    });
-
-    if (filterButton) {
-      filterButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        loadLocations();
-      });
-    }
-
-    filterForm.addEventListener('reset', () => {
-      clearTableAlert();
-      setTimeout(() => loadLocations(), 0);
-    });
-
-    fetchDepartments();
-    loadLocations();
-    fetchLocationStats();
-  };
-
-  document.addEventListener('DOMContentLoaded', () => {
-    initLocationDistribution();
-    initLocationsTablePage();
-  });
-</script>
-
+ <!-- Core JS -->
+<script src="../admin/assets/vendor/libs/jquery/jquery.js"></script>
+<script src="../admin/assets/vendor/libs/popper/popper.js"></script>
+<script src="../admin/assets/vendor/js/bootstrap.js"></script>
+<script src="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="../admin/assets/vendor/libs/node-waves/node-waves.js"></script>
+<script src="../admin/assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
+<script src="../admin/assets/js/app/logout.js"></script>
+<!-- Main JS (Vuexy) -->
+<script src="../admin/assets/js/main.js"></script>
+<!-- Page JS -->
+<script src="../admin/assets/js/app/api.js"></script>
+<script src="../admin/assets/js/app/locations-list.js"></script>
+<script src="../admin/assets/js/app/locations-filters.js"></script>
+<script src="../admin/assets/js/app/locations-stats.js"></script>
+<script src="../admin/assets/js/app/locations-init.js"></script>
 
   </body>
 </html>

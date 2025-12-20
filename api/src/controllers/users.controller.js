@@ -1,9 +1,9 @@
 const knex = require('../config/knex');
 const bcrypt = require('bcryptjs');
-
+const parseCount = (row) => Number(row?.total ?? row?.count ?? 0);
 exports.getAll = async (req, res) => {
   try {
-const municipalityId = req.user?.municipality_id ?? null;
+const municipalityId = req.tenantMunicipalityId ?? req.user?.municipality_id ?? null;
 
     const users = await knex('users')
       .select(
@@ -22,7 +22,9 @@ const municipalityId = req.user?.municipality_id ?? null;
         if (municipalityId) {
           queryBuilder.andWhere({ municipality_id: municipalityId });
         }
-      });    res.json(users);
+      });
+
+    res.json(users);
   } catch (err) {
     console.error('getAll users hatası:', err);
     res.status(500).json({ message: 'Sunucu hatası' });
@@ -32,23 +34,31 @@ const municipalityId = req.user?.municipality_id ?? null;
 exports.getById = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await knex('users')
+     const municipalityId = req.tenantMunicipalityId ?? req.user?.municipality_id ?? null;
+    const user = await knex('users as u')
+      .leftJoin('roles as r', 'u.role_id', 'r.id')
+      .leftJoin('municipalities as m', 'u.municipality_id', 'm.id')
       .select(
-        'id',
-        'username',
-        'email',
-        'full_name',
-        'role_id',
-        'municipality_id',
-        'is_active',
-        'phone',
-        'email_verified_at'
+        'u.id',
+        'u.username',
+        'u.email',
+        'u.full_name',
+        'u.role_id',
+        'u.municipality_id',
+        'u.is_active',
+        'u.phone',
+        'u.email_verified_at',
+        'u.last_login_at',
+        'u.created_at',
+        'u.updated_at',
+        'r.name as role_name',
+        'm.name as municipality_name'
       )
-      .where({ id })
-      .whereNull('deleted_at')
+      .where('u.id', id)
+      .whereNull('u.deleted_at')
       .modify((queryBuilder) => {
         if (municipalityId) {
-          queryBuilder.andWhere({ municipality_id: municipalityId });
+          queryBuilder.andWhere('u.municipality_id', municipalityId);
         }
       })
       .first();
@@ -59,6 +69,145 @@ exports.getById = async (req, res) => {
     res.json(user);
   } catch (err) {
     console.error('getById user hatası:', err);
+    res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+exports.getSummaryStats = async (req, res) => {
+  try {
+    const municipalityId = req.tenantMunicipalityId ?? req.user?.municipality_id ?? null;
+
+    if (!municipalityId) {
+      return res.status(400).json({ message: 'Belediye kapsamı bulunamadı' });
+    }
+
+    const todayStart = knex.raw("DATE_TRUNC('day', NOW())");
+
+    const [
+      totalUsersRow,
+      activeUsersRow,
+      todayLoginsRow,
+      adminRoleRow,
+      managerRoleRow,
+      userRoleRow,
+    ] = await Promise.all([
+      knex('users').where({ municipality_id: municipalityId }).whereNull('deleted_at').count({ total: 'id' }).first(),
+      knex('users')
+        .where({ municipality_id: municipalityId, is_active: true })
+        .whereNull('deleted_at')
+        .count({ total: 'id' })
+        .first(),
+      knex('users')
+        .where({ municipality_id: municipalityId })
+        .whereNull('deleted_at')
+        .whereNotNull('last_login_at')
+        .andWhere('last_login_at', '>=', todayStart)
+        .count({ total: 'id' })
+        .first(),
+      knex('users')
+        .where({ municipality_id: municipalityId, role_id: 1 })
+        .whereNull('deleted_at')
+        .count({ total: 'id' })
+        .first(),
+      knex('users')
+        .where({ municipality_id: municipalityId, role_id: 4 })
+        .whereNull('deleted_at')
+        .count({ total: 'id' })
+        .first(),
+      knex('users')
+        .where({ municipality_id: municipalityId, role_id: 5 })
+        .whereNull('deleted_at')
+        .count({ total: 'id' })
+        .first(),
+    ]);
+
+    return res.json({
+      totals: {
+        users: parseCount(totalUsersRow),
+        activeUsers: parseCount(activeUsersRow),
+        todayLogins: parseCount(todayLoginsRow),
+      },
+      roles: {
+        admin: parseCount(adminRoleRow),
+        manager: parseCount(managerRoleRow),
+        user: parseCount(userRoleRow),
+      },
+    });
+  } catch (err) {
+    console.error('getSummaryStats hatası:', err);
+    res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
+exports.getTodayLogins = async (req, res) => {
+  try {
+    const municipalityId = req.tenantMunicipalityId ?? req.user?.municipality_id ?? null;
+
+    if (!municipalityId) {
+      return res.status(400).json({ message: 'Belediye kapsamı bulunamadı' });
+    }
+
+    const limit = Number(req.query.limit) > 0 ? Number(req.query.limit) : 5;
+    const todayStart = knex.raw("DATE_TRUNC('day', NOW())");
+
+    const rows = await knex('users as u')
+      .leftJoin('departments as d', function () {
+        this.on('d.manager_user_id', '=', 'u.id').andOn('d.municipality_id', '=', 'u.municipality_id');
+      })
+      .where('u.municipality_id', municipalityId)
+      .whereNull('u.deleted_at')
+      .whereNotNull('u.last_login_at')
+      .andWhere('u.last_login_at', '>=', todayStart)
+      .select(
+        'u.id',
+        'u.full_name',
+        'u.email',
+        'u.role_id',
+        'u.is_active',
+        'u.last_login_at',
+        'd.id as department_id',
+        'd.name as department_name'
+      )
+      .orderBy('u.last_login_at', 'desc')
+      .limit(limit);
+
+    return res.json(rows);
+  } catch (err) {
+    console.error('getTodayLogins hatası:', err);
+    res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+exports.getDetailedList = async (req, res) => {
+  try {
+    const municipalityId = req.tenantMunicipalityId ?? req.user?.municipality_id ?? null;
+
+    if (!municipalityId) {
+      return res.status(400).json({ message: 'Belediye kapsamı bulunamadı' });
+    }
+
+    const users = await knex('users as u')
+      .leftJoin('roles as r', 'u.role_id', 'r.id')
+      .leftJoin('departments as d', function () {
+        this.on('d.manager_user_id', '=', 'u.id').andOn('d.municipality_id', '=', 'u.municipality_id');
+      })
+      .where('u.municipality_id', municipalityId)
+      .whereNull('u.deleted_at')
+      .select(
+        'u.id',
+        'u.full_name',
+        'u.email',
+        'u.role_id',
+        'u.is_active',
+        'u.last_login_at',
+        'u.created_at',
+        'r.name as role_name',
+        'd.id as department_id',
+        'd.name as department_name'
+      )
+      .orderBy('u.created_at', 'desc');
+
+    return res.json(users);
+  } catch (err) {
+    console.error('getDetailedList hatası:', err);
     res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
@@ -207,6 +356,133 @@ const municipalityId = req.user?.municipality_id ?? null;
     res.json({ message: 'Kullanıcı silindi' });
   } catch (err) {
     console.error('delete user hatası:', err);
+    res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { password } = req.body;
+    const municipalityId = req.user?.municipality_id ?? null;
+
+    // Şifre kontrolü
+    if (!password || typeof password !== 'string' || password.length < 8) {
+      return res.status(400).json({ message: 'Şifre en az 8 karakter olmalıdır' });
+    }
+
+    // Kullanıcının var olup olmadığını ve municipality kontrolü yap
+    const user = await knex('users')
+      .where({ id })
+      .whereNull('deleted_at')
+      .modify((queryBuilder) => {
+        if (municipalityId) {
+          queryBuilder.andWhere({ municipality_id: municipalityId });
+        }
+      })
+      .first();
+
+    if (!user) {
+      return res.status(404).json({ message: 'Kullanıcı bulunamadı' });
+    }
+
+    // Şifreyi hash'le
+    const password_hash = await bcrypt.hash(password, 10);
+
+    // Şifreyi güncelle
+    const [updated] = await knex('users')
+      .where({ id })
+      .whereNull('deleted_at')
+      .update(
+        {
+          password_hash,
+          updated_by: req.user?.id || null,
+          updated_at: knex.fn.now(),
+        },
+        ['id', 'username', 'email', 'full_name']
+      );
+
+    if (!updated) {
+      return res.status(404).json({ message: 'Kullanıcı bulunamadı' });
+    }
+
+    res.json({ message: 'Şifre başarıyla sıfırlandı', user: updated });
+  } catch (err) {
+    console.error('resetPassword hatası:', err);
+    res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
+exports.toggleStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const municipalityId = req.user?.municipality_id ?? null;
+
+    // Kullanıcının var olup olmadığını ve municipality kontrolü yap
+    const user = await knex('users as u')
+      .leftJoin('roles as r', 'u.role_id', 'r.id')
+      .leftJoin('municipalities as m', 'u.municipality_id', 'm.id')
+      .select(
+        'u.id',
+        'u.username',
+        'u.email',
+        'u.full_name',
+        'u.role_id',
+        'u.municipality_id',
+        'u.is_active',
+        'u.phone',
+        'r.name as role_name',
+        'm.name as municipality_name'
+      )
+      .where('u.id', id)
+      .whereNull('u.deleted_at')
+      .modify((queryBuilder) => {
+        if (municipalityId) {
+          queryBuilder.andWhere('u.municipality_id', municipalityId);
+        }
+      })
+      .first();
+
+    if (!user) {
+      return res.status(404).json({ message: 'Kullanıcı bulunamadı' });
+    }
+
+    // Durumu tersine çevir
+    const newStatus = !user.is_active;
+
+    // Durumu güncelle
+    const [updated] = await knex('users')
+      .where({ id })
+      .whereNull('deleted_at')
+      .update(
+        {
+          is_active: newStatus,
+          updated_by: req.user?.id || null,
+          updated_at: knex.fn.now(),
+        },
+        [
+          'id',
+          'username',
+          'email',
+          'full_name',
+          'role_id',
+          'municipality_id',
+          'is_active',
+          'phone',
+          'email_verified_at',
+        ]
+      );
+
+    if (!updated) {
+      return res.status(404).json({ message: 'Kullanıcı bulunamadı' });
+    }
+
+    res.json({
+      message: `Kullanıcı ${newStatus ? 'aktif' : 'pasif'} hale getirildi`,
+      user: updated,
+    });
+  } catch (err) {
+    console.error('toggleStatus hatası:', err);
     res.status(500).json({ message: 'Sunucu hatası' });
   }
 };

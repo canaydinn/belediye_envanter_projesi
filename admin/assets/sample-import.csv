@@ -1,0 +1,7 @@
+name,category_name,department_name,location_name,description,purchase_price,purchase_date,serial_number,brand,model,quantity,unit,status,asset_type
+Masaüstü Bilgisayar,Bilgisayar ve Donanım,IT Birimi,Ana Bina 1. Kat,Intel i7 işlemcili masaüstü bilgisayar,15000.00,2024-01-15,PC-2024-001,HP,EliteDesk 800 G6,1,Adet,active,demirbas
+Laptop,Bilgisayar ve Donanım,IT Birimi,Ana Bina 2. Kat,İş için kullanılan laptop,12000.00,2024-02-20,LT-2024-002,Dell,Latitude 5520,1,Adet,active,demirbas
+Yazıcı,Ofis Ekipmanları,Muhasebe Birimi,Ana Bina 1. Kat,Çok fonksiyonlu yazıcı,8000.00,2024-03-10,PR-2024-003,Canon,imageRUNNER ADVANCE,1,Adet,active,demirbas
+Projeksiyon Cihazı,Elektronik Cihazlar,Toplantı Salonu,Ana Bina 3. Kat,Toplantı salonu projeksiyon cihazı,5000.00,2024-04-05,PJ-2024-004,Epson,EB-X41,1,Adet,active,demirbas
+Fotokopi Makinesi,Ofis Ekipmanları,İnsan Kaynakları,Ana Bina 1. Kat,Çok fonksiyonlu fotokopi makinesi,25000.00,2024-05-12,FC-2024-005,Konica Minolta,bizhub C360i,1,Adet,active,demirbas
+

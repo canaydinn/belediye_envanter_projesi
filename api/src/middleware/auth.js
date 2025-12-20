@@ -24,25 +24,37 @@ const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-key';
  *   → sistemdeki TEK doğruluk kaynağı req.user olur
  */
 module.exports = async function auth(req, res, next) {
+
   try {
     // 1️⃣ Token’ı iki farklı kaynaktan okumaya çalış:
     // - HttpOnly cookie (web uygulamaları)
     // - Authorization: Bearer <token> (mobil, Postman, servisler)
     const cookieToken = req.cookies?.token;
-    const authHeader = req.headers.authorization;
+    const authHeader = req.headers?.authorization || req.headers?.Authorization;
+
 
     // Öncelik cookie token’dadır
-    let token = cookieToken;
+   // let token = cookieToken;
+let token = null;
+if (typeof authHeader === 'string' && authHeader.startsWith('Bearer ')) {
+   token = authHeader.slice(7).trim();
+} else if (cookieToken) {
+  token = cookieToken;
+}
+
+if (!token) {
+  return res.status(401).json({ message: 'Oturum bulunamadı' });
+}
 
     // Cookie yoksa Authorization header kontrol edilir
-    if (!token && authHeader?.startsWith('Bearer ')) {
+    /* if (!token && authHeader?.startsWith('Bearer ')) {
       token = authHeader.slice(7); // "Bearer " kısmı atılır
     }
 
     // 2️⃣ Token hiç yoksa → kullanıcı oturum açmamış demektir
     if (!token) {
       return res.status(401).json({ message: 'Oturum bulunamadı' });
-    }
+    } */
 
     // 3️⃣ Token doğrulanır
     // - İmza kontrol edilir
@@ -81,7 +93,7 @@ module.exports = async function auth(req, res, next) {
     req.user = user;
 
     // 7️⃣ Yetkilendirme / tenant kontrolü / controller’a geç
-    next();
+    return next();
   } catch (err) {
     // Token:
     // - Süresi dolmuş

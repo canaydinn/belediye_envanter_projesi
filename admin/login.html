@@ -76,7 +76,7 @@
               <!-- /Logo + Title -->
 
               <!-- Login Form -->
-              <form id="formLogin" class="mb-3" action="#" method="POST">
+              <form id="formLogin" class="mb-3" novalidate>
                 <!-- Backend error placeholder -->
                 <div class="alert alert-danger d-none" role="alert">Geçersiz e-posta veya şifre.</div>
 
@@ -147,71 +147,75 @@
     <script src="../admin/assets/vendor/libs/typeahead-js/typeahead.js"></script>
 
     <script src="../admin/assets/vendor/js/menu.js"></script>
-
+<script src="../admin/assets/js/app/logout.js"></script>
     <!-- Main JS -->
     <script src="../admin/assets/js/main.js"></script>
-    <script>
-      (() => {
-        const form = document.getElementById('formLogin');
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
-        const errorAlert = document.getElementById('loginError');
+    <script src="../admin/assets/js/app/login.js"></script>
+<!--  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('formLogin');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const errorAlert = document.getElementById('loginError');
 
-        const showError = message => {
-          if (!errorAlert) return;
-          errorAlert.textContent = message || 'Giriş sırasında bir hata oluştu.';
-          errorAlert.classList.remove('d-none');
-        };
+    const showError = (message) => {
+      if (!errorAlert) return;
+      errorAlert.textContent = message || 'Giriş sırasında bir hata oluştu.';
+      errorAlert.classList.remove('d-none');
+    };
 
-        form?.addEventListener('submit', async event => {
-          event.preventDefault();
-          errorAlert?.classList.add('d-none');
+    if (!form) {
+      console.error('formLogin bulunamadı');
+      return;
+    }
 
-          if (!form.checkValidity()) {
-            form.classList.add('was-validated');
-            return;
-          }
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault(); // ✅ refresh’i kesin keser
+      errorAlert?.classList.add('d-none');
 
-          const payload = {
-            email: emailInput.value.trim(),
-            password: passwordInput.value
-          };
+      // Basit doğrulama
+      const email = (emailInput?.value || '').trim();
+      const password = passwordInput?.value || '';
 
-          try {
-            const response = await fetch('http://localhost:4000/api/auth/login', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              credentials: 'include',
-              body: JSON.stringify(payload)
-            });
+      if (!email || !password) {
+        showError('E-posta ve şifre zorunludur.');
+        return;
+      }
 
-            const data = await response.json().catch(() => ({}));
-
-            if (!response.ok) {
-              showError(data.message || 'Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
-              return;
-            }
-            if (data.token) {
-                      localStorage.setItem('token', data.token);
-                    }
-            const roleId = Number(data?.user?.role_id);
-            if (roleId === 1) {
-              window.location.href = 'super-admin-dashboard.html';
-
-            } else if (roleId === 3) {
-              window.location.href = 'dashboard.html';
-
-            } else {
-              showError('Yetkiniz için uygun bir yönlendirme bulunamadı.');
-            }
-          } catch (error) {
-            console.error('Login error:', error);
-            showError('Sunucuya bağlanırken bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
-          }
+      try {
+        const response = await fetch('/api/auth/login', {   // ✅ relative kullanın
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, password }),
         });
-      })();
-    </script>
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          showError(data?.message || `Giriş başarısız (HTTP ${response.status}).`);
+          return;
+        }
+
+        // ✅ cookie tabanlı auth kullanıyorsanız token’ı localStorage’a yazmayın
+        const roleId = Number(data?.user?.role_id);
+
+        if (roleId === 1) {
+          window.location.href = '/admin/super-admin-dashboard.html';
+        } else if (roleId === 3) {
+          window.location.href = '/admin/dashboard.html';
+        } else if (roleId === 2) {
+          window.location.href = '/admin/dashboard.html';
+        } else {
+          showError('Yetkiniz için uygun bir yönlendirme bulunamadı.');
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        showError('Sunucuya bağlanırken bir hata oluştu.');
+      }
+    });
+  });
+</script> -->
+
   </body>
 </html>

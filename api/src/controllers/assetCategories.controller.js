@@ -122,6 +122,105 @@ exports.createCategory = async (req, res) => {
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };
+exports.getCategoryById = async (req, res) => {
+  try {
+    const municipalityId = req.user?.municipality_id;
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: 'Kategori id bilgisi zorunludur' });
+    }
+
+    const category = await knex('asset_categories')
+      .where({ id, municipality_id: municipalityId })
+      .first();
+
+    if (!category) {
+      return res.status(404).json({ message: 'Kategori bulunamadı veya bu belediyeye ait değil' });
+    }
+
+    // Kategoriye ait varlık sayısını al
+    const [assetCountRow] = await knex('assets')
+      .where({ category_id: id, municipality_id: municipalityId })
+      .count('id as count');
+
+    const categoryWithStats = {
+      ...category,
+      asset_count: Number(assetCountRow?.count || 0),
+    };
+
+    return res.json(categoryWithStats);
+  } catch (err) {
+    console.error('assetCategories.getCategoryById hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+exports.updateCategory = async (req, res) => {
+  try {
+    const municipalityId = req.user?.municipality_id;
+    const { id } = req.params;
+    const { code, name, description } = req.body || {};
+
+    if (!municipalityId) {
+      return res.status(401).json({ message: 'Belediye doğrulaması başarısız' });
+    }
+
+    if (!id) {
+      return res.status(400).json({ message: 'Kategori id bilgisi zorunludur' });
+    }
+
+    const sanitizedCode = (code || '').trim();
+    const sanitizedName = (name || '').trim();
+    const sanitizedDescription = (description || '').trim();
+
+    if (!sanitizedCode || !sanitizedName) {
+      return res.status(400).json({ message: 'Kod ve ad alanları zorunludur' });
+    }
+
+    // Kategoriyi kontrol et
+    const existingCategory = await knex('asset_categories')
+      .where({ id, municipality_id: municipalityId })
+      .first();
+
+    if (!existingCategory) {
+      return res.status(404).json({ message: 'Kategori bulunamadı veya bu belediyeye ait değil' });
+    }
+
+    // Kod veya ad değiştiriliyorsa, aynı belediye içinde çakışma kontrolü
+    if (sanitizedCode !== existingCategory.code || sanitizedName !== existingCategory.name) {
+      const duplicate = await knex('asset_categories')
+        .where({ municipality_id: municipalityId })
+        .andWhere((builder) =>
+          builder.where('code', sanitizedCode).orWhere('name', sanitizedName)
+        )
+        .andWhereNot({ id })
+        .first();
+
+      if (duplicate) {
+        return res.status(409).json({ message: 'Bu kod veya ad ile kayıtlı kategori zaten mevcut' });
+      }
+    }
+
+    // Kategoriyi güncelle
+    const [updatedCategory] = await knex('asset_categories')
+      .where({ id, municipality_id: municipalityId })
+      .update({
+        code: sanitizedCode,
+        name: sanitizedName,
+        description: sanitizedDescription || null,
+        updated_at: knex.fn.now(),
+      })
+      .returning(['id', 'code', 'name', 'description', 'municipality_id', 'created_at', 'updated_at']);
+
+    return res.json({
+      message: 'Kategori başarıyla güncellendi',
+      category: updatedCategory,
+    });
+  } catch (err) {
+    console.error('assetCategories.updateCategory hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
 exports.getCategoryDistribution = async (req, res) => {
   try {
     const municipalityId = req.user?.municipality_id;

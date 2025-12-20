@@ -15,8 +15,8 @@ router.get('/:id', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), inventoryCon
 /**
  * WRITE (Municipality Admin only)
  */
-router.post('/', authorize(ROLES.MUNICIPALITY_ADMIN), inventoryController.createInventoryItem);
-router.patch('/:id', authorize(ROLES.MUNICIPALITY_ADMIN), inventoryController.updateInventory);
-router.delete('/:id', authorize(ROLES.MUNICIPALITY_ADMIN), inventoryController.deleteInventory);
+router.post('/', authorize(ROLES.MUNICIPALITY_ADMIN,ROLES.USER), inventoryController.createInventoryItem);
+router.patch('/:id', authorize(ROLES.MUNICIPALITY_ADMIN,ROLES.USER), inventoryController.updateInventory);
+router.delete('/:id', authorize(ROLES.MUNICIPALITY_ADMIN,ROLES.USER), inventoryController.deleteInventory);
 
 module.exports = router;

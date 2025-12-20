@@ -60,11 +60,8 @@ const populateRoles = () => {
   if (!roleSelect) return;
 
   const roles = [
-    { id: 1, name: 'Belediye Yöneticisi' },
-    { id: 2, name: 'Taşınır Kayıt' },
-    { id: 3, name: 'Taşınır Kontrol' },
-    { id: 4, name: 'Birim Sorumlusu' },
-    { id: 5, name: 'Kullanıcı' },
+    { id: 2, name: 'Yönetici' },
+    { id: 3, name: 'Kullanıcı' },
   ];
 
   roleSelect.replaceChildren();

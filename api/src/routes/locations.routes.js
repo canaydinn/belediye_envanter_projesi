@@ -11,6 +11,7 @@ router.get('/stats', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), locationsC
 router.get('/type-distribution', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), locationsController.getLocationTypeDistribution);
 router.get('/', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), locationsController.listLocations);
 router.get('/:id', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), locationsController.getLocationById);
+router.get('/search', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), locationsController.listLocationsFiltered);
 
 // WRITE (admin)
 router.post('/', authorize(ROLES.MUNICIPALITY_ADMIN), locationsController.createLocation);

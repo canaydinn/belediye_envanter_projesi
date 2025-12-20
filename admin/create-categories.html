@@ -199,7 +199,7 @@
             <footer class="content-footer footer bg-footer-theme">
               <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
                 <div class="mb-2 mb-md-0">
-                  © <script>document.write(new Date().getFullYear());</script> Envanter360
+                  © <span data-footer-year></span> Envanter360
                 </div>
                 <div>
                   <a href="pages-help-center-landing.html" class="footer-link me-4">Destek</a>
@@ -215,6 +215,7 @@
       </div>
     </div>
 
+    <!-- Core JS -->
     <script src="./assets/vendor/libs/jquery/jquery.js"></script>
     <script src="./assets/vendor/libs/popper/popper.js"></script>
     <script src="./assets/vendor/js/bootstrap.js"></script>
@@ -224,7 +225,13 @@
     <script src="./assets/vendor/libs/i18n/i18n.js"></script>
     <script src="./assets/vendor/libs/typeahead-js/typeahead.js"></script>
     <script src="./assets/vendor/js/menu.js"></script>
+
+    <!-- Main JS -->
     <script src="./assets/js/main.js"></script>
+
+    <!-- Page JS -->
     <script type="module" src="./assets/js/app/create-categories.js"></script>
+    <script src="../admin/assets/js/app/logout.js"></script>
+    <script src="../admin/assets/js/app/footer-year.js"></script>
   </body>
 </html>

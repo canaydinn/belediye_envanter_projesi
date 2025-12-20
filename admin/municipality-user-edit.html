@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="tr" class="light-style layout-navbar-fixed layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="/admin/assets/" data-template="vertical-menu-template">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Kullanıcı Güncelle | Envanter360</title>
+<!-- Include Vuexy core CSS and vendor CSS here -->
+    <link rel="icon" type="image/x-icon" href="../admin/assets/img/favicon/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/tabler-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/flag-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../admin/assets/css/demo.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/node-waves/node-waves.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/typeahead-js/typeahead.css" />
+  
+  </head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Sidebar Navigation -->
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+            <a href="index.html" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                 <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z"
+                    fill="#7367F0" />
+                  <path
+                    opacity="0.06"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z"
+                    fill="#161616" />
+                  <path
+                    opacity="0.06"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z"
+                    fill="#161616" />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z"
+                    fill="#7367F0" />
+                </svg>
+              </span>
+              <span class="app-brand-text demo menu-text fw-bold">Envanter360</span>
+            </a>
+
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+              <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+              <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
+            </a>
+          </div>
+
+          <div class="menu-inner-shadow"></div>
+
+          <ul class="menu-inner py-1">
+            <li class="menu-item">
+              <a href="/admin/dashboard.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                <div>Dashboard</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="/admin/assets.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-archive"></i>
+                <div>Varlıklar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="/admin/assets-movements.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-arrows-left-right"></i>
+                <div>Varlık Hareketleri</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="/admin/locations.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-map-pin"></i>
+                <div>Lokasyonlar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="/admin/categories.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-folders"></i>
+                <div>Kategoriler</div>
+              </a>
+            </li>
+            <li class="menu-item active">
+              <a href="/admin/users.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-users"></i>
+                <div>Kullanıcılar</div>
+              </a>
+            </li>
+          </ul>
+        </aside>
+        <!-- /Sidebar Navigation -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+              <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                <i class="ti ti-menu-2 ti-sm"></i>
+              </a>
+            </div>
+            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                      <img src="../admin/assets/img/avatars/1.png" alt="User" class="h-auto rounded-circle" />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar avatar-online">
+                              <img src="../admin/assets/img/avatars/1.png" alt="User" class="h-auto rounded-circle" />
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <span class="fw-semibold d-block">Belediye Yöneticisi</span>
+                            <small class="text-muted" id="navbarMunicipalityName"></small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li><div class="dropdown-divider"></div></li>
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <i class="ti ti-user-check me-2 ti-sm"></i>
+                        <span class="align-middle">Profil</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <i class="ti ti-settings me-2 ti-sm"></i>
+                        <span class="align-middle">Ayarlar</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <i class="ti ti-logout me-2 ti-sm"></i>
+                        <span class="align-middle">Çıkış</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <!-- /Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Page Header -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="row">
+                <div class="col-12">
+                  <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                      <h4 class="fw-bold mb-1">Kullanıcı Bilgilerini Güncelle</h4>
+                      <p class="text-muted mb-0">Düzenleme yapmak için formu doldurun.</p>
+                    </div>
+                    <a href="/admin/users.html" class="btn btn-outline-secondary">Listeye Dön</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12">
+                  <div class="alert d-none" role="alert" data-role="feedback"></div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12">
+                  <form id="userUpdateForm" class="needs-validation" novalidate>
+                    <div class="alert alert-success d-none" role="alert" id="success-message"></div>
+                    <div class="alert alert-danger d-none" role="alert" id="error-message"></div>
+
+                    <!-- Genel Bilgiler -->
+                    <div class="card mb-4">
+                      <div class="card-header d-flex justify-content-between align-items-start flex-wrap gap-2">
+                        <div>
+                          <h5 class="card-title mb-1">Genel Bilgiler</h5>
+                          <small class="text-muted">Kullanıcının temel bilgilerini güncelleyin.</small>
+                        </div>
+                        <span class="badge bg-label-info" data-role="user-id">-</span>
+                      </div>
+                      <div class="card-body">
+                        <div class="row g-3">
+                          <div class="col-md-6">
+                            <label for="username" class="form-label">Kullanıcı Adı</label>
+                            <input type="text" class="form-control" id="username" name="username" readonly disabled />
+                            <small class="text-muted">Kullanıcı adı değiştirilemez.</small>
+                          </div>
+                          <div class="col-md-6">
+                            <label for="email" class="form-label">E-posta *</label>
+                            <input type="email" class="form-control" id="email" name="email" required />
+                            <div class="invalid-feedback">Geçerli bir e-posta adresi giriniz.</div>
+                          </div>
+                          <div class="col-md-6">
+                            <label for="full_name" class="form-label">Ad Soyad *</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Örn: Ahmet Yılmaz" required />
+                            <div class="invalid-feedback">Bu alan zorunludur.</div>
+                          </div>
+                          <div class="col-md-6">
+                            <label for="phone" class="form-label">Telefon</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Örn: 0555 123 45 67" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Rol ve Durum -->
+                    <div class="card mb-4">
+                      <div class="card-header">
+                        <h5 class="card-title mb-1">Rol ve Durum</h5>
+                        <small class="text-muted">Kullanıcının rolünü ve aktiflik durumunu belirleyin.</small>
+                      </div>
+                      <div class="card-body">
+                        <div class="row g-3">
+                          <div class="col-md-6">
+                            <label for="role_id" class="form-label">Rol *</label>
+                            <select class="form-select" id="role_id" name="role_id" required>
+                              <option value="">Rol seçin</option>
+                              <option value="2">Taşınır Kayıt Yetkilisi</option>
+                              <option value="3">Taşınır Kontrol Yetkilisi</option>
+                              <option value="4">Birim Sorumlusu</option>
+                              <option value="5">Kullanıcı</option>
+                            </select>
+                            <div class="invalid-feedback">Rol seçilmelidir.</div>
+                          </div>
+                          <div class="col-md-6">
+                            <label for="is_active" class="form-label">Durum</label>
+                            <select class="form-select" id="is_active" name="is_active">
+                              <option value="true">Aktif</option>
+                              <option value="false">Pasif</option>
+                            </select>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-check form-switch mt-4">
+                              <input class="form-check-input" type="checkbox" role="switch" id="email_verified" name="email_verified" />
+                              <label class="form-check-label" for="email_verified">E-posta doğrulandı</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Form Butonları -->
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                      <a href="/admin/users.html" class="btn btn-outline-secondary">İptal</a>
+                      <button type="submit" class="btn btn-primary" data-role="update-button">Güncelle</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- /Page Header -->
+            <div class="text-center text-muted mt-4">Envanter360 • Belediye Envanter Yönetim Sistemi</div>
+            </div>
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!--/ Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    <!-- Include Vuexy core JS and vendor JS here -->
+     <script src="/admin/assets/vendor/js/helpers.js"></script>
+
+<script src="/admin/assets/js/config.js"></script>
+
+<script src="/admin/assets/vendor/libs/jquery/jquery.js"></script>
+<script src="/admin/assets/vendor/libs/popper/popper.js"></script>
+<script src="/admin/assets/vendor/js/bootstrap.js"></script>
+<script src="/admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="/admin/assets/vendor/libs/node-waves/node-waves.js"></script>
+<script src="/admin/assets/vendor/libs/hammer/hammer.js"></script>
+<script src="/admin/assets/vendor/libs/i18n/i18n.js"></script>
+<script src="/admin/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+<script src="/admin/assets/vendor/js/menu.js"></script>
+
+<script src="/admin/assets/js/main.js"></script>
+
+  </body>
+  
+  <!-- Page JS -->
+  <script src="/admin/assets/js/app/api.js"></script>
+  <script src="/admin/assets/js/app/municipality-user-edit.js"></script>
+  <script src="/admin/assets/js/app/logout.js"></script>
+
+</html>
+

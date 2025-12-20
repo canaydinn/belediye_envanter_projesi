@@ -12,7 +12,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Gösterge Paneli | Envanter360</title>
+    <title>Envanter Hareketi Yarat | Envanter360</title>
 
     <!-- Include Vuexy core CSS and vendor CSS here -->
     <link rel="icon" type="image/x-icon" href="../admin/assets/img/favicon/favicon.ico" />
@@ -43,13 +43,31 @@
             <a href="index.html" class="app-brand-link">
               <span class="app-brand-logo demo">
                 <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M0.0017 0V6.854C0.0017 6.854 -0.1332 9.012 1.9809 10.839L13.6912 21.9964L19.7809 21.9181L18.8042 9.8825L16.4951 7.1729L9.238 0H0.0017Z" fill="#7367F0" />
-                  <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd" d="M7.6982 16.4364L12.5199 3.2370L16.5541 7.2560L7.6982 16.4364Z" fill="#161616" />
-                  <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd" d="M8.0775 15.9175L13.9419 4.6399L16.5849 7.2848L8.0775 15.9175Z" fill="#161616" />
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M7.7730 16.3566L23.6563 0H32V6.8838C32 6.8838 31.8262 9.1784 30.6591 10.4057L19.7824 22H13.6938L7.7730 16.3566Z" fill="#7367F0" />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z"
+                    fill="#7367F0" />
+                  <path
+                    opacity="0.06"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z"
+                    fill="#161616" />
+                  <path
+                    opacity="0.06"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z"
+                    fill="#161616" />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z"
+                    fill="#7367F0" />
                 </svg>
               </span>
-              <span class="app-brand-text demo menu-text fw-bold ms-1">Belediye Envanter</span>
+              <span class="app-brand-text demo menu-text fw-bold ms-1">Envanter 360</span>
             </a>
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
               <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
@@ -57,39 +75,39 @@
             </a>
           </div>
           <div class="menu-inner-shadow"></div>
-          <ul class="menu-inner py-1 navigation navigation-main">
-            <li class="menu-item active">
-              <a href="../admin/dashboard.html" class="menu-link">
+          <ul class="menu-inner py-1">
+            <li class="menu-item">
+              <a href="/admin/dashboard.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div>Dashboard</div>
               </a>
             </li>
-            <li class="menu-item">
-              <a href="../admin/assets.html" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-building"></i>
+            <li class="menu-item ">
+              <a href="/admin/assets.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-archive"></i>
                 <div>Varlıklar</div>
               </a>
             </li>
-            <li class="menu-item">
-              <a href="../admin/asset-movements.html" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-arrows-exchange"></i>
+            <li class="menu-item active">
+              <a href="/admin/assets-movements.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-arrows-left-right"></i>
                 <div>Varlık Hareketleri</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="../admin/locations.html" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-map"></i>
+              <a href="/admin/locations.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-map-pin"></i>
                 <div>Lokasyonlar</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="../admin/categories.html" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-category"></i>
+              <a href="/admin/categories.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-folders"></i>
                 <div>Kategoriler</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="../admin/users.html" class="menu-link">
+              <a href="/admin/users.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-users"></i>
                 <div>Kullanıcılar</div>
               </a>
@@ -393,570 +411,386 @@
         <div class="toast-body">Lütfen formdaki zorunlu alanları kontrol edin.</div>
       </div>
     </div>
-   <script>
-      const API_BASE_URL = 'http://localhost:4000';
-
-document.addEventListener('DOMContentLoaded', () => {
-  populateDepartments();
-  populateLocations();
-  populateOwners();
-});
-
-const initMovementForm = () => {
-  const assetSummary = {};
-
-  const movementForm = document.getElementById('movementForm');
-  const assetSelect = document.getElementById('assetSelect');
-  const movementDate = document.getElementById('movementDate');
-  const movementTypeFeedback = document.getElementById('movementTypeFeedback');
-
-  const newDept = document.getElementById('newDept');
-  const newLocation = document.getElementById('newLocation');
-  const newOwner = document.getElementById('newOwner');
-
-  const summaryName = document.getElementById('summaryName');
-  const summaryCode = document.getElementById('summaryCode');
-  const summaryDept = document.getElementById('summaryDept');
-  const summaryLocation = document.getElementById('summaryLocation');
-  const summaryOwner = document.getElementById('summaryOwner');
-  const recentMovementsBody = document.getElementById('recentMovementsBody');
-
-  const currentDept = document.getElementById('currentDept');
-  const currentLocation = document.getElementById('currentLocation');
-  const currentOwner = document.getElementById('currentOwner');
-
-  if (!movementForm || !assetSelect) {
-    console.warn('movementForm veya assetSelect bulunamadı, hareket formu başlatılamadı.');
-    return;
-  }
-  const renderRecentMovements = (movements = []) => {
-  if (!recentMovementsBody) return;
-
-  if (!Array.isArray(movements) || movements.length === 0) {
-    recentMovementsBody.innerHTML =
-      '<tr><td colspan="4" class="text-center text-muted">Henüz hareket kaydı yok.</td></tr>';
-    return;
-  }
-
-  const rows = movements
-    .map((m) => {
-      const date = m.movement_date
-        ? new Date(m.movement_date).toLocaleDateString('tr-TR')
-        : '-';
-
-      // movement_type'i Türkçeleştirmek istersen burada map edebilirsin
-      const typeLabel = (() => {
-        switch (m.movement_type) {
-          case 'department': return 'Birim Değişikliği';
-          case 'location': return 'Lokasyon Değişikliği';
-          case 'owner': return 'Sorumlu Kişi';
-          case 'maintenance': return 'Bakım / Onarım';
-          case 'decommission': return 'Hurdaya Ayırma';
-          default: return m.movement_type || '-';
-        }
-      })();
-
-      const changeText =
-        m.to_department_name ||
-        m.to_location_name ||
-        m.notes ||
-        '-';
-
-      const userName = m.performed_by_name || '-';
-
-      return `
-        <tr>
-          <td>${date}</td>
-          <td>${typeLabel}</td>
-          <td>${changeText}</td>
-          <td>${userName}</td>
-        </tr>
-      `;
-    })
-    .join('');
-
-  recentMovementsBody.innerHTML = rows;
-};
-
-const loadRecentMovements = async () => {
-  if (recentMovementsBody) {
-    recentMovementsBody.innerHTML =
-      '<tr><td colspan="4" class="text-center text-muted">Hareketler yükleniyor...</td></tr>';
-  }
-
-  const token = localStorage.getItem('token');
-
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/asset-movements/recent`, {
-      method: 'GET',
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-      credentials: 'include',
-    });
-
-    const data = await response.json().catch(() => []);
-
-    if (!response.ok) {
-      throw new Error(data?.message || 'Hareketler alınamadı');
-    }
-
-    renderRecentMovements(Array.isArray(data) ? data : []);
-  } catch (error) {
-    console.error('Son hareketler alınamadı:', error);
-    if (recentMovementsBody) {
-      recentMovementsBody.innerHTML =
-        '<tr><td colspan="4" class="text-center text-danger">Hareketler yüklenemedi.</td></tr>';
-    }
-  }
-};
-          loadRecentMovements()
-  // 1) Yardımcı: seçili varlığı özet alanlara yazar
-  const setSelectedAsset = (assetId) => {
-    const selected = assetSummary[assetId];
-    if (!selected) return;
-
-    if (summaryName) summaryName.textContent = selected.name;
-    if (summaryCode) summaryCode.textContent = `Kod: ${selected.code}`;
-    if (summaryDept) summaryDept.textContent = selected.dept;
-    if (summaryLocation) summaryLocation.textContent = selected.location;
-    if (summaryOwner) summaryOwner.textContent = selected.owner;
-
-    if (currentDept) currentDept.value = selected.dept;
-    if (currentLocation) currentLocation.value = selected.location;
-    if (currentOwner) currentOwner.value = selected.owner;
-  };
-
-  // 2) Yardımcı: varlıkları API'den çeker ve select'i doldurur
-  const loadAssets = async () => {
-    assetSelect.innerHTML = '<option value="" selected disabled>Varlık seçiniz</option>';
-
-    const token = localStorage.getItem('token');
-    const headers = {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    };
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/assets`, {
-        method: 'GET',
-        headers,
-        credentials: 'include',
-      });
-
-      const assets = await response.json().catch(() => []);
-
-      if (!response.ok) {
-        throw new Error(assets?.message || 'Varlık listesi alınamadı');
-      }
-
-      if (!Array.isArray(assets) || !assets.length) {
-        assetSelect.innerHTML =
-          '<option value="" selected disabled>Henüz tanımlı varlık bulunamadı</option>';
-        return;
-      }
-
-      const optionMarkup = assets
-        .map((asset) => {
-          const assetId = asset?.id ?? asset?.asset_code;
-          if (!assetId) return '';
-
-          assetSummary[assetId] = {
-            name: asset?.name || 'Varlık',
-            code: asset?.asset_code || '—',
-            dept: asset?.department_name || '—',
-            location: asset?.location_name || '—',
-            owner: asset?.full_name || '—',
-          };
-
-          const codeLabel =
-            assetSummary[assetId].code !== '—' ? ` - ${assetSummary[assetId].code}` : '';
-
-          return `<option value="${assetId}"
-                    data-dept="${assetSummary[assetId].dept}"
-                    data-location="${assetSummary[assetId].location}"
-                    data-owner="${assetSummary[assetId].owner}">
-                    ${assetSummary[assetId].name}${codeLabel}
-                  </option>`;
-        })
-        .filter(Boolean)
-        .join('');
-
-      assetSelect.insertAdjacentHTML('beforeend', optionMarkup);
-
-      const firstAssetId = assets[0]?.id ?? assets[0]?.asset_code;
-      if (firstAssetId) {
-        assetSelect.value = String(firstAssetId);
-        setSelectedAsset(firstAssetId);
-      }
-    } catch (error) {
-      console.error('Varlık listesi alınamadı:', error);
-      assetSelect.innerHTML =
-        '<option value="" selected disabled>Varlıklar yüklenemedi</option>';
-    }
-  };
-
-  // Küçük yardımcı: toast göster
-  const showToast = (el) => {
-    if (!el || !window.bootstrap?.Toast) return;
-    const toast = new bootstrap.Toast(el);
-    toast.show();
-  };
-
-  // 3) Yardımcı: form submit handler
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const movementTypeSelected = movementForm.querySelector(
-      'input[name="movementType"]:checked'
-    );
-
-    if (!movementTypeSelected) {
-      if (movementTypeFeedback) movementTypeFeedback.classList.remove('d-none');
-    } else {
-      if (movementTypeFeedback) movementTypeFeedback.classList.add('d-none');
-    }
-
-    const requiresOwner = movementTypeSelected && movementTypeSelected.value === 'owner';
-    const requiresDept = movementTypeSelected && movementTypeSelected.value === 'department';
-    const requiresLocation =
-      movementTypeSelected && movementTypeSelected.value === 'location';
-
-    if (newOwner) {
-      newOwner.required = requiresOwner;
-      const feedbackEl = newOwner.parentElement?.querySelector('.invalid-feedback');
-      if (feedbackEl) {
-        feedbackEl.textContent = requiresOwner
-          ? 'Yeni sorumlu kişiyi seçiniz.'
-          : 'Bu alan zorunlu değil.';
-      }
-    }
-
-    if (newDept) {
-      newDept.required = requiresDept;
-      const feedbackEl = newDept.parentElement?.querySelector('.invalid-feedback');
-      if (feedbackEl) {
-        feedbackEl.textContent = requiresDept
-          ? 'Yeni birimi seçiniz.'
-          : 'Bu alan zorunlu değil.';
-      }
-    }
-
-    if (newLocation) {
-      newLocation.required = requiresLocation;
-      const feedbackEl = newLocation.parentElement?.querySelector('.invalid-feedback');
-      if (feedbackEl) {
-        feedbackEl.textContent = requiresLocation
-          ? 'Yeni lokasyonu seçiniz.'
-          : 'Bu alan zorunlu değil.';
-      }
-    }
-
-    movementForm.classList.add('was-validated');
-    const isValid = movementForm.checkValidity() && !!movementTypeSelected;
-
-    const toastEl = document.getElementById(isValid ? 'toastSuccess' : 'toastError');
-
-    // Geçersiz ise: hata tostu göster, kaydetme
-    if (!isValid) {
-      showToast(toastEl);
-      return;
-    }
-
-    const submitButton = movementForm.querySelector('button[type="submit"]');
-    const originalBtnText = submitButton?.innerHTML;
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.innerHTML =
-        '<span class="spinner-border spinner-border-sm me-2"></span>Kaydediliyor...';
-    }
-
-    const payload = {
-      asset_id: assetSelect.value,
-      movement_type: movementTypeSelected.value,
-      movement_date: movementDate?.value,
-    };
-
-    if (movementTypeSelected.value === 'department' && newDept?.value) {
-      payload.to_department_id = newDept.value;
-    }
-
-    if (movementTypeSelected.value === 'location' && newLocation?.value) {
-      payload.to_location_id = newLocation.value;
-    }
-
-    const descriptionField = document.getElementById('description');
-    if (descriptionField?.value?.trim()) {
-      payload.notes = descriptionField.value.trim();
-    }
-
-    const token = localStorage.getItem('token');
-    const headers = {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    };
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/asset-movements`, {
-        method: 'POST',
-        headers,
-        credentials: 'include',
-        body: JSON.stringify(payload),
-      });
-
-      const result = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        const message = result?.message || 'Hareket kaydedilemedi';
-        throw new Error(message);
-      }
-
-      showToast(document.getElementById('toastSuccess'));
-      movementForm.reset();
-      movementForm.classList.remove('was-validated');
-
-      if (movementDate) {
-        movementDate.value = new Date().toISOString().split('T')[0];
-      }
-
-      const firstAssetId = Object.keys(assetSummary)[0];
-      if (firstAssetId && assetSelect) {
-        assetSelect.value = firstAssetId;
-        setSelectedAsset(firstAssetId);
-      }
-    } catch (error) {
-      console.error('Varlık hareketi kaydedilemedi:', error);
-      const errorToast = document.getElementById('toastError');
-      const toastBody = errorToast?.querySelector('.toast-body');
-      if (toastBody && error?.message) {
-        toastBody.textContent = error.message;
-      }
-      showToast(errorToast);
-    } finally {
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.innerHTML = originalBtnText;
-      }
-    }
-  }; // ← handleSubmit burada kapanıyor ✅
-
-  // Başlangıç işleri
-  loadAssets();
-
-  if (movementDate) {
-    movementDate.value = new Date().toISOString().split('T')[0];
-  }
-
-  assetSelect.addEventListener('change', (event) => {
-    setSelectedAsset(event.target.value);
-  });
-
-  movementForm.addEventListener('submit', handleSubmit);
-}; // ← initMovementForm burada kapanıyor ✅
-
-   initMovementForm();
-
-
-  /************************************************************
-   * 7) DEPARTMAN SELECT'İNİ DOLDURAN BAĞIMSIZ BLOK
-   ************************************************************/
-
-  const populateDepartments = async () => {
-  const selectEl = document.getElementById('newDept');
-  if (!selectEl) return;
-
-  // Başlangıç: "yükleniyor" durumu
-  selectEl.innerHTML = '';
-  selectEl.appendChild(
-    new Option('Birimler yükleniyor...', '', true, true)
-  );
-  selectEl.disabled = true;
-
-  try {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${API_BASE_URL}/api/departments`, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    });
-
-    if (!response.ok) throw new Error('API isteği başarısız');
-
-    const departments = await response.json();
-    const list = Array.isArray(departments) ? departments : [];
-
-    // Select'i sıfırla
-    selectEl.innerHTML = '';
-    selectEl.appendChild(new Option('Seçiniz', '', true, true));
-
-    list.forEach((dept) => {
-      selectEl.appendChild(
-        new Option(
-          `${dept.name}${dept.code ? ` (${dept.code})` : ''}`,
-          dept.id
-        )
-      );
-    });
-
-    selectEl.disabled = list.length === 0;
-
-    if (list.length === 0) {
-      selectEl.appendChild(
-        new Option('Herhangi bir birim bulunamadı', '', true, false)
-      );
-    }
-  } catch (error) {
-    console.error('Birimler yüklenirken hata oluştu:', error);
-
-    // Hata durumunda tek mesaj
-    selectEl.innerHTML = '';
-    selectEl.appendChild(
-      new Option('Birimler yüklenemedi', '', true, true)
-    );
-    selectEl.disabled = true;
-  }
-};
-
-populateDepartments();
-
-   /************************************************************
-   * 8) LOKASYON SELECT'İNİ DOLDURAN BLOK
-   ************************************************************/
- const populateLocations = async () => {
-  const selectEl = document.getElementById('newLocation');
-  if (!selectEl) return;
-
-  // Varsayılan "Seçiniz" opsiyonu
-  const createDefaultOption = () => new Option('Seçiniz', '', true, true);
-
-  const token = localStorage.getItem('token');
-
-  // Token yoksa: giriş uyarısı göster ve çık
-  if (!token) {
-    selectEl.innerHTML = '';
-    selectEl.appendChild(createDefaultOption());
-    selectEl.appendChild(
-      new Option('Önce giriş yapmalısınız', '', true, false)
-    );
-    return;
-  }
-
-  // Yükleniyor durumu
-  selectEl.innerHTML = '';
-  selectEl.appendChild(
-    new Option('Lokasyonlar yükleniyor...', '', true, true)
-  );
-
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/locations?is_active=true`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Lokasyonlar yüklenemedi. Status: ${response.status}`);
-    }
-
-    const payload = await response.json();
-    const locations = Array.isArray(payload?.data)
-      ? payload.data
-      : Array.isArray(payload)
-      ? payload
-      : [];
-
-    // Gelen lokasyon verilerini select'e yazma
-    selectEl.innerHTML = '';
-    selectEl.appendChild(createDefaultOption());
-
-    locations.forEach((loc) => {
-      selectEl.appendChild(
-        new Option(
-          loc.name || loc.code || `Lokasyon #${loc.id}`,
-          loc.id
-        )
-      );
-    });
-
-    if (locations.length === 0) {
-      selectEl.appendChild(
-        new Option('Aktif lokasyon bulunamadı', '', true, false)
-      );
-    }
-  } catch (error) {
-    console.error('Lokasyon listesi alınırken hata oluştu:', error);
-    selectEl.innerHTML = '';
-    selectEl.appendChild(createDefaultOption());
-    selectEl.appendChild(
-      new Option('Lokasyonlar yüklenemedi', '', true, false)
-    );
-  }
-};
-
-populateLocations();
-
-        /************************************************************
-   * 9) KULLANICI (OWNER) SELECT'İNİ DOLDURAN BLOK
-   ************************************************************/
-       const populateOwners = async () => {
-  const selectEl = document.getElementById('newOwner');
-  if (!selectEl) return;
-
-  const placeholderOption = '<option value="" disabled selected>Seçiniz</option>';
-  selectEl.innerHTML = placeholderOption;
-
-  try {
-    const token = localStorage.getItem('token');
-
-    const response = await fetch(`${API_BASE_URL}/api/users`, {
-      method: 'GET',
-      headers: token
-        ? {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          }
-        : { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    });
-
-    // Hata durumunda önce logla
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => '');
-      console.error('Users response status:', response.status);
-      console.error('Users response body:', errorText);
-      throw new Error('Kullanıcılar yüklenemedi');
-    }
-
-    const users = await response.json();
-
-    const options = Array.isArray(users)
-      ? users
-          .filter((user) => user?.full_name)
-          .map(
-            (user) => `<option value="${user.full_name}">${user.full_name}</option>`
-          )
-          .join('')
-      : '';
-
-    selectEl.innerHTML = placeholderOption + options;
-  } catch (error) {
-    console.error('Sorumlu kişiler yüklenemedi:', error);
-    selectEl.innerHTML =
-      placeholderOption + '<option disabled>Kullanıcı listesi alınamadı</option>';
-  }
-};
-
-populateOwners();
-
-</script>
+  
 <!-- Vendor JS -->
 <script src="assets/vendor/libs/jquery/jquery.js"></script>
 <script src="assets/vendor/js/bootstrap.js"></script>
 <script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 <script src="assets/vendor/libs/node-waves/node-waves.js"></script>
-
+<script src="../admin/assets/js/app/logout.js"></script>
 
 <!-- Vuexy core JS -->
 <script src="assets/vendor/js/menu.js"></script>
 <script src="assets/js/main.js"></script>
+<script>
+    /************************************************************
+     * 0) ORTAK AYARLAR + YARDIMCI FONKSİYONLAR
+     ************************************************************/
+    const API_BASE_URL = 'http://localhost:4000';
 
+    // Cookie standardı: credentials include.
+    // Eğer illa Bearer token da olsun isterseniz alttaki fallback aktif.
+    const getToken = () => localStorage.getItem('token'); // fallback
+    const buildAuthHeaders = () => {
+      const token = getToken();
+      return token ? { Authorization: `Bearer ${token}` } : {};
+    };
+
+    const authFetch = (path, options = {}) => {
+      const headers = {
+        ...(options.headers || {}),
+        // fallback token:
+        ...buildAuthHeaders(),
+      };
+
+      return fetch(`${API_BASE_URL}${path}`, {
+        credentials: 'include',
+        ...options,
+        headers,
+      });
+    };
+
+    const parseJsonSafe = async (res) => {
+      try { return await res.json(); } catch { return null; }
+    };
+
+    const setSelectState = (selectEl, { text, disabled = true }) => {
+      if (!selectEl) return;
+      selectEl.replaceChildren(new Option(text, '', true, true));
+      selectEl.disabled = disabled;
+    };
+
+    const fillSelect = (selectEl, { placeholder = 'Seçiniz', items = [], getValue, getLabel }) => {
+      if (!selectEl) return;
+      selectEl.replaceChildren(new Option(placeholder, '', true, true));
+      items.forEach((item) => {
+        const v = getValue(item);
+        const l = getLabel(item);
+        if (v === undefined || v === null || v === '' || !l) return;
+        selectEl.add(new Option(l, String(v)));
+      });
+      selectEl.disabled = items.length === 0;
+      if (items.length === 0) {
+        selectEl.add(new Option('Kayıt bulunamadı', '', true, false));
+        selectEl.disabled = true;
+      }
+    };
+
+    const handle401 = (selectEl) => {
+      setSelectState(selectEl, { text: 'Oturum yok. Lütfen giriş yapın.', disabled: true });
+    };
+
+    /************************************************************
+     * 1) SELECT DOLDURMA FONKSİYONLARI
+     ************************************************************/
+    const populateDepartments = async () => {
+      const selectEl = document.getElementById('newDept');
+      if (!selectEl) return;
+
+      setSelectState(selectEl, { text: 'Birimler yükleniyor...', disabled: true });
+
+      const res = await authFetch('/api/departments', { method: 'GET' });
+      if (res.status === 401) return handle401(selectEl);
+
+      const data = await parseJsonSafe(res);
+      if (!res.ok) return setSelectState(selectEl, { text: 'Birimler yüklenemedi', disabled: true });
+
+      const list = Array.isArray(data) ? data : [];
+      fillSelect(selectEl, {
+        placeholder: 'Seçiniz',
+        items: list,
+        getValue: (d) => d.id,
+        getLabel: (d) => `${d.name}${d.code ? ` (${d.code})` : ''}`,
+      });
+    };
+
+    const populateLocations = async () => {
+      const selectEl = document.getElementById('newLocation');
+      if (!selectEl) return;
+
+      setSelectState(selectEl, { text: 'Lokasyonlar yükleniyor...', disabled: true });
+
+      const res = await authFetch('/api/locations?is_active=true', { method: 'GET' });
+      if (res.status === 401) return handle401(selectEl);
+
+      const payload = await parseJsonSafe(res);
+      if (!res.ok) return setSelectState(selectEl, { text: 'Lokasyonlar yüklenemedi', disabled: true });
+
+      const locations = Array.isArray(payload?.data) ? payload.data : Array.isArray(payload) ? payload : [];
+      fillSelect(selectEl, {
+        placeholder: 'Seçiniz',
+        items: locations,
+        getValue: (l) => l.id,
+        getLabel: (l) => l.name || l.code || `Lokasyon #${l.id}`,
+      });
+    };
+
+    const populateUsers = async () => {
+      // hem newOwner hem officer aynı kullanıcı listesini kullanacak
+      const ownerSelect = document.getElementById('newOwner');
+      const officerSelect = document.getElementById('officer');
+
+      if (ownerSelect) setSelectState(ownerSelect, { text: 'Kullanıcılar yükleniyor...', disabled: true });
+      if (officerSelect) setSelectState(officerSelect, { text: 'Kullanıcılar yükleniyor...', disabled: true });
+
+      // Sizin routes dosyanıza göre: /api/users/detailed mevcut
+      const res = await authFetch('/api/users/detailed', { method: 'GET' });
+      if (res.status === 401) {
+        if (ownerSelect) handle401(ownerSelect);
+        if (officerSelect) handle401(officerSelect);
+        return;
+      }
+
+      const users = await parseJsonSafe(res);
+      if (!res.ok) {
+        if (ownerSelect) setSelectState(ownerSelect, { text: 'Kullanıcılar yüklenemedi', disabled: true });
+        if (officerSelect) setSelectState(officerSelect, { text: 'Kullanıcılar yüklenemedi', disabled: true });
+        return;
+      }
+
+      const list = Array.isArray(users) ? users : [];
+
+      // Owner: zorunlu alan gibi düşünüyorsunuz; value=id olmalı
+      if (ownerSelect) {
+        fillSelect(ownerSelect, {
+          placeholder: 'Seçiniz',
+          items: list,
+          getValue: (u) => u.id,
+          getLabel: (u) => u.full_name || u.email,
+        });
+      }
+
+      // Officer: opsiyonel; value=id
+      if (officerSelect) {
+        fillSelect(officerSelect, {
+          placeholder: 'Seçiniz',
+          items: list,
+          getValue: (u) => u.id,
+          getLabel: (u) => u.full_name || u.email,
+        });
+        officerSelect.disabled = false;
+      }
+    };
+
+   const populateAssets = async () => {
+  const selectEl = document.getElementById('assetSelect');
+  if (!selectEl) return;
+
+  // 1) Loading state (kesin disabled)
+  setSelectState(selectEl, { text: 'Varlıklar yükleniyor...', disabled: true });
+
+  try {
+    // 2) API call (cookie ile)
+    const res = await authFetch('/api/assets', { method: 'GET' });
+
+    // 3) Unauthorized
+    if (res.status === 401) {
+      handle401(selectEl);               // genelde disabled bırakır
+      selectEl.disabled = true;
+      return;
+    }
+
+    // 4) Parse
+    const assets = await parseJsonSafe(res);
+
+    // 5) Not OK
+    if (!res.ok) {
+      setSelectState(selectEl, { text: `Varlıklar yüklenemedi (HTTP ${res.status})`, disabled: true });
+      return;
+    }
+
+    // 6) Normalize list
+    const list = Array.isArray(assets) ? assets : [];
+
+    // 7) Empty list
+    if (list.length === 0) {
+      setSelectState(selectEl, { text: 'Henüz tanımlı varlık bulunamadı', disabled: true });
+      return;
+    }
+
+    // 8) Fill options
+    fillSelect(selectEl, {
+      placeholder: 'Varlık seçiniz',
+      items: list,
+      getValue: (a) => a?.id ?? a?.asset_code,
+      getLabel: (a) => {
+        const name = a?.name || 'Varlık';
+        const code = a?.asset_code ? ` - ${a.asset_code}` : '';
+        return `${name}${code}`;
+      },
+    });
+
+    // 9) KRİTİK: aktif hale getir
+    selectEl.disabled = false;
+
+    // 10) URL'den asset_id parametresini oku ve varlığı otomatik seç
+    const urlParams = new URLSearchParams(window.location.search);
+    const assetIdFromUrl = urlParams.get('asset_id');
+    
+    if (assetIdFromUrl) {
+      // Varlığı bul ve seç
+      const assetToSelect = list.find(a => String(a.id) === String(assetIdFromUrl));
+      if (assetToSelect) {
+        selectEl.value = String(assetToSelect.id);
+        // Change event'ini tetikle ki mevcut bilgiler (birim, lokasyon, sorumlu) yüklensin
+        selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+      } else {
+        console.warn(`Asset ID ${assetIdFromUrl} bulunamadı`);
+      }
+    }
+
+  } catch (err) {
+    console.error('populateAssets error:', err);
+    setSelectState(selectEl, { text: 'Varlıklar yüklenemedi (istemci hatası)', disabled: true });
+  }
+};
+
+
+    const loadRecentMovements = async () => {
+      const body = document.getElementById('recentMovementsBody');
+      if (!body) return;
+
+      body.innerHTML = '<tr><td>Hareketler yükleniyor...</td></tr>';
+
+      const res = await authFetch('/api/asset-movements/recent', { method: 'GET' });
+      if (res.status === 401) {
+        body.innerHTML = '<tr><td class="text-danger">Oturum yok. Giriş yapın.</td></tr>';
+        return;
+      }
+
+      const data = await parseJsonSafe(res);
+      if (!res.ok) {
+        body.innerHTML = '<tr><td class="text-danger">Hareketler yüklenemedi.</td></tr>';
+        return;
+      }
+
+      const list = Array.isArray(data) ? data : [];
+      if (!list.length) {
+        body.innerHTML = '<tr><td class="text-muted">Henüz hareket kaydı yok.</td></tr>';
+        return;
+      }
+
+      body.innerHTML = list.map((m) => {
+        const date = m.movement_date ? new Date(m.movement_date).toLocaleDateString('tr-TR') : '-';
+        const user = m.performed_by_name || '-';
+        const type = m.movement_type || '-';
+        const change = m.to_department_name || m.to_location_name || m.notes || '-';
+        return `<tr><td>${date}</td><td>${type}</td><td>${change}</td><td>${user}</td></tr>`;
+      }).join('');
+    };
+
+    /************************************************************
+     * 2) ASSET SELECT CHANGE HANDLER - Mevcut bilgileri doldur
+     ************************************************************/
+    const handleAssetSelectChange = async () => {
+      const assetSelect = document.getElementById('assetSelect');
+      if (!assetSelect) return;
+
+      const assetId = assetSelect.value;
+      if (!assetId) {
+        // Varlık seçimi temizlendiğinde mevcut alanları temizle
+        document.getElementById('currentDept')?.setAttribute('value', '');
+        document.getElementById('currentLocation')?.setAttribute('value', '');
+        document.getElementById('currentOwner')?.setAttribute('value', '');
+        return;
+      }
+
+      try {
+        // Varlık detaylarını API'den çek
+        const res = await authFetch(`/api/assets/${assetId}`, { method: 'GET' });
+        if (res.status === 401) return;
+
+        const asset = await parseJsonSafe(res);
+        if (!res.ok || !asset) {
+          console.error('Varlık detayları yüklenemedi');
+          return;
+        }
+
+        // Mevcut bilgileri doldur
+        const currentDeptEl = document.getElementById('currentDept');
+        const currentLocationEl = document.getElementById('currentLocation');
+        const currentOwnerEl = document.getElementById('currentOwner');
+
+        if (currentDeptEl) {
+          currentDeptEl.value = asset.department_name || '-';
+        }
+        if (currentLocationEl) {
+          currentLocationEl.value = asset.location_name || '-';
+        }
+        if (currentOwnerEl) {
+          currentOwnerEl.value = asset.assigned_user_full_name || asset.assigned_user_name || '-';
+        }
+      } catch (err) {
+        console.error('Varlık detayları yüklenirken hata:', err);
+      }
+    };
+
+    /************************************************************
+     * 3) FORM SUBMIT (opsiyonel örnek)
+     ************************************************************/
+    const initForm = () => {
+      const form = document.getElementById('movementForm');
+      if (!form) return;
+
+      const movementDate = document.getElementById('movementDate');
+      if (movementDate) movementDate.value = new Date().toISOString().split('T')[0];
+
+      // Asset select change event listener
+      const assetSelect = document.getElementById('assetSelect');
+      if (assetSelect) {
+        assetSelect.addEventListener('change', handleAssetSelectChange);
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Örnek payload: siz movement_type radio’larınızdan alıyorsunuz
+        const assetId = document.getElementById('assetSelect')?.value;
+        const toDept = document.getElementById('newDept')?.value;
+        const toLoc = document.getElementById('newLocation')?.value;
+        const toOwner = document.getElementById('newOwner')?.value;
+        const officerId = document.getElementById('officer')?.value;
+
+        const payload = {
+          asset_id: assetId,
+          movement_type: 'department', // örnek
+          movement_date: movementDate?.value,
+          to_department_id: toDept || null,
+          to_location_id: toLoc || null,
+          to_user_id: toOwner || null,
+          performed_by_user_id: officerId ? Number(officerId) : null,
+        };
+
+        const res = await authFetch('/api/asset-movements', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await parseJsonSafe(res);
+        if (!res.ok) {
+          alert(result?.message || 'Kaydedilemedi');
+          return;
+        }
+
+        alert('Başarıyla kaydedildi');
+        await loadRecentMovements();
+      });
+    };
+
+    /************************************************************
+     * 3) SAYFA BAŞLAT
+     ************************************************************/
+    document.addEventListener('DOMContentLoaded', async () => {
+      initForm();
+      await Promise.all([
+        populateAssets(),
+        populateDepartments(),
+        populateLocations(),
+        populateUsers(),
+        loadRecentMovements(),
+      ]);
+    });
+  </script>
   </body>
 </html>
