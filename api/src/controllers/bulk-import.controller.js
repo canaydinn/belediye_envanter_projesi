@@ -36,46 +36,49 @@ exports.bulkImportAssets = async (req, res) => {
       processed: 0
     };
 
-    // Her varlığı işle
-    for (let i = 0; i < assets.length; i++) {
-      const assetData = assets[i];
-      const rowNumber = (chunkNumber - 1) * 1000 + i + 1;
+    // Her chunk'ı tek bir transaction içinde işle (performans için)
+    await knex.transaction(async (trx) => {
+      // Her varlığı işle
+      for (let i = 0; i < assets.length; i++) {
+        const assetData = assets[i];
+        const rowNumber = (chunkNumber - 1) * 1000 + i + 1;
 
-      try {
-        // Varlık verilerini hazırla
-        const preparedAsset = await prepareAssetData(
-          assetData,
-          municipalityId,
-          currentUserId,
-          categoryCache,
-          departmentCache,
-          locationCache,
-          userCache
-        );
+        try {
+          // Varlık verilerini hazırla
+          const preparedAsset = await prepareAssetData(
+            assetData,
+            municipalityId,
+            currentUserId,
+            categoryCache,
+            departmentCache,
+            locationCache,
+            userCache
+          );
 
-        // Validasyon
-        const validation = validateAssetData(preparedAsset);
-        if (!validation.valid) {
+          // Validasyon
+          const validation = validateAssetData(preparedAsset);
+          if (!validation.valid) {
+            results.errors.push({
+              row: rowNumber,
+              message: validation.error
+            });
+            continue;
+          }
+
+          // Varlığı ekle (aynı transaction içinde)
+          await insertAsset(trx, preparedAsset, municipalityId);
+          results.success++;
+          results.processed++;
+        } catch (err) {
+          console.error(`Satır ${rowNumber} işleme hatası:`, err);
           results.errors.push({
             row: rowNumber,
-            message: validation.error
+            message: err.message || 'Bilinmeyen hata'
           });
-          continue;
+          results.processed++;
         }
-
-        // Varlığı ekle
-        await insertAsset(preparedAsset, municipalityId);
-        results.success++;
-        results.processed++;
-      } catch (err) {
-        console.error(`Satır ${rowNumber} işleme hatası:`, err);
-        results.errors.push({
-          row: rowNumber,
-          message: err.message || 'Bilinmeyen hata'
-        });
-        results.processed++;
       }
-    }
+    });
 
     return res.json({
       success: results.success,
@@ -204,61 +207,59 @@ function validateAssetData(asset) {
 /**
  * Varlığı veritabanına ekle
  */
-async function insertAsset(assetData, municipalityId) {
-  return await knex.transaction(async (trx) => {
-    // 1) asset_code olmadan insert
-    const [inserted] = await trx('assets')
-      .insert({
-        asset_code: null, // 2. adımda üretilecek
-        name: assetData.name,
-        description: assetData.description,
-        category_id: assetData.category_id,
-        department_id: assetData.department_id,
-        location_id: assetData.location_id,
-        assigned_user_id: assetData.assigned_user_id,
-        purchase_price: assetData.purchase_price,
-        purchase_date: assetData.purchase_date,
-        serial_number: assetData.serial_number,
-        status: assetData.status,
-        is_qr_tagged: assetData.is_qr_tagged,
-        quantity: assetData.quantity,
-        unit: assetData.unit,
-        tasinir_code: assetData.tasinir_code,
-        asset_type: assetData.asset_type,
-        created_by_user_id: assetData.created_by_user_id,
-        updated_by_user_id: assetData.updated_by_user_id,
-        municipality_id: municipalityId,
-        brand: assetData.brand,
-        model: assetData.model,
-        purchase_id: assetData.purchase_id,
-        warranty_end_date: assetData.warranty_end_date,
-        amortisman_suresi: assetData.amortisman_suresi,
-        hurda_degeri: assetData.hurda_degeri,
-        current_value: assetData.current_value,
-        is_movable: assetData.is_movable,
-        qrcode: null // 2. adımda üretilecek
-      })
-      .returning('*');
+async function insertAsset(trx, assetData, municipalityId) {
+  // 1) asset_code olmadan insert
+  const [inserted] = await trx('assets')
+    .insert({
+      asset_code: null, // 2. adımda üretilecek
+      name: assetData.name,
+      description: assetData.description,
+      category_id: assetData.category_id,
+      department_id: assetData.department_id,
+      location_id: assetData.location_id,
+      assigned_user_id: assetData.assigned_user_id,
+      purchase_price: assetData.purchase_price,
+      purchase_date: assetData.purchase_date,
+      serial_number: assetData.serial_number,
+      status: assetData.status,
+      is_qr_tagged: assetData.is_qr_tagged,
+      quantity: assetData.quantity,
+      unit: assetData.unit,
+      tasinir_code: assetData.tasinir_code,
+      asset_type: assetData.asset_type,
+      created_by_user_id: assetData.created_by_user_id,
+      updated_by_user_id: assetData.updated_by_user_id,
+      municipality_id: municipalityId,
+      brand: assetData.brand,
+      model: assetData.model,
+      purchase_id: assetData.purchase_id,
+      warranty_end_date: assetData.warranty_end_date,
+      amortisman_suresi: assetData.amortisman_suresi,
+      hurda_degeri: assetData.hurda_degeri,
+      current_value: assetData.current_value,
+      is_movable: assetData.is_movable,
+      qrcode: null // 2. adımda üretilecek
+    })
+    .returning('*');
 
-    // 2) Kod üretimi: AS-<municipalityId>-<YY>-<ID>
-    const dateForYear = assetData.purchase_date || new Date();
-    const year = String(new Date(dateForYear).getFullYear()).slice(-2);
-    const paddedId = String(inserted.id).padStart(6, '0');
-    const generatedAssetCode = `AS-${municipalityId}-${year}-${paddedId}`;
+  // 2) Kod üretimi: AS-<municipalityId>-<YY>-<ID>
+  const dateForYear = assetData.purchase_date || new Date();
+  const year = String(new Date(dateForYear).getFullYear()).slice(-2);
+  const paddedId = String(inserted.id).padStart(6, '0');
+  const generatedAssetCode = `AS-${municipalityId}-${year}-${paddedId}`;
 
-    // 3) QR kod oluştur
-    const qrCodeData = generatedAssetCode;
+  // 3) QR kod oluştur
+  const qrCodeData = generatedAssetCode;
 
-    // 4) asset_code ve qrcode update
-    await trx('assets')
-      .where({ id: inserted.id, municipality_id: municipalityId })
-      .update({
-        asset_code: generatedAssetCode,
-        qrcode: qrCodeData
-      });
+  // 4) asset_code ve qrcode update
+  await trx('assets')
+    .where({ id: inserted.id, municipality_id: municipalityId })
+    .update({
+      asset_code: generatedAssetCode,
+      qrcode: qrCodeData
+    });
 
-    return inserted;
-  });
+  return inserted;
 }
 
 /**

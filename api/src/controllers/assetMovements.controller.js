@@ -331,11 +331,23 @@ exports.createAssetMovement = async (req, res) => {
 
     return res.status(201).json(created);
   } catch (err) {
-    console.error('assetMovements.createAssetMovement hatası:', {message: err.message,
-    detail: err.detail,
-    code: err.code,
-    stack: err.stack,});
-    return res.status(500).json({ message: 'Sunucu hatası' });
+    console.error('assetMovements.createAssetMovement hatası:', {
+      message: err.message,
+      detail: err.detail,
+      code: err.code,
+      stack: err.stack,
+    });
+    
+    // Geliştirme ortamında daha detaylı hata mesajı göster
+    const isDevelopment = process.env.NODE_ENV !== 'production';
+    return res.status(500).json({ 
+      message: 'Sunucu hatası',
+      ...(isDevelopment && { 
+        error: err.message,
+        detail: err.detail,
+        code: err.code 
+      })
+    });
   }
 };
 

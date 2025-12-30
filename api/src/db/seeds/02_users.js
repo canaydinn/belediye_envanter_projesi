@@ -44,4 +44,8 @@ exports.seed = async function (knex) {
       municipality_id: 1,
     },
   ]);
+
+  await knex.raw(
+    "SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));"
+  );
 };

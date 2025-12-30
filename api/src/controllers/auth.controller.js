@@ -5,8 +5,15 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const ROLES = require('../constants/roles');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-key';
 const IS_PROD = process.env.NODE_ENV === 'production';
+
+// In production, JWT_SECRET must be explicitly provided – never fall back to a default
+if (IS_PROD && !process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required in production');
+}
+
+// In non-production environments, a dev default is allowed for convenience
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-key';
 
 // Cookie ayarları: Prod ortamında HTTPS + daha sıkı ayar
 const buildAuthCookieOptions = () => {

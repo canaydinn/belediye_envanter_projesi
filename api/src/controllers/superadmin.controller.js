@@ -99,18 +99,16 @@ const updatePayload = {
 };
 const MUNICIPALITY_CODE_PREFIX = 'BLD-';
 
-const generateMunicipalityCode = async () => {
-  const lastMunicipality = await knex('municipalities')
-    .where('code', 'like', `${MUNICIPALITY_CODE_PREFIX}%`)
-    .orderBy('id', 'desc')
-    .first();
-
-  const lastNumber = lastMunicipality?.code?.split('-')[1];
-  const nextNumber = lastNumber && /^\d+$/.test(lastNumber)
-    ? parseInt(lastNumber, 10) + 1
-    : 1;
-
-  return `${MUNICIPALITY_CODE_PREFIX}${String(nextNumber).padStart(3, '0')}`;
+// NOTE:
+// Önceki implementasyon son belediyeyi bulup kodu +1 arttırıyordu.
+// Bu yaklaşım iki superadmin aynı anda belediye oluşturduğunda
+// yarış koşuluna (aynı kodun iki kez üretilmesi) açık olduğu için kaldırıldı.
+//
+// Artık kod üretimi belediyenin kendi "id" değeri üzerinden yapılıyor.
+// "id" zaten PostgreSQL sequence ile üretiliyor ve yarışa dayanıklı.
+// Böylece aynı anda birden fazla createMunicipality çağrısı da güvenli.
+const formatMunicipalityCodeFromId = (id) => {
+  return `${MUNICIPALITY_CODE_PREFIX}${String(id).padStart(3, '0')}`;
 };
 // Yeni belediye oluştur
 exports.createMunicipality = async (req, res) => {
@@ -144,63 +142,79 @@ exports.createMunicipality = async (req, res) => {
       });
     }
 
-    
-    const code = await generateMunicipalityCode();
+    // Kod üretimi artık tek bir transaction içinde, belediye ID'sine göre yapılıyor.
+    // Böylece aynı anda birden fazla createMunicipality çağrısı olsa bile
+    // her belediye benzersiz bir code alıyor (BLD-<id padded>).
+    const inserted = await knex.transaction(async (trx) => {
+      // 1) Kaydı kod olmadan ekle, ID sequence'den güvenli şekilde alınır
+      const [created] = await trx('municipalities')
+        .insert({
+          name,
+          province,
+          district,
+          tax_number: tax_number || null,
+          address: address || null,
+          contact_email: contact_email || null,
+          contact_phone: contact_phone || null,
+          contact_person: contact_person || null,
+          is_active: true,
+          status: 'active',
+          license_start_date: license_start_date ? new Date(license_start_date) : null,
+          license_end_date: license_end_date ? new Date(license_end_date) : null,
+          quota_end_date: quota_end_date ? new Date(quota_end_date) : null,
+          plan_type: plan_type || 'standard',
+          logo_url: logo_url || null,
+          domain_url: domain_url || null,
+          api_key: api_key || null,
+          max_users: max_users ?? null,
+          max_assets: max_assets ?? null,
+          notes: notes || null,
+          activation_token: activation_token || null,
+          created_at: trx.fn.now(),
+          updated_at: trx.fn.now(),
+        })
+        .returning(['id']);
 
-    const [inserted] = await knex('municipalities')
-      .insert({
-        code,
-        name,
-        province,
-        district,
-        tax_number: tax_number || null,
-        address: address || null,
-        contact_email: contact_email || null,
-        contact_phone: contact_phone || null,
-        contact_person: contact_person || null,
-        is_active: true,
-        status: 'active',
-        license_start_date: license_start_date ? new Date(license_start_date) : null,
-        license_end_date: license_end_date ? new Date(license_end_date) : null,
-        quota_end_date: quota_end_date ? new Date(quota_end_date) : null,
-        plan_type: plan_type || 'standard',
-        logo_url: logo_url || null,
-        domain_url: domain_url || null,
-        api_key: api_key || null,
-        max_users: max_users ?? null,
-        max_assets: max_assets ?? null,
-        notes: notes || null,
-        activation_token: activation_token || null,
-        created_at: knex.fn.now(),
-        updated_at: knex.fn.now(),
-      })
-      .returning([
-        'id',
-        'code',
-        'name',
-        'province',
-        'district',
-        'tax_number',
-        'address',
-        'contact_email',
-        'contact_phone',
-        'contact_person',
-        'is_active',
-        'status',
-        'license_start_date',
-        'license_end_date',
-        'quota_end_date',
-        'plan_type',
-        'logo_url',
-        'domain_url',
-        
-        'max_users',
-        'max_assets',
-        'notes',
-        
-        'created_at',
-        'updated_at',
-      ]);
+      const municipalityId = created.id;
+      const code = formatMunicipalityCodeFromId(municipalityId);
+
+      // 2) Aynı transaction içinde kodu güncelle ve tüm alanlarla geri döndür
+      const [withCode] = await trx('municipalities')
+        .where({ id: municipalityId })
+        .update(
+          {
+            code,
+            updated_at: trx.fn.now(),
+          },
+          [
+            'id',
+            'code',
+            'name',
+            'province',
+            'district',
+            'tax_number',
+            'address',
+            'contact_email',
+            'contact_phone',
+            'contact_person',
+            'is_active',
+            'status',
+            'license_start_date',
+            'license_end_date',
+            'quota_end_date',
+            'plan_type',
+            'logo_url',
+            'domain_url',
+            'max_users',
+            'max_assets',
+            'notes',
+            'created_at',
+            'updated_at',
+          ]
+        );
+
+      return withCode;
+    });
 
     return res.status(201).json(inserted);
   } catch (err) {

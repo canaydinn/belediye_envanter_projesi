@@ -7,11 +7,12 @@ const authorize = require('../middleware/authorize');
 const ROLES = require('../constants/roles');
 
 // READ
+// ÖNEMLİ: /search route'u /:id route'undan ÖNCE olmalı, yoksa /search isteği /:id route'una yakalanır
 router.get('/stats', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), locationsController.getLocationStats);
 router.get('/type-distribution', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), locationsController.getLocationTypeDistribution);
+router.get('/search', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), locationsController.listLocationsFiltered);
 router.get('/', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), locationsController.listLocations);
 router.get('/:id', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), locationsController.getLocationById);
-router.get('/search', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), locationsController.listLocationsFiltered);
 
 // WRITE (admin)
 router.post('/', authorize(ROLES.MUNICIPALITY_ADMIN), locationsController.createLocation);

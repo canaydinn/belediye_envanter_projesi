@@ -347,6 +347,7 @@ exports.getLocationTypeDistribution = async (req, res) => {
       warehouse: 0,    // type=2
       open_area: 0,    // type=3
       building: 0,     // type=4
+      other: 0,        // diğer type'lar
     };
 
     rows.forEach((row) => {

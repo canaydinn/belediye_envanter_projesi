@@ -17942,6 +17942,9 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
 }
 .content-backdrop.fade {
   opacity: 0;
+  pointer-events: none;
+  background-color: transparent;
+  z-index: -1;
 }
 .content-backdrop.show {
   opacity: 0.5;
@@ -17952,9 +17955,6 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
 .layout-horizontal .content-backdrop:not(.fade) {
   z-index: 9;
   top: 3.875rem !important;
-}
-.content-backdrop.fade {
-  z-index: -1;
 }
 
 .layout-navbar {

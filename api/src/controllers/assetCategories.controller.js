@@ -3,7 +3,7 @@ const knex = require('../config/knex');
 
 exports.listCategories = async (req, res) => {
   try {
-    const municipalityId = req.user?.municipality_id;
+    const municipalityId = req.tenantMunicipalityId || req.user?.municipality_id;
 
     const categories = await knex('asset_categories')
   .where({ municipality_id: municipalityId })
@@ -17,7 +17,7 @@ exports.listCategories = async (req, res) => {
 };
 exports.getCategoryStats = async (req, res) => {
   try {
-    const municipalityId = req.user?.municipality_id;
+    const municipalityId = req.tenantMunicipalityId || req.user?.municipality_id;
 
     if (!municipalityId) {
       return res.status(400).json({ message: 'Belediye bilgisi bulunamadı' });
@@ -78,7 +78,7 @@ exports.getCategoryStats = async (req, res) => {
 };
 exports.createCategory = async (req, res) => {
   try {
-    const municipalityId = req.user?.municipality_id;
+    const municipalityId = req.tenantMunicipalityId || req.user?.municipality_id;
     const { code, name, description } = req.body || {};
 
     if (!municipalityId) {
@@ -124,7 +124,7 @@ exports.createCategory = async (req, res) => {
 };
 exports.getCategoryById = async (req, res) => {
   try {
-    const municipalityId = req.user?.municipality_id;
+    const municipalityId = req.tenantMunicipalityId || req.user?.municipality_id;
     const { id } = req.params;
 
     if (!id) {
@@ -157,7 +157,7 @@ exports.getCategoryById = async (req, res) => {
 };
 exports.updateCategory = async (req, res) => {
   try {
-    const municipalityId = req.user?.municipality_id;
+    const municipalityId = req.tenantMunicipalityId || req.user?.municipality_id;
     const { id } = req.params;
     const { code, name, description } = req.body || {};
 
@@ -223,7 +223,7 @@ exports.updateCategory = async (req, res) => {
 };
 exports.getCategoryDistribution = async (req, res) => {
   try {
-    const municipalityId = req.user?.municipality_id;
+    const municipalityId = req.tenantMunicipalityId || req.user?.municipality_id;
     const distribution = await knex('asset_categories as c')
   .leftJoin('assets as a', function () {
     this.on('a.category_id', '=', 'c.id')
@@ -250,7 +250,7 @@ exports.getCategoryDistribution = async (req, res) => {
 };
 exports.deleteCategory = async (req, res) => {
   try {
-    const municipalityId = req.user?.municipality_id;
+    const municipalityId = req.tenantMunicipalityId || req.user?.municipality_id;
     const { id } = req.params;
 
     if (!id) {

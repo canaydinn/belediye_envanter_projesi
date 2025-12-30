@@ -354,10 +354,11 @@ test('superadmin.createMunicipality -> 400 when district is missing', async () =
 
 test('superadmin.createMunicipality -> creates municipality successfully', async () => {
   const mockKnex = createMockKnex();
-  // First query: generateMunicipalityCode - no existing municipality
-  mockKnex.__queue('municipalities', 'first', [null]);
-  // Second query: insert
-  mockKnex.__queue('municipalities', 'insert:returning', [[{
+  // Yeni implementasyon tek bir transaction içinde çalışır:
+  // 1) municipalities.insert (sadece id döner)
+  // 2) municipalities.update:returning (code dahil tüm alanları döner)
+  mockKnex.__queue('municipalities', 'insert:returning', [[{ id: 1 }]]);
+  mockKnex.__queue('municipalities', 'update:returning', [[{
     id: 1,
     code: 'BLD-001',
     name: 'Belediye 1',
@@ -407,7 +408,8 @@ test('superadmin.createMunicipality -> creates municipality successfully', async
 
 test('superadmin.createMunicipality -> 500 on DB error', async () => {
   const mockKnex = createMockKnex();
-  mockKnex.__queue('municipalities', 'first', [Promise.reject(new Error('DB Error'))]);
+  // Transaction içindeki ilk insert sırasında hata fırlatıyormuş gibi davran
+  mockKnex.__queue('municipalities', 'insert:returning', [Promise.reject(new Error('DB Error'))]);
 
   await withMockedModules({ [require.resolve('../config/knex')]: mockKnex }, async () => {
     delete require.cache[require.resolve('./superadmin.controller')];

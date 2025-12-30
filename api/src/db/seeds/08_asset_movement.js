@@ -32,4 +32,9 @@ exports.seed = async function (knex) {
       municipality_id: 1,
     },
   ]);
+
+  // Sequence'i resetle (PostgreSQL için)
+  await knex.raw(
+    "SELECT setval('asset_movements_id_seq', (SELECT MAX(id) FROM asset_movements));"
+  );
 };

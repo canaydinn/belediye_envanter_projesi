@@ -328,7 +328,7 @@ test('reports.getMaintenanceSummary -> 500 on DB error', async () => {
 // exportExcel
 // ============================================================================
 
-test('reports.exportExcel -> sets correct headers and ends response', async () => {
+test('reports.exportExcel -> 403 when municipalityId missing', async () => {
   const mockKnex = createMockKnex();
 
   await withMockedModules({ [require.resolve('../config/knex')]: mockKnex }, async () => {
@@ -339,44 +339,112 @@ test('reports.exportExcel -> sets correct headers and ends response', async () =
       query: { type: 'inventory-summary' },
     });
     const res = createRes();
-    let ended = false;
-    res.end = () => { ended = true; };
 
     await reports.exportExcel(req, res);
-    assert.equal(res.headers['Content-Type'], 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    assert.equal(res.headers['Content-Disposition'], 'attachment; filename="report.xlsx"');
-    assert.equal(ended, true);
+    assert.equal(res.statusCode, 403);
+    assert.equal(res.body.error, 'FORBIDDEN');
   });
+});
+
+test('reports.exportExcel -> sets correct headers and generates Excel file', async () => {
+  const mockKnex = createMockKnex();
+  mockKnex.__queue('assets', 'where', [mockKnex]);
+  mockKnex.__queue('assets', 'select', [mockKnex]);
+  mockKnex.__queue('assets', 'groupBy', [mockKnex]);
+  mockKnex.__queue('assets', 'then', [[{ _id: 1, total_count: 5, total_value: 1000 }]]);
+  mockKnex.__queue('departments', 'whereIn', [mockKnex]);
+  mockKnex.__queue('departments', 'where', [mockKnex]);
+  mockKnex.__queue('departments', 'select', [mockKnex]);
+  mockKnex.__queue('departments', 'then', [[{ id: 1, name: 'Test Department' }]]);
+
+  const mockWorkbook = {
+    addWorksheet: () => ({
+      addRow: () => {},
+      getRow: () => ({
+        font: {},
+        alignment: {},
+        fill: {},
+      }),
+      mergeCells: () => {},
+      getColumn: () => ({
+        width: 0,
+      }),
+      rowCount: 1,
+    }),
+    xlsx: {
+      write: async (stream) => {
+        stream.end();
+      },
+    },
+  };
+
+  await withMockedModules(
+    {
+      [require.resolve('../config/knex')]: mockKnex,
+      exceljs: {
+        Workbook: class {
+          constructor() {
+            Object.assign(this, mockWorkbook);
+          }
+        },
+      },
+    },
+    async () => {
+      delete require.cache[require.resolve('./reports.controller')];
+      const reports = require('./reports.controller');
+
+      const req = createReq({
+        tenantMunicipalityId: 1,
+        query: { type: 'inventory-summary', groupBy: 'department' },
+      });
+      const res = createRes();
+      let ended = false;
+      res.end = () => {
+        ended = true;
+      };
+
+      await reports.exportExcel(req, res);
+      assert.equal(res.headers['Content-Type'], 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      assert.match(res.headers['Content-Disposition'], /attachment; filename="rapor_inventory-summary_.*\.xlsx"/);
+      assert.equal(ended, true);
+    }
+  );
 });
 
 test('reports.exportExcel -> 500 on error', async () => {
   const mockKnex = createMockKnex();
+  mockKnex.__queue('assets', 'where', [Promise.reject(new Error('DB Error'))]);
 
-  await withMockedModules({ [require.resolve('../config/knex')]: mockKnex }, async () => {
-    delete require.cache[require.resolve('./reports.controller')];
-    const reports = require('./reports.controller');
+  await withMockedModules(
+    {
+      [require.resolve('../config/knex')]: mockKnex,
+      exceljs: {
+        Workbook: class {},
+      },
+    },
+    async () => {
+      delete require.cache[require.resolve('./reports.controller')];
+      const reports = require('./reports.controller');
 
-    const req = createReq({
-      query: { type: 'inventory-summary' },
-    });
-    const res = createRes();
-    // Simulate error by making res.end throw
-    res.end = () => {
-      throw new Error('Stream error');
-    };
+      const req = createReq({
+        tenantMunicipalityId: 1,
+        query: { type: 'inventory-summary' },
+      });
+      const res = createRes();
 
-    await reports.exportExcel(req, res);
-    assert.equal(res.statusCode, 500);
-    assert.equal(res.body.error, 'INTERNAL_SERVER_ERROR');
-    assert.match(res.body.message, /Excel çıktısı/);
-  });
+      await reports.exportExcel(req, res);
+      assert.equal(res.statusCode, 500);
+      assert.equal(res.body.error, 'INTERNAL_SERVER_ERROR');
+      assert.match(res.body.message, /Excel çıktısı/);
+    }
+  );
 });
 
 // ============================================================================
 // exportPdf
 // ============================================================================
 
-test('reports.exportPdf -> sets correct headers and ends response', async () => {
+test('reports.exportPdf -> 403 when municipalityId missing', async () => {
   const mockKnex = createMockKnex();
 
   await withMockedModules({ [require.resolve('../config/knex')]: mockKnex }, async () => {
@@ -385,34 +453,99 @@ test('reports.exportPdf -> sets correct headers and ends response', async () => 
 
     const req = createReq({});
     const res = createRes();
-    let ended = false;
-    res.end = () => { ended = true; };
 
     await reports.exportPdf(req, res);
-    assert.equal(res.headers['Content-Type'], 'application/pdf');
-    assert.equal(res.headers['Content-Disposition'], 'attachment; filename="report.pdf"');
-    assert.equal(ended, true);
+    assert.equal(res.statusCode, 403);
+    assert.equal(res.body.error, 'FORBIDDEN');
   });
+});
+
+test('reports.exportPdf -> sets correct headers and generates PDF file', async () => {
+  const mockKnex = createMockKnex();
+  mockKnex.__queue('assets', 'where', [mockKnex]);
+  mockKnex.__queue('assets', 'select', [mockKnex]);
+  mockKnex.__queue('assets', 'groupBy', [mockKnex]);
+  mockKnex.__queue('assets', 'then', [[{ _id: 1, total_count: 5, total_value: 1000 }]]);
+  mockKnex.__queue('departments', 'whereIn', [mockKnex]);
+  mockKnex.__queue('departments', 'where', [mockKnex]);
+  mockKnex.__queue('departments', 'select', [mockKnex]);
+  mockKnex.__queue('departments', 'then', [[{ id: 1, name: 'Test Department' }]]);
+
+  let docEnded = false;
+  const mockPDFDoc = class {
+    constructor() {
+      this.y = 50;
+      this.page = { height: 800 };
+    }
+    pipe() {}
+    fontSize() { return this; }
+    font() { return this; }
+    text() {}
+    moveDown() {}
+    moveTo() { return this; }
+    lineTo() { return this; }
+    stroke() {}
+    addPage() {}
+    end() {
+      docEnded = true;
+    }
+  };
+
+  await withMockedModules(
+    {
+      [require.resolve('../config/knex')]: mockKnex,
+      pdfkit: mockPDFDoc,
+    },
+    async () => {
+      delete require.cache[require.resolve('./reports.controller')];
+      const reports = require('./reports.controller');
+
+      const req = createReq({
+        tenantMunicipalityId: 1,
+        query: { type: 'inventory-summary', groupBy: 'department' },
+      });
+      const res = createRes();
+      let ended = false;
+      res.end = () => {
+        ended = true;
+      };
+
+      await reports.exportPdf(req, res);
+      assert.equal(res.headers['Content-Type'], 'application/pdf');
+      assert.match(res.headers['Content-Disposition'], /attachment; filename="rapor_inventory-summary_.*\.pdf"/);
+      // PDF dokümanı end() çağrıldığında res.end() de çağrılır
+      assert.ok(docEnded || ended, 'PDF should be ended');
+    }
+  );
 });
 
 test('reports.exportPdf -> 500 on error', async () => {
   const mockKnex = createMockKnex();
+  mockKnex.__queue('assets', 'where', [Promise.reject(new Error('DB Error'))]);
 
-  await withMockedModules({ [require.resolve('../config/knex')]: mockKnex }, async () => {
-    delete require.cache[require.resolve('./reports.controller')];
-    const reports = require('./reports.controller');
+  await withMockedModules(
+    {
+      [require.resolve('../config/knex')]: mockKnex,
+      pdfkit: class {
+        pipe() {}
+        end() {}
+      },
+    },
+    async () => {
+      delete require.cache[require.resolve('./reports.controller')];
+      const reports = require('./reports.controller');
 
-    const req = createReq({});
-    const res = createRes();
-    // Simulate error by making res.end throw
-    res.end = () => {
-      throw new Error('Stream error');
-    };
+      const req = createReq({
+        tenantMunicipalityId: 1,
+        query: { type: 'inventory-summary' },
+      });
+      const res = createRes();
 
-    await reports.exportPdf(req, res);
-    assert.equal(res.statusCode, 500);
-    assert.equal(res.body.error, 'INTERNAL_SERVER_ERROR');
-    assert.match(res.body.message, /PDF çıktısı/);
-  });
+      await reports.exportPdf(req, res);
+      assert.equal(res.statusCode, 500);
+      assert.equal(res.body.error, 'INTERNAL_SERVER_ERROR');
+      assert.match(res.body.message, /PDF çıktısı/);
+    }
+  );
 });
 

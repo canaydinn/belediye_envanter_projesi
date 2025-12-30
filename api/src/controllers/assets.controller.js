@@ -250,7 +250,7 @@ exports.createAsset = async (req, res) => {
           department_id,
           location_id,
           assigned_user_id: assigned_user_id || null,
-          purchase_price: purchase_price ?? null,
+          purchase_price: purchase_price != null ? Number(purchase_price) : null,
           purchase_date: purchase_date || null,
           serial_number: serial_number ? String(serial_number).trim() : null,
           status: status || 'active',
@@ -394,7 +394,7 @@ exports.updateAsset = async (req, res) => {
           department_id: nextDepartmentId,
           location_id: nextLocationId,
           assigned_user_id: nextAssignedUserId,
-          purchase_price: purchase_price ?? existing.purchase_price,
+          purchase_price: purchase_price != null ? Number(purchase_price) : existing.purchase_price,
           purchase_date: purchase_date ?? existing.purchase_date,
           serial_number: serial_number ?? existing.serial_number,
           status: status ?? existing.status,
@@ -561,7 +561,7 @@ exports.getAssetByQRCode = async (req, res) => {
     }
 
     // QR kod ile eşleşen varlığı bul
-    // Önce qrcode alanına bak, sonra asset_code'a bak, son olarak ID'ye bak
+    // Önce qrcode alanına bak, sonra asset_code'a bak, son olarak ID'ye bak (sadece numeric ise)
     const asset = await knex('assets as e')
       .leftJoin('asset_categories as c', function () {
         this.on('e.category_id', 'c.id').andOn('e.municipality_id', 'c.municipality_id');
@@ -578,8 +578,13 @@ exports.getAssetByQRCode = async (req, res) => {
       .where('e.municipality_id', municipalityId)
       .where(function() {
         this.where('e.qrcode', code)
-          .orWhere('e.asset_code', code)
-          .orWhere('e.id', code);
+          .orWhere('e.asset_code', code);
+        
+        // ID kontrolü sadece numeric ise yap
+        const codeAsInt = parseInt(code, 10);
+        if (!isNaN(codeAsInt) && String(codeAsInt) === String(code)) {
+          this.orWhere('e.id', codeAsInt);
+        }
       })
       .select([
         ...ASSET_SELECT_COLUMNS,

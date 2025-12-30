@@ -249,43 +249,147 @@ test('qrcode.generateBatchQrCodes -> 400 when inventoryIds is missing', async ()
   });
 });
 
-test('qrcode.generateBatchQrCodes -> 200 when valid array provided', async () => {
-  await withMockedModules({}, async () => {
-    delete require.cache[require.resolve('./qrcode.controller')];
-    const qrcode = require('./qrcode.controller');
+test('qrcode.generateBatchQrCodes -> 403 when municipalityId missing', async () => {
+  const mockKnex = createMockKnex();
 
-    const req = createReq({
-      body: { inventoryIds: [1, 2, 3] },
-    });
-    const res = createRes();
+  await withMockedModules(
+    {
+      [require.resolve('../config/knex')]: mockKnex,
+      qrcode: {
+        toBuffer: async () => Buffer.from('fake-qr-data'),
+      },
+      jszip: {
+        __esModule: true,
+        default: class {
+          file() {}
+          async generateAsync() {
+            return Buffer.from('fake-zip-data');
+          }
+        },
+      },
+    },
+    async () => {
+      delete require.cache[require.resolve('./qrcode.controller')];
+      const qrcode = require('./qrcode.controller');
 
-    await qrcode.generateBatchQrCodes(req, res);
-    assert.equal(res.statusCode, 200);
-    assert.equal(res.body.count, 3);
-    assert.match(res.body.downloadUrl, /https:\/\/example\.com\/qrcodes\/batch\/abc123\.zip/);
-  });
+      const req = createReq({
+        body: { inventoryIds: [1, 2, 3] },
+      });
+      const res = createRes();
+
+      await qrcode.generateBatchQrCodes(req, res);
+      assert.equal(res.statusCode, 403);
+      assert.equal(res.body.error, 'FORBIDDEN');
+    }
+  );
+});
+
+test('qrcode.generateBatchQrCodes -> 200 when valid array provided, returns ZIP file', async () => {
+  const mockItems = [
+    { id: 1, asset_tag: 'TAG-001', name: 'Item 1' },
+    { id: 2, asset_tag: 'TAG-002', name: 'Item 2' },
+  ];
+
+  const mockKnex = createMockKnex();
+  mockKnex.__queue('inventory_items', 'whereIn', [mockKnex]);
+  mockKnex.__queue('inventory_items', 'where', [mockKnex]);
+  mockKnex.__queue('inventory_items', 'select', [mockKnex]);
+  mockKnex.__queue('inventory_items', 'then', [mockItems]);
+
+  let zipBuffer = null;
+  const mockJSZip = class {
+    file() {}
+    async generateAsync() {
+      zipBuffer = Buffer.from('fake-zip-data');
+      return zipBuffer;
+    }
+  };
+
+  await withMockedModules(
+    {
+      [require.resolve('../config/knex')]: mockKnex,
+      qrcode: {
+        toBuffer: async () => Buffer.from('fake-qr-data'),
+      },
+      jszip: {
+        __esModule: true,
+        default: mockJSZip,
+      },
+    },
+    async () => {
+      delete require.cache[require.resolve('./qrcode.controller')];
+      const qrcode = require('./qrcode.controller');
+
+      const req = createReq({
+        tenantMunicipalityId: 1,
+        body: { inventoryIds: [1, 2] },
+      });
+      const res = createRes();
+      let sentData = null;
+      res.send = (data) => {
+        sentData = data;
+      };
+
+      await qrcode.generateBatchQrCodes(req, res);
+      assert.equal(res.statusCode, 200);
+      assert.equal(res.headers['Content-Type'], 'application/zip');
+      assert.match(res.headers['Content-Disposition'], /attachment; filename="qrcodes_batch_.*\.zip"/);
+      assert.ok(sentData instanceof Buffer, 'Should send ZIP buffer');
+    }
+  );
+});
+
+test('qrcode.generateBatchQrCodes -> 404 when no items found', async () => {
+  const mockKnex = createMockKnex();
+  mockKnex.__queue('inventory_items', 'whereIn', [mockKnex]);
+  mockKnex.__queue('inventory_items', 'where', [mockKnex]);
+  mockKnex.__queue('inventory_items', 'select', [mockKnex]);
+  mockKnex.__queue('inventory_items', 'then', [[]]);
+
+  await withMockedModules(
+    {
+      [require.resolve('../config/knex')]: mockKnex,
+    },
+    async () => {
+      delete require.cache[require.resolve('./qrcode.controller')];
+      const qrcode = require('./qrcode.controller');
+
+      const req = createReq({
+        tenantMunicipalityId: 1,
+        body: { inventoryIds: [999] },
+      });
+      const res = createRes();
+
+      await qrcode.generateBatchQrCodes(req, res);
+      assert.equal(res.statusCode, 404);
+      assert.equal(res.body.error, 'INVENTORY_NOT_FOUND');
+    }
+  );
 });
 
 test('qrcode.generateBatchQrCodes -> 500 on error', async () => {
-  await withMockedModules({}, async () => {
-    delete require.cache[require.resolve('./qrcode.controller')];
-    const qrcode = require('./qrcode.controller');
+  const mockKnex = createMockKnex();
+  mockKnex.__queue('inventory_items', 'whereIn', [Promise.reject(new Error('DB Error'))]);
 
-    const req = createReq({
-      body: { inventoryIds: [1, 2, 3] },
-    });
-    const res = createRes();
+  await withMockedModules(
+    {
+      [require.resolve('../config/knex')]: mockKnex,
+    },
+    async () => {
+      delete require.cache[require.resolve('./qrcode.controller')];
+      const qrcode = require('./qrcode.controller');
 
-    // Force an error by making JSON.stringify fail (unlikely but possible)
-    // Actually, let's just test the error handling path
-    // Since the function doesn't throw errors easily, we'll test with a different approach
-    // For now, the happy path is tested. Error handling would require mocking console.error
-    // or making the function throw, which is not straightforward with the current implementation.
+      const req = createReq({
+        tenantMunicipalityId: 1,
+        body: { inventoryIds: [1, 2, 3] },
+      });
+      const res = createRes();
 
-    // This test passes because the function doesn't throw in normal cases
-    await qrcode.generateBatchQrCodes(req, res);
-    assert.equal(res.statusCode, 200);
-  });
+      await qrcode.generateBatchQrCodes(req, res);
+      assert.equal(res.statusCode, 500);
+      assert.equal(res.body.error, 'INTERNAL_SERVER_ERROR');
+    }
+  );
 });
 
 // ============================================================================
