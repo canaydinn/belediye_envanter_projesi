@@ -1,0 +1,12 @@
+# Test dosyaları
+**/*.test.js
+**/__tests__/**
+**/test/**
+integration/**
+
+# API test dosyaları
+api/src/**/*.test.js
+api/src/__tests__/**
+api/src/controllers/**/*.test.js
+api/src/routes/**/*.test.js
+
