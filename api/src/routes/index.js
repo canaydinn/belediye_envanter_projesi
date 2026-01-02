@@ -219,5 +219,16 @@ router.use(
   tenantScope({ allowSuperadmin: true }),
   require('./profile.routes')
 );
+
+/**
+ * Kullanıcı ayarları
+ */
+router.use(
+  '/settings',
+  auth, // Kullanıcı doğrulama
+  tenantScope({ allowSuperadmin: true }),
+  require('./settings.routes')
+);
+
 // Ana router export
 module.exports = router;

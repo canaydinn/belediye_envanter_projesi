@@ -7,6 +7,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@supabase/supabase-js": "^2.89.0",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
@@ -33,6 +34,12 @@
     "test:integration": "cross-env NODE_ENV=test node --test --test-concurrency=1 src/__tests__/integration/**/*.test.js",
     "test:integration:env": "cross-env NODE_ENV=test node --test src/__tests__/integration/**/*.test.js",
     "test:watch": "node --test --watch",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "migrate": "knex migrate:latest --knexfile knexfile.js",
+    "migrate:rollback": "knex migrate:rollback --knexfile knexfile.js",
+    "migrate:status": "knex migrate:status --knexfile knexfile.js",
+    "migrate:fix": "node scripts/fix_migrations.js",
+    "migrate:municipality": "node scripts/run_municipality_migration.js",
+    "seed": "knex seed:run --knexfile knexfile.js"
   }
 }

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="tr" class="light-style layout-navbar-fixed layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../admin/assets/" data-template="vertical-menu-template">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>Ayarlar | Envanter360</title>
+    <meta name="description" content="Kişisel tercihlerinizi ve ayarlarınızı yönetin." />
+
+    <link rel="icon" type="image/x-icon" href="../admin/assets/img/favicon/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/tabler-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/fonts/flag-icons.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../admin/assets/css/demo.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/node-waves/node-waves.css" />
+    <link rel="stylesheet" href="../admin/assets/vendor/libs/typeahead-js/typeahead.css" />
+
+    <script src="../admin/assets/vendor/js/helpers.js"></script>
+    <script src="../admin/assets/vendor/js/template-customizer.js"></script>
+    <script src="../admin/assets/js/config.js"></script>
+  </head>
+  <body>
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+            <a href="index.html" class="app-brand-link">
+              <span class="app-brand-logo demo"></span>
+              <span class="app-brand-text demo menu-text fw-bold">Envanter360</span>
+            </a>
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+              <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+              <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
+            </a>
+          </div>
+          <div class="menu-inner-shadow"></div>
+          <ul class="menu-inner py-1 navigation navigation-main">
+            <li class="menu-item"><a href="../admin/dashboard.html" class="menu-link"><i class="menu-icon tf-icons ti ti-smart-home"></i><div>Dashboard</div></a></li>
+            <li class="menu-item"><a href="../admin/assets.html" class="menu-link"><i class="menu-icon tf-icons ti ti-box"></i><div>Varlıklar</div></a></li>
+            <li class="menu-item"><a href="../admin/assets-movements.html" class="menu-link"><i class="menu-icon tf-icons ti ti-transfer"></i><div>Varlık Hareketleri</div></a></li>
+            <li class="menu-item"><a href="../admin/locations.html" class="menu-link"><i class="menu-icon tf-icons ti ti-map"></i><div>Lokasyonlar</div></a></li>
+            <li class="menu-item"><a href="../admin/categories.html" class="menu-link"><i class="menu-icon tf-icons ti ti-category"></i><div>Kategoriler</div></a></li>
+            <li class="menu-item"><a href="../admin/users.html" class="menu-link"><i class="menu-icon tf-icons ti ti-users"></i><div>Kullanıcılar</div></a></li>
+            <li class="menu-item"><a href="../admin/profile.html" class="menu-link"><i class="menu-icon tf-icons ti ti-id"></i><div>Profil</div></a></li>
+            <li class="menu-item active"><a href="../admin/settings.html" class="menu-link"><i class="menu-icon tf-icons ti ti-settings"></i><div>Ayarlar</div></a></li>
+          </ul>
+        </aside>
+
+        <div class="layout-page">
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+              <span class="navbar-text fw-semibold">Kullanıcı Ayarları</span>
+            </div>
+          </nav>
+
+          <div class="content-wrapper">
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <div>
+                  <h4 class="fw-bold mb-1">Ayarlar</h4>
+                  <p class="mb-0 text-muted">Kişisel tercihlerinizi ve uygulama ayarlarınızı yönetin.</p>
+                </div>
+              </div>
+
+              <div class="row g-4">
+                <!-- Görünüm Tercihleri -->
+                <div class="col-12">
+                  <div class="card mb-4">
+                    <div class="card-header">
+                      <h5 class="mb-1"><i class="ti ti-palette me-2"></i>Görünüm Tercihleri</h5>
+                      <small class="text-muted">Arayüz görünümünü ve dil ayarlarını özelleştirin.</small>
+                    </div>
+                    <div class="card-body">
+                      <div id="appearanceSuccess" class="alert alert-success d-none" role="alert"></div>
+                      <div id="appearanceError" class="alert alert-danger d-none" role="alert"></div>
+
+                      <form id="appearanceForm" class="row g-3">
+                        <div class="col-md-6">
+                          <label class="form-label" for="themeMode">Tema Modu</label>
+                          <select class="form-select" id="themeMode">
+                            <option value="light">Açık</option>
+                            <option value="dark">Koyu</option>
+                            <option value="auto">Sistem Ayarı</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="colorTheme">Renk Teması</label>
+                          <select class="form-select" id="colorTheme">
+                            <option value="theme-default">Varsayılan</option>
+                            <option value="theme-semi-dark">Yarı Koyu</option>
+                            <option value="theme-bordered">Kenarlıklı</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="language">Dil</label>
+                          <select class="form-select" id="language">
+                            <option value="tr">Türkçe</option>
+                            <option value="en">English</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="dateFormat">Tarih Formatı</label>
+                          <select class="form-select" id="dateFormat">
+                            <option value="DD/MM/YYYY">GG/AA/YYYY</option>
+                            <option value="MM/DD/YYYY">AA/GG/YYYY</option>
+                            <option value="YYYY-MM-DD">YYYY-AA-GG</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="timeFormat">Saat Formatı</label>
+                          <select class="form-select" id="timeFormat">
+                            <option value="24">24 Saat</option>
+                            <option value="12">12 Saat (AM/PM)</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="timezone">Saat Dilimi</label>
+                          <select class="form-select" id="timezone">
+                            <option value="Europe/Istanbul">Türkiye (GMT+3)</option>
+                            <option value="UTC">UTC</option>
+                          </select>
+                        </div>
+                        <div class="col-12 d-flex align-items-center gap-2 mt-2">
+                          <button type="submit" class="btn btn-primary" id="appearanceSaveButton" data-loading-text="Kaydediliyor...">
+                            Görünüm Ayarlarını Kaydet
+                          </button>
+                          <button type="reset" class="btn btn-outline-secondary">Sıfırla</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bildirim Tercihleri -->
+                <div class="col-12">
+                  <div class="card mb-4">
+                    <div class="card-header">
+                      <h5 class="mb-1"><i class="ti ti-bell me-2"></i>Bildirim Tercihleri</h5>
+                      <small class="text-muted">Hangi bildirimleri almak istediğinizi seçin.</small>
+                    </div>
+                    <div class="card-body">
+                      <div id="notificationSuccess" class="alert alert-success d-none" role="alert"></div>
+                      <div id="notificationError" class="alert alert-danger d-none" role="alert"></div>
+
+                      <form id="notificationForm">
+                        <h6 class="mb-3">E-posta Bildirimleri</h6>
+                        <div class="row g-3 mb-4">
+                          <div class="col-md-6">
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="emailAssetCreate" checked>
+                              <label class="form-check-label" for="emailAssetCreate">Varlık ekleme/güncelleme bildirimleri</label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="emailAssetMovement" checked>
+                              <label class="form-check-label" for="emailAssetMovement">Varlık hareket bildirimleri</label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="emailSystemUpdates">
+                              <label class="form-check-label" for="emailSystemUpdates">Sistem güncellemeleri</label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="emailSecurityAlerts" checked disabled>
+                              <label class="form-check-label" for="emailSecurityAlerts">Güvenlik uyarıları <span class="badge bg-label-warning">Zorunlu</span></label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <h6 class="mb-3">Sistem Bildirimleri (Uygulama İçi)</h6>
+                        <div class="row g-3 mb-4">
+                          <div class="col-md-6">
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="inAppAssetCreate" checked>
+                              <label class="form-check-label" for="inAppAssetCreate">Varlık ekleme/güncelleme bildirimleri</label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="inAppAssetMovement" checked>
+                              <label class="form-check-label" for="inAppAssetMovement">Varlık hareket bildirimleri</label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="inAppSystemUpdates">
+                              <label class="form-check-label" for="inAppSystemUpdates">Sistem güncellemeleri</label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="mb-3">
+                          <label class="form-label" for="notificationFrequency">Bildirim Sıklığı</label>
+                          <select class="form-select" id="notificationFrequency">
+                            <option value="instant">Anında</option>
+                            <option value="daily">Günlük Özet</option>
+                            <option value="weekly">Haftalık Özet</option>
+                          </select>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2 mt-2">
+                          <button type="submit" class="btn btn-primary" id="notificationSaveButton" data-loading-text="Kaydediliyor...">
+                            Bildirim Ayarlarını Kaydet
+                          </button>
+                          <button type="reset" class="btn btn-outline-secondary">Sıfırla</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Güvenlik Ayarları -->
+                <div class="col-12">
+                  <div class="card mb-4">
+                    <div class="card-header">
+                      <h5 class="mb-1"><i class="ti ti-shield-lock me-2"></i>Güvenlik Ayarları</h5>
+                      <small class="text-muted">Hesap güvenliğinizi yönetin.</small>
+                    </div>
+                    <div class="card-body">
+                      <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                          <div>
+                            <h6 class="mb-1">İki Faktörlü Doğrulama (2FA)</h6>
+                            <small class="text-muted">Hesabınızı ekstra bir güvenlik katmanı ile koruyun.</small>
+                          </div>
+                          <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="twoFactorEnabled">
+                            <label class="form-check-label" for="twoFactorEnabled"></label>
+                          </div>
+                        </div>
+                        <div id="twoFactorInfo" class="alert alert-info d-none">
+                          <i class="ti ti-info-circle me-2"></i>
+                          <span>2FA aktifleştirildiğinde, giriş yaparken telefonunuzdaki doğrulama kodunu girmeniz gerekecektir.</span>
+                        </div>
+                      </div>
+
+                      <div class="mb-4">
+                        <h6 class="mb-3">Aktif Oturumlar</h6>
+                        <div id="activeSessionsList">
+                          <div class="text-center text-muted py-3">
+                            <i class="ti ti-loader-2 ti-spin me-2"></i>Yükleniyor...
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="mb-4">
+                        <h6 class="mb-3">Giriş Geçmişi</h6>
+                        <div id="loginHistoryList">
+                          <div class="text-center text-muted py-3">
+                            <i class="ti ti-loader-2 ti-spin me-2"></i>Yükleniyor...
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn btn-outline-danger" id="terminateAllSessionsButton">
+                          <i class="ti ti-logout me-2"></i>Tüm Oturumları Sonlandır
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Kişisel Tercihler -->
+                <div class="col-12">
+                  <div class="card mb-4">
+                    <div class="card-header">
+                      <h5 class="mb-1"><i class="ti ti-user-cog me-2"></i>Kişisel Tercihler</h5>
+                      <small class="text-muted">Uygulama davranışını özelleştirin.</small>
+                    </div>
+                    <div class="card-body">
+                      <div id="preferencesSuccess" class="alert alert-success d-none" role="alert"></div>
+                      <div id="preferencesError" class="alert alert-danger d-none" role="alert"></div>
+
+                      <form id="preferencesForm" class="row g-3">
+                        <div class="col-md-6">
+                          <label class="form-label" for="defaultListView">Varsayılan Liste Görünümü</label>
+                          <select class="form-select" id="defaultListView">
+                            <option value="table">Tablo</option>
+                            <option value="grid">Grid</option>
+                            <option value="list">Liste</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="itemsPerPage">Sayfa Başına Kayıt Sayısı</label>
+                          <select class="form-select" id="itemsPerPage">
+                            <option value="10">10</option>
+                            <option value="25" selected>25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-check form-switch mt-4">
+                            <input class="form-check-input" type="checkbox" id="autoSave" checked>
+                            <label class="form-check-label" for="autoSave">Form otomatik kaydetme</label>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label" for="defaultExportFormat">Varsayılan Dışa Aktarma Formatı</label>
+                          <select class="form-select" id="defaultExportFormat">
+                            <option value="csv">CSV</option>
+                            <option value="excel">Excel</option>
+                          </select>
+                        </div>
+                        <div class="col-12">
+                          <h6 class="mb-3">Dashboard Widget'ları</h6>
+                          <div class="row g-3">
+                            <div class="col-md-4">
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="widgetAssets" checked>
+                                <label class="form-check-label" for="widgetAssets">Varlık Özeti</label>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="widgetMovements" checked>
+                                <label class="form-check-label" for="widgetMovements">Hareket Özeti</label>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="widgetCategories" checked>
+                                <label class="form-check-label" for="widgetCategories">Kategori Dağılımı</label>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="widgetLocations" checked>
+                                <label class="form-check-label" for="widgetLocations">Lokasyon Haritası</label>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="widgetRecentActivity">
+                                <label class="form-check-label" for="widgetRecentActivity">Son Aktiviteler</label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 d-flex align-items-center gap-2 mt-2">
+                          <button type="submit" class="btn btn-primary" id="preferencesSaveButton" data-loading-text="Kaydediliyor...">
+                            Tercihleri Kaydet
+                          </button>
+                          <button type="reset" class="btn btn-outline-secondary">Sıfırla</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <footer class="content-footer footer bg-footer-theme">
+              <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                <div class="mb-2 mb-md-0">© <script>document.write(new Date().getFullYear());</script> Envanter360</div>
+              </div>
+            </footer>
+
+            <div class="content-backdrop fade"></div>
+          </div>
+        </div>
+      </div>
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+
+    <script type="module" src="./assets/js/app/settings.js"></script>
+  </body>
+</html>
+

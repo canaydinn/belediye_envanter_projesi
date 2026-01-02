@@ -47,7 +47,7 @@ if (department_id) {
       }
     }
     const [existingCode] = await knex('locations')
-      .where({ municipalityId, code })
+      .where({ municipality_id: municipalityId, code })
       .limit(1);
 
     if (existingCode) {
@@ -61,7 +61,7 @@ if (department_id) {
         address: address || null,
         department_id: department_id || null,
         is_active: is_active ?? true,
-        municipalityId,
+        municipality_id: municipalityId,
         type: type || null,
         latitude: latitude ?? null,
         longitude: longitude ?? null,

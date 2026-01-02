@@ -119,7 +119,67 @@ exports.createCategory = async (req, res) => {
     });
   } catch (err) {
     console.error('assetCategories.createCategory hatası:', err);
-    return res.status(500).json({ message: 'Sunucu hatası' });
+    
+    // Veritabanı constraint hatası kontrolü
+    if (err.code === '23505') { // PostgreSQL unique constraint violation
+      const constraintName = err.constraint || '';
+      
+      // Primary key hatası - sequence sorunu olabilir, otomatik düzelt
+      if (constraintName.includes('pkey') || constraintName === 'asset_categories_pkey') {
+        try {
+          console.log('asset_categories sequence hatası tespit edildi, düzeltiliyor...');
+          // Sequence'i mevcut max ID'ye göre güncelle
+          await knex.raw(
+            "SELECT setval('asset_categories_id_seq', COALESCE((SELECT MAX(id) FROM asset_categories), 0) + 1, false);"
+          );
+          console.log('asset_categories sequence düzeltildi.');
+          
+          // Kullanıcıya tekrar denemesini söyle
+          return res.status(409).json({
+            message: 'ID sequence hatası tespit edildi ve düzeltildi. Lütfen formu tekrar gönderin.',
+            ...(process.env.NODE_ENV !== 'production' && {
+              error: err.message,
+              code: err.code,
+              detail: 'Sequence otomatik olarak düzeltildi. Formu tekrar gönderebilirsiniz.'
+            })
+          });
+        } catch (fixErr) {
+          console.error('Sequence düzeltme hatası:', fixErr);
+          return res.status(500).json({
+            message: 'ID sequence hatası. Lütfen sistem yöneticisine başvurun.',
+            ...(process.env.NODE_ENV !== 'production' && {
+              error: err.message,
+              fixError: fixErr.message
+            })
+          });
+        }
+      } else if (constraintName.includes('code') || constraintName.includes('name') || constraintName.includes('municipality_id')) {
+        // Kod veya ad duplicate (belediye bazında)
+        return res.status(409).json({ 
+          message: 'Bu kod veya ad ile kayıtlı kategori zaten mevcut',
+          error: process.env.NODE_ENV === 'development' ? err.message : undefined
+        });
+      } else {
+        // Genel unique constraint hatası
+        return res.status(409).json({ 
+          message: 'Bu kod veya ad ile kayıtlı kategori zaten mevcut',
+          error: process.env.NODE_ENV === 'development' ? err.message : undefined
+        });
+      }
+    }
+    
+    // Diğer veritabanı hataları
+    if (err.code && err.code.startsWith('23')) {
+      return res.status(400).json({ 
+        message: 'Veritabanı hatası',
+        error: process.env.NODE_ENV === 'development' ? err.message : undefined
+      });
+    }
+    
+    return res.status(500).json({ 
+      message: 'Sunucu hatası',
+      error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
   }
 };
 exports.getCategoryById = async (req, res) => {

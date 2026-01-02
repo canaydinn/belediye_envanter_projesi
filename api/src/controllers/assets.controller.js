@@ -302,10 +302,44 @@ exports.createAsset = async (req, res) => {
     return res.status(201).json(createdAsset);
   } catch (err) {
     console.error('assets.createAsset hatası:', err);
+    
+    // Sequence senkronizasyon hatası - otomatik düzelt
+    if (err.code === '23505' && err.constraint === 'assets_pkey') {
+      try {
+        console.log('Sequence hatası tespit edildi, düzeltiliyor...');
+        // Sequence'i mevcut max ID'ye göre güncelle
+        await knex.raw(
+          "SELECT setval('assets_id_seq', COALESCE((SELECT MAX(id) FROM assets), 0) + 1, false);"
+        );
+        console.log('Sequence düzeltildi.');
+        
+        // Kullanıcıya tekrar denemesini söyle
+        return res.status(409).json({
+          message: 'ID sequence hatası tespit edildi ve düzeltildi. Lütfen formu tekrar gönderin.',
+          ...(process.env.NODE_ENV !== 'production' && {
+            error: err.message,
+            code: err.code,
+            detail: 'Sequence otomatik olarak düzeltildi. Formu tekrar gönderebilirsiniz.'
+          })
+        });
+      } catch (fixErr) {
+        console.error('Sequence düzeltme hatası:', fixErr);
+        return res.status(500).json({
+          message: 'ID sequence hatası. Lütfen sistem yöneticisine başvurun.',
+          ...(process.env.NODE_ENV !== 'production' && {
+            error: err.message,
+            fixError: fixErr.message
+          })
+        });
+      }
+    }
+    
     return res.status(500).json({
       message: err.message || 'Sunucu hatası',
-      code: err.code,
-      detail: err.detail,
+      ...(process.env.NODE_ENV !== 'production' && {
+        code: err.code,
+        detail: err.detail,
+      })
     });
   }
 };

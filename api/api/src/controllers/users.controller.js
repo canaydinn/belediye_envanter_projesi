@@ -237,6 +237,15 @@ const {
       .orWhere({ email })
       .first();
     
+    if (exists) {
+      if (exists.username === username) {
+        return res.status(409).json({ message: 'Bu kullanıcı adı zaten kullanılıyor' });
+      }
+      if (exists.email === email) {
+        return res.status(409).json({ message: 'Bu e-posta adresi zaten kullanılıyor' });
+      }
+      return res.status(409).json({ message: 'Bu kullanıcı adı veya e-posta zaten kullanılıyor' });
+    }
 
     const password_hash = await bcrypt.hash(password, 10);
   const emailVerifiedAt = email_verified ? new Date().toISOString() : null;
@@ -268,7 +277,81 @@ const {
     res.status(201).json(inserted);
   } catch (err) {
     console.error('create user hatası:', err);
-    res.status(500).json({ message: 'Sunucu hatası' });
+    console.error('Hata detayları - code:', err.code, 'constraint:', err.constraint, 'table:', err.table);
+    
+    // Veritabanı constraint hatalarını kontrol et
+    if (err.code === '23505') { // PostgreSQL unique constraint violation
+      const constraintName = err.constraint || '';
+      const tableName = err.table || '';
+      
+      // Primary key hatası - sequence sorunu olabilir, otomatik düzelt
+      // users tablosu ve pkey constraint kontrolü
+      const isPrimaryKeyError = constraintName === 'users_pkey' || 
+                                 (constraintName.includes('pkey') && tableName === 'users') ||
+                                 (constraintName.includes('pkey') && !tableName && err.detail && err.detail.includes('Key (id)'));
+      
+      if (isPrimaryKeyError) {
+        try {
+          console.log('users sequence hatası tespit edildi, düzeltiliyor...');
+          console.log('Constraint:', constraintName, 'Table:', tableName, 'Detail:', err.detail);
+          
+          // Sequence'i mevcut max ID'ye göre güncelle
+          // Önce sequence adını kontrol et - bigIncrements için users_id_seq olmalı
+          await knex.raw(
+            "SELECT setval('users_id_seq', COALESCE((SELECT MAX(id) FROM users), 0) + 1, false);"
+          );
+          console.log('users sequence düzeltildi.');
+          
+          // Kullanıcıya tekrar denemesini söyle
+          return res.status(409).json({
+            message: 'ID sequence hatası tespit edildi ve düzeltildi. Lütfen formu tekrar gönderin.',
+            ...(process.env.NODE_ENV !== 'production' && {
+              error: err.message,
+              code: err.code,
+              detail: 'Sequence otomatik olarak düzeltildi. Formu tekrar gönderebilirsiniz.'
+            })
+          });
+        } catch (fixErr) {
+          console.error('Sequence düzeltme hatası:', fixErr);
+          return res.status(500).json({
+            message: 'ID sequence hatası. Lütfen sistem yöneticisine başvurun.',
+            ...(process.env.NODE_ENV !== 'production' && {
+              error: err.message,
+              fixError: fixErr.message
+            })
+          });
+        }
+      }
+      
+      if (constraintName.includes('username') || constraintName.includes('users_username')) {
+        return res.status(409).json({ message: 'Bu kullanıcı adı zaten kullanılıyor' });
+      }
+      if (constraintName.includes('email') || constraintName.includes('users_email')) {
+        return res.status(409).json({ message: 'Bu e-posta adresi zaten kullanılıyor' });
+      }
+      return res.status(409).json({ message: 'Bu kullanıcı adı veya e-posta zaten kullanılıyor' });
+    }
+    
+    // Foreign key constraint hatası
+    if (err.code === '23503') { // PostgreSQL foreign key constraint violation
+      if (err.constraint && err.constraint.includes('role_id')) {
+        return res.status(400).json({ message: 'Geçersiz rol ID' });
+      }
+      if (err.constraint && err.constraint.includes('municipality_id')) {
+        return res.status(400).json({ message: 'Geçersiz belediye ID' });
+      }
+      return res.status(400).json({ message: 'Geçersiz referans değeri' });
+    }
+    
+    // Not null constraint hatası
+    if (err.code === '23502') { // PostgreSQL not null constraint violation
+      return res.status(400).json({ message: 'Zorunlu alanlar eksik' });
+    }
+    
+    res.status(500).json({ 
+      message: 'Sunucu hatası',
+      ...(process.env.NODE_ENV !== 'production' && { error: err.message })
+    });
   }
 };
 

@@ -6,7 +6,13 @@ const parseCount = (row) => Number(row?.total ?? row?.count ?? 0);
 // GET /api/dashboard/stats
 exports.getMunicipalityStats = async (req, res) => {
   try {
-    const municipalityId = req.tenantMunicipalityId;
+    let municipalityId = req.tenantMunicipalityId;
+
+    // SUPERADMIN için ilk belediyeyi kullan
+    if (!municipalityId && req.user?.role_id === 1) {
+      const firstMunicipality = await knex('municipalities').select('id').first();
+      municipalityId = firstMunicipality?.id;
+    }
 
     if (!municipalityId) {
       return res.status(400).json({ message: 'Belediye kapsamı bulunamadı' });
@@ -68,7 +74,13 @@ exports.getMunicipalityStats = async (req, res) => {
 // GET /api/dashboard/municipality
 exports.getMunicipalityInfo = async (req, res) => {
   try {
-    const municipalityId = req.tenantMunicipalityId;
+    let municipalityId = req.tenantMunicipalityId;
+
+    // SUPERADMIN için ilk belediyeyi kullan
+    if (!municipalityId && req.user?.role_id === 1) {
+      const firstMunicipality = await knex('municipalities').select('id').first();
+      municipalityId = firstMunicipality?.id;
+    }
 
     if (!municipalityId) {
       return res.status(400).json({ message: 'Belediye kapsamı bulunamadı' });
@@ -93,17 +105,31 @@ exports.getMunicipalityInfo = async (req, res) => {
 // GET /api/dashboard/recent-movements
 exports.getRecentAssetMovements = async (req, res) => {
   try {
-    const municipalityId = req.tenantMunicipalityId;
+    let municipalityId = req.tenantMunicipalityId;
     console.log('[RECENT MOVEMENTS] tenantMunicipalityId =', municipalityId);
 
-    const movements = await knex('asset_movements as am')
+    // SUPERADMIN için ilk belediyeyi kullan
+    if (!municipalityId && req.user?.role_id === 1) {
+      const firstMunicipality = await knex('municipalities').select('id').first();
+      municipalityId = firstMunicipality?.id;
+    }
+
+    // assets tablosunda municipality_id kolonu yoksa, where koşulunu kaldır
+    const hasMunicipalityColumn = await knex.schema.hasColumn('assets', 'municipality_id');
+    
+    let query = knex('asset_movements as am')
       .join('assets as a', 'am.asset_id', 'a.id')
       .leftJoin('departments as fd', 'am.from_department_id', 'fd.id')
       .leftJoin('departments as td', 'am.to_department_id', 'td.id')
       .leftJoin('locations as fl', 'am.from_location_id', 'fl.id')
       .leftJoin('locations as tl', 'am.to_location_id', 'tl.id')
-      .leftJoin('users as u', 'am.performed_by_user_id', 'u.id')
-      .where('a.municipality_id', municipalityId)
+      .leftJoin('users as u', 'am.performed_by_user_id', 'u.id');
+    
+    if (hasMunicipalityColumn && municipalityId) {
+      query = query.where('a.municipality_id', municipalityId);
+    }
+
+    const movements = await query
       .select(
         'am.id',
         'am.asset_id',
@@ -133,13 +159,32 @@ exports.getRecentAssetMovements = async (req, res) => {
 // GET /api/dashboard/category-distribution
 exports.getCategoryDistribution = async (req, res) => {
   try {
-    const municipalityId = req.tenantMunicipalityId;
+    let municipalityId = req.tenantMunicipalityId;
 
-    const rows = await knex('assets as a')
-      .leftJoin('asset_categories as c', function () {
+    // SUPERADMIN için ilk belediyeyi kullan
+    if (!municipalityId && req.user?.role_id === 1) {
+      const firstMunicipality = await knex('municipalities').select('id').first();
+      municipalityId = firstMunicipality?.id;
+    }
+
+    // assets tablosunda municipality_id kolonu yoksa, where ve join koşullarını kaldır
+    const hasMunicipalityColumn = await knex.schema.hasColumn('assets', 'municipality_id');
+    
+    let query = knex('assets as a');
+    
+    if (hasMunicipalityColumn) {
+      query = query.leftJoin('asset_categories as c', function () {
         this.on('a.category_id', '=', 'c.id').andOn('a.municipality_id', '=', 'c.municipality_id');
-      })
-      .where('a.municipality_id', municipalityId)
+      });
+    } else {
+      query = query.leftJoin('asset_categories as c', 'a.category_id', 'c.id');
+    }
+    
+    if (hasMunicipalityColumn && municipalityId) {
+      query = query.where('a.municipality_id', municipalityId);
+    }
+
+    const rows = await query
       .groupBy('a.category_id', 'c.name')
       .select('a.category_id', 'c.name as category_name')
       .count('a.id as total');
@@ -173,7 +218,13 @@ exports.getCategoryDistribution = async (req, res) => {
 // GET /api/dashboard/upcoming-maintenance
 exports.getUpcomingMaintenance = async (req, res) => {
   try {
-    const municipalityId = req.tenantMunicipalityId;
+    let municipalityId = req.tenantMunicipalityId;
+
+    // SUPERADMIN için ilk belediyeyi kullan
+    if (!municipalityId && req.user?.role_id === 1) {
+      const firstMunicipality = await knex('municipalities').select('id').first();
+      municipalityId = firstMunicipality?.id;
+    }
 
     if (!municipalityId) {
       return res.status(400).json({ message: 'Belediye kapsamı bulunamadı' });

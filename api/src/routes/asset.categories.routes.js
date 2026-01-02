@@ -7,48 +7,48 @@ const authorize = require('../middleware/authorize');
 const ROLES = require('../constants/roles');
 
 /**
- * READ (Municipality Admin + User)
+ * READ (Superadmin + Municipality Admin + User)
  */
 router.get(
   '/',
-  authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
+  authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
   assetCategoriesController.listCategories
 );
 
 router.get(
   '/stats',
-  authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
+  authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
   assetCategoriesController.getCategoryStats
 );
 
 router.get(
   '/distribution',
-  authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
+  authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
   assetCategoriesController.getCategoryDistribution
 );
 
 router.get(
   '/:id',
-  authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
+  authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
   assetCategoriesController.getCategoryById
 );
 
 /**
- * WRITE (Municipality Admin only)
+ * WRITE (Superadmin + Municipality Admin)
  */
 router.post(
   '/',
-  authorize(ROLES.MUNICIPALITY_ADMIN),
+  authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN),
   assetCategoriesController.createCategory
 );
 router.put(
   '/:id',
-  authorize(ROLES.MUNICIPALITY_ADMIN),
+  authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN),
   assetCategoriesController.updateCategory
 );
 router.delete(
   '/:id',
-  authorize(ROLES.MUNICIPALITY_ADMIN),
+  authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN),
   assetCategoriesController.deleteCategory
 );
 module.exports = router;

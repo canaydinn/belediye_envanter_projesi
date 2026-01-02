@@ -74,10 +74,33 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (!response.ok) {
-        const message =
-          data?.message ||
-          `Varlık kaydı sırasında bir hata oluştu (status: ${response.status}).`;
-        throw new Error(message);
+        // Sequence hatası - otomatik tekrar dene
+        if (response.status === 409 && data?.message?.includes('sequence')) {
+          console.log('Sequence hatası düzeltildi, tekrar deneniyor...');
+          // İsteği tekrar gönder (sadece bir kez)
+          const retryResponse = await fetch(`${API_BASE}/api/assets`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify(payload),
+          });
+          
+          const retryData = await retryResponse.json();
+          
+          if (!retryResponse.ok) {
+            throw new Error(retryData?.message || 'Varlık kaydı sırasında bir hata oluştu.');
+          }
+          
+          // Başarılı oldu, devam et
+          data = retryData;
+        } else {
+          const message =
+            data?.message ||
+            `Varlık kaydı sırasında bir hata oluştu (status: ${response.status}).`;
+          throw new Error(message);
+        }
       }
 
       successMessage.textContent = `${

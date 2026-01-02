@@ -6,22 +6,22 @@ const authorize = require('../middleware/authorize');
 const ROLES = require('../constants/roles');
 
 /**
- * READ (Municipality Admin + User)
+ * READ (Superadmin + Municipality Admin + User)
  */
-router.get('/', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), assetsController.listAssets);
-router.get('/filters', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), assetsController.getFilterOptions);
-router.get('/status-distribution', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), assetsController.getStatusDistribution);
-router.get('/recent-assets', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), assetsController.getRecentAssets);
-router.get('/qr/:code', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), assetsController.getAssetByQRCode);
-router.get('/:id/qrcode', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), assetsController.generateAssetQRCode);
-router.get('/:id', authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER), assetsController.getAssetById);
+router.get('/', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER), assetsController.listAssets);
+router.get('/filters', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER), assetsController.getFilterOptions);
+router.get('/status-distribution', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER), assetsController.getStatusDistribution);
+router.get('/recent-assets', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER), assetsController.getRecentAssets);
+router.get('/qr/:code', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER), assetsController.getAssetByQRCode);
+router.get('/:id/qrcode', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER), assetsController.generateAssetQRCode);
+router.get('/:id', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER), assetsController.getAssetById);
 
 /**
- * WRITE (Municipality Admin only)
+ * WRITE (Superadmin + Municipality Admin)
  */
-router.post('/', authorize(ROLES.MUNICIPALITY_ADMIN), assetsController.createAsset);
-router.post('/bulk-import', authorize(ROLES.MUNICIPALITY_ADMIN), require('../controllers/bulk-import.controller').bulkImportAssets);
-router.put('/:id', authorize(ROLES.MUNICIPALITY_ADMIN), assetsController.updateAsset);
-router.delete('/:id', authorize(ROLES.MUNICIPALITY_ADMIN), assetsController.deleteAsset);
+router.post('/', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN), assetsController.createAsset);
+router.post('/bulk-import', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN), require('../controllers/bulk-import.controller').bulkImportAssets);
+router.put('/:id', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN), assetsController.updateAsset);
+router.delete('/:id', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN), assetsController.deleteAsset);
 
 module.exports = router;

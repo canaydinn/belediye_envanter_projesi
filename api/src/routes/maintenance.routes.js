@@ -7,44 +7,44 @@ const authorize = require('../middleware/authorize');
 const ROLES = require('../constants/roles');
 
 /**
- * READ (Municipality Admin + User)
+ * READ (Superadmin + Municipality Admin + User)
  */
 router.get(
   '/',
-  authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
+  authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
   maintenanceController.listTickets
 );
 
 router.get(
   '/:id',
-  authorize(ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
+  authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
   maintenanceController.getTicketById
 );
 
 /**
- * WRITE (Municipality Admin only)
+ * WRITE (Superadmin + Municipality Admin)
  */
 router.post(
   '/',
-  authorize(ROLES.MUNICIPALITY_ADMIN),
+  authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN),
   maintenanceController.createTicket
 );
 
 router.patch(
   '/:id',
-  authorize(ROLES.MUNICIPALITY_ADMIN),
+  authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN),
   maintenanceController.updateTicket
 );
 
 router.post(
   '/:id/complete',
-  authorize(ROLES.MUNICIPALITY_ADMIN),
+  authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN),
   maintenanceController.completeTicket
 );
 
 router.delete(
   '/:id',
-  authorize(ROLES.MUNICIPALITY_ADMIN),
+  authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN),
   maintenanceController.deleteTicket
 );
 

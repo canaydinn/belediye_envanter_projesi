@@ -25,8 +25,11 @@ module.exports = function tenantScope({ allowSuperadmin = true } = {}) {
     // 1️⃣ Eğer kullanıcı SUPERADMIN ise
     // ve allowSuperadmin = true ise
     // → belediye kısıtı uygulanmaz
-    // → tüm tenant’lara erişebilir
+    // → tüm tenant'lara erişebilir
+    // → Ama controller'lar için municipality_id null olarak set edilir
+    // → Controller'lar null kontrolü yaparak tüm belediyeleri gösterebilir
     if (allowSuperadmin && role_id === ROLES.SUPERADMIN) {
+      req.tenantMunicipalityId = municipality_id || null; // null = tüm belediyeler
       return next();
     }
 

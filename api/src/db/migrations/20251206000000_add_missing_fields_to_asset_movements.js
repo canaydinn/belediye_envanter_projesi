@@ -1,37 +1,54 @@
-exports.up = function (knex) {
+exports.up = async function (knex) {
+  // Kolonların zaten var olup olmadığını kontrol et
+  const hasToUserId = await knex.schema.hasColumn('asset_movements', 'to_user_id');
+  const hasReason = await knex.schema.hasColumn('asset_movements', 'reason');
+  const hasRequestedBy = await knex.schema.hasColumn('asset_movements', 'requested_by');
+  const hasApprovedBy = await knex.schema.hasColumn('asset_movements', 'approved_by');
+  const hasStatus = await knex.schema.hasColumn('asset_movements', 'status');
+
   return knex.schema.table('asset_movements', (table) => {
-    // Yeni sorumlu kullanıcı (zimmet için)
-    table
-      .integer('to_user_id')
-      .unsigned()
-      .references('id')
-      .inTable('users')
-      .onDelete('SET NULL')
-      .onUpdate('CASCADE');
+    // Yeni sorumlu kullanıcı (zimmet için) - sadece yoksa ekle
+    if (!hasToUserId) {
+      table
+        .integer('to_user_id')
+        .unsigned()
+        .references('id')
+        .inTable('users')
+        .onDelete('SET NULL')
+        .onUpdate('CASCADE');
+    }
 
     // Hareket gerekçesi
-    table.string('reason', 500).nullable();
+    if (!hasReason) {
+      table.string('reason', 500).nullable();
+    }
 
     // Talep eden kullanıcı
-    table
-      .integer('requested_by')
-      .unsigned()
-      .references('id')
-      .inTable('users')
-      .onDelete('SET NULL')
-      .onUpdate('CASCADE');
+    if (!hasRequestedBy) {
+      table
+        .integer('requested_by')
+        .unsigned()
+        .references('id')
+        .inTable('users')
+        .onDelete('SET NULL')
+        .onUpdate('CASCADE');
+    }
 
     // Onaylayan kullanıcı
-    table
-      .integer('approved_by')
-      .unsigned()
-      .references('id')
-      .inTable('users')
-      .onDelete('SET NULL')
-      .onUpdate('CASCADE');
+    if (!hasApprovedBy) {
+      table
+        .integer('approved_by')
+        .unsigned()
+        .references('id')
+        .inTable('users')
+        .onDelete('SET NULL')
+        .onUpdate('CASCADE');
+    }
 
     // Hareket durumu
-    table.string('status', 50).nullable();
+    if (!hasStatus) {
+      table.string('status', 50).nullable();
+    }
   });
 };
 
@@ -44,6 +61,7 @@ exports.down = function (knex) {
     table.dropColumn('status');
   });
 };
+
 
 
 

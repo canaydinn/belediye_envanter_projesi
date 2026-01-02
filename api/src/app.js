@@ -18,25 +18,32 @@ app.use(
 const projectRoot = path.resolve(__dirname, '..','..'); // ✅ köke çık
 const adminPath = path.join(projectRoot, 'admin');
 app.use(cookieParser());
-app.get(['/admin', '/admin/login', '/admin/login.html'], (req, res) => {
-  return res.sendFile(path.join(adminPath, 'login.html'));
-});
+
+// Assets klasörü herkese açık (CSS, JS, resimler vb.)
 app.use('/admin/assets', express.static(path.join(adminPath, 'assets')));
 
-
-
-// admin root: cookie varsa dashboard'a, yoksa login'e
-app.get('/admin', requireAuthPage, (req, res) =>
-  res.sendFile(path.join(adminPath, 'dashboard.html'))
-);
-app.use('/admin', requireAuthPage, express.static(adminPath));
-
-//app.use('/admin', express.static(adminPath));
-
-// İstersen /admin'e girince otomatik login açsın:
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(adminPath, 'login.html'));
+// Login sayfası herkese açık
+app.get(['/admin/login', '/admin/login.html'], (req, res) => {
+  return res.sendFile(path.join(adminPath, 'login.html'));
 });
+
+// Admin root: cookie varsa dashboard'a, yoksa login'e yönlendir
+app.get('/admin', (req, res) => {
+  const token = req.cookies?.token;
+  if (token) {
+    try {
+      const jwt = require('jsonwebtoken');
+      jwt.verify(token, process.env.JWT_SECRET || 'dev-secret-key');
+      return res.sendFile(path.join(adminPath, 'dashboard.html'));
+    } catch (err) {
+      return res.sendFile(path.join(adminPath, 'login.html'));
+    }
+  }
+  return res.sendFile(path.join(adminPath, 'login.html'));
+});
+
+// Diğer tüm admin sayfaları için authentication gerekli
+app.use('/admin', requireAuthPage, express.static(adminPath));
 
 app.use(express.json());
 
