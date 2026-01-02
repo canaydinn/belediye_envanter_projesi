@@ -1,9 +1,0 @@
-{
-  "ignore": [
-    "**/*.test.js",
-    "**/__tests__/**",
-    "**/test/**",
-    "integration/**"
-  ]
-}
-
