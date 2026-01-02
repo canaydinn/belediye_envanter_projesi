@@ -3,9 +3,25 @@ const router = express.Router();
 
 const uploadsController = require('../controllers/uploads.controller');
 
-// Örnek: Multer middleware'i burada kullanılabilir
+// Multer configuration - Vercel'de dosya sistemi read-only olduğu için
+// production'da memory storage kullanıyoruz
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+
+// Production ortamında (Vercel) memory storage kullan
+// Development ortamında disk storage kullan
+const storage = process.env.NODE_ENV === 'production' 
+  ? multer.memoryStorage()
+  : multer.diskStorage({
+      destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+      },
+      filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + '-' + file.originalname);
+      }
+    });
+
+const upload = multer({ storage: storage });
 
 
 // POST /api/uploads

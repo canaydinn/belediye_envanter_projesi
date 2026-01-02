@@ -15,11 +15,16 @@ exports.uploadFile = async (req, res) => {
       });
     }
 
+    // Production'da (Vercel) memory storage kullanılıyor, file.buffer var
+    // Development'ta disk storage kullanılıyor, file.path var
+    const isMemoryStorage = process.env.NODE_ENV === 'production' || file.buffer;
+    
     const doc = await FileUpload.create({
       fileName: file.originalname,
       mimeType: file.mimetype,
       size: file.size,
-      path: file.path,
+      path: isMemoryStorage ? null : file.path, // Memory storage'da path yok
+      buffer: isMemoryStorage ? file.buffer : null, // Sadece memory storage'da
       type: type || null,
       linkedTo: entity && entityId ? { entity, id: entityId } : null,
       uploadedBy: req.user.id
@@ -55,22 +60,34 @@ exports.getFileById = async (req, res) => {
       });
     }
 
-    const filePath = path.resolve(doc.path);
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({
-        error: 'FILE_NOT_FOUND',
-        message: 'Dosya bulunamadı.'
-      });
-    }
-
     res.setHeader('Content-Type', doc.mimeType);
     res.setHeader(
       'Content-Disposition',
       `inline; filename="${doc.fileName}"`
     );
 
-    const stream = fs.createReadStream(filePath);
-    stream.pipe(res);
+    // Production'da (memory storage) buffer'dan oku
+    // Development'ta (disk storage) dosyadan oku
+    if (doc.buffer) {
+      // Memory storage - buffer'dan gönder
+      res.send(doc.buffer);
+    } else if (doc.path) {
+      // Disk storage - dosyadan oku
+      const filePath = path.resolve(doc.path);
+      if (!fs.existsSync(filePath)) {
+        return res.status(404).json({
+          error: 'FILE_NOT_FOUND',
+          message: 'Dosya bulunamadı.'
+        });
+      }
+      const stream = fs.createReadStream(filePath);
+      stream.pipe(res);
+    } else {
+      return res.status(404).json({
+        error: 'FILE_NOT_FOUND',
+        message: 'Dosya verisi bulunamadı.'
+      });
+    }
   } catch (err) {
     console.error('GET_FILE_ERROR', err);
     return res.status(500).json({
@@ -92,9 +109,13 @@ exports.deleteFile = async (req, res) => {
       });
     }
 
-    const filePath = path.resolve(doc.path);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
+    // Sadece disk storage kullanılıyorsa dosyayı sil
+    // Memory storage'da dosya zaten veritabanında
+    if (doc.path && !doc.buffer) {
+      const filePath = path.resolve(doc.path);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
     }
 
     await FileUpload.deleteOne({ _id: fileId });
