@@ -13,7 +13,6 @@ api/src/routes/**/*.test.js
 # Vercel'in ayrı function olarak algılamaması için gereksiz dosyalar
 # Not: Route ve controller dosyaları ignore edilmemeli çünkü api/index.js bunları require ediyor
 api/server.js
-api/knexfile.js
 api/scripts/**
 api/docs/**
 api/SUPABASE_SETUP.md

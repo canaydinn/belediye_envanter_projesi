@@ -40,6 +40,25 @@ module.exports = {
       createRetryIntervalMillis: 2000,
     },
   },
+  production: {
+    client: 'pg',
+    connection: getConnection(),
+    migrations: {
+      directory: './src/db/migrations',
+    },
+    seeds: {
+      directory: './src/db/seeds',
+    },
+    pool: {
+      min: 0,
+      max: 10,
+      createTimeoutMillis: 30000,
+      acquireTimeoutMillis: 30000,
+      idleTimeoutMillis: 30000,
+      reapIntervalMillis: 1000,
+      createRetryIntervalMillis: 2000,
+    },
+  },
   test: {
     client: 'pg',
     connection: {
