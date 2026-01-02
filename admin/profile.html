@@ -2,15 +2,19 @@
 <html lang="tr" class="light-style layout-navbar-fixed layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../admin/assets/" data-template="vertical-menu-template">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Profilim | Envanter360</title>
-    <meta name="description" content="Kullanıcı profil bilgilerinizi güncelleyin ve şifrenizi yönetin." />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
+    <title>Gösterge Paneli | Envanter360</title>
+
+    <!-- Include Vuexy core CSS and vendor CSS here -->
     <link rel="icon" type="image/x-icon" href="../admin/assets/img/favicon/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
-
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet" />
     <link rel="stylesheet" href="../admin/assets/vendor/fonts/fontawesome.css" />
     <link rel="stylesheet" href="../admin/assets/vendor/fonts/tabler-icons.css" />
     <link rel="stylesheet" href="../admin/assets/vendor/fonts/flag-icons.css" />
@@ -20,10 +24,7 @@
     <link rel="stylesheet" href="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="../admin/assets/vendor/libs/node-waves/node-waves.css" />
     <link rel="stylesheet" href="../admin/assets/vendor/libs/typeahead-js/typeahead.css" />
-
-    <script src="../admin/assets/vendor/js/helpers.js"></script>
-    <script src="../admin/assets/vendor/js/template-customizer.js"></script>
-    <script src="../admin/assets/js/config.js"></script>
+  
   </head>
   <body>
     <div class="layout-wrapper layout-content-navbar">
@@ -40,22 +41,94 @@
             </a>
           </div>
           <div class="menu-inner-shadow"></div>
-          <ul class="menu-inner py-1 navigation navigation-main">
-            <li class="menu-item"><a href="../admin/dashboard.html" class="menu-link"><i class="menu-icon tf-icons ti ti-smart-home"></i><div>Dashboard</div></a></li>
-            <li class="menu-item"><a href="../admin/assets.html" class="menu-link"><i class="menu-icon tf-icons ti ti-box"></i><div>Varlıklar</div></a></li>
-            <li class="menu-item"><a href="../admin/assets-movements.html" class="menu-link"><i class="menu-icon tf-icons ti ti-transfer"></i><div>Varlık Hareketleri</div></a></li>
-            <li class="menu-item"><a href="../admin/locations.html" class="menu-link"><i class="menu-icon tf-icons ti ti-map"></i><div>Lokasyonlar</div></a></li>
-            <li class="menu-item"><a href="../admin/categories.html" class="menu-link"><i class="menu-icon tf-icons ti ti-category"></i><div>Kategoriler</div></a></li>
-            <li class="menu-item"><a href="../admin/users.html" class="menu-link"><i class="menu-icon tf-icons ti ti-users"></i><div>Kullanıcılar</div></a></li>
-            <li class="menu-item active"><a href="../admin/profile.html" class="menu-link"><i class="menu-icon tf-icons ti ti-id"></i><div>Profil</div></a></li>
-            <li class="menu-item"><a href="../admin/settings.html" class="menu-link"><i class="menu-icon tf-icons ti ti-settings"></i><div>Ayarlar</div></a></li>
+          <ul class="menu-inner py-1">
+            <li class="menu-item">
+              <a href="/admin/dashboard.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                <div>Dashboard</div>
+              </a>
+            </li>
+            <li class="menu-item active">
+              <a href="/admin/assets.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-archive"></i>
+                <div>Varlıklar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="/admin/assets-movements.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-arrows-left-right"></i>
+                <div>Varlık Hareketleri</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="/admin/locations.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-map-pin"></i>
+                <div>Lokasyonlar</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="/admin/categories.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-folders"></i>
+                <div>Kategoriler</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="/admin/users.html" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-users"></i>
+                <div>Kullanıcılar</div>
+              </a>
+            </li>
           </ul>
         </aside>
 
         <div class="layout-page">
           <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-              <span class="navbar-text fw-semibold">Kişisel Profil</span>
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                      <img src="../admin/assets/img/avatars/1.png" alt="User" class="h-auto rounded-circle" />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar avatar-online">
+                              <img src="../admin/assets/img/avatars/1.png" alt="User" class="h-auto rounded-circle" />
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <span class="fw-semibold d-block">Belediye Yöneticisi</span>
+                            <small class="text-muted" id="navbarMunicipalityName"></small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li><div class="dropdown-divider"></div></li>
+                    <li>
+                      <a class="dropdown-item" href="profile.html">
+                        <i class="ti ti-user-check me-2 ti-sm"></i>
+                        <span class="align-middle">Profil</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="settings.html">
+                        <i class="ti ti-settings me-2 ti-sm"></i>
+                        <span class="align-middle">Ayarlar</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="logout.html">
+                        <i class="ti ti-logout me-2 ti-sm"></i>
+                        <span class="align-middle">Çıkış</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
             </div>
           </nav>
 
@@ -203,4 +276,14 @@
     <script type="module" src="./assets/js/app/profile.js"></script>
     
   </body>
+    <!-- Page JS -->
+    <script src="/admin/assets/js/app/api.js"></script>
+    <script src="/admin/assets/js/app/logout.js"></script>
+    <script src="../admin/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../admin/assets/vendor/libs/popper/popper.js"></script>
+    <script src="../admin/assets/vendor/js/bootstrap.js"></script>
+    <script src="../admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../admin/assets/vendor/libs/node-waves/node-waves.js"></script>
+    <script src="../admin/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+<script src="../admin/assets/vendor/js/helpers.js"></script>
 </html>
