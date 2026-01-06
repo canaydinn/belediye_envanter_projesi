@@ -19,6 +19,19 @@ const projectRoot = path.resolve(__dirname, '..','..'); // ✅ köke çık
 const adminPath = path.join(projectRoot, 'admin');
 app.use(cookieParser());
 
+// Root path için basit yönlendirme / bilgi mesajı
+// Vercel'de "Cannot GET /" almamak için
+app.get('/', (req, res) => {
+  // İstersen burada admin login'e yönlendirebilirsin
+  return res.redirect('/admin/login');
+});
+
+// Eğer Vercel tüm istekleri /api'ye rewrite ediyorsa,
+// /api için de basit bir cevap verelim
+app.get('/api', (req, res) => {
+  return res.json({ status: 'ok', message: 'API çalışıyor' });
+});
+
 // Assets klasörü herkese açık (CSS, JS, resimler vb.)
 app.use('/admin/assets', express.static(path.join(adminPath, 'assets')));
 
