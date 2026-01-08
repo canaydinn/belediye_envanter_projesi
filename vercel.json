@@ -2,9 +2,6 @@
   "functions": {
     "api/index.js": {
       "maxDuration": 30
-    },
-    "index.js": {
-      "maxDuration": 30
     }
   },
   "rewrites": [
