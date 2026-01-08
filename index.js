@@ -1,12 +1,11 @@
 // Root path için serverless function
-// Vercel'de / path'i için özel handling
+// Vercel'de / path'i için Express app'i kullan
 require('dotenv').config();
 const path = require('path');
 
-const projectRoot = path.resolve(__dirname);
-const adminPath = path.join(projectRoot, 'admin');
+// api/index.js'deki Express app'i kullan
+const appPath = path.join(__dirname, 'api', 'src', 'app');
+const app = require(appPath);
 
-module.exports = (req, res) => {
-  // Login sayfasını direkt serve et
-  return res.sendFile(path.join(adminPath, 'login.html'));
-};
+// Vercel serverless function olarak export et
+module.exports = app;
