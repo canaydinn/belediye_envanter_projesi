@@ -5,6 +5,17 @@
     }
   },
   "rewrites": [
-    { "source": "/(.*)", "destination": "C:Users/cityp/belediye_envanter_projesi/api/src/index.js" }
+    {
+      "source": "/admin/(.*)",
+      "destination": "/api/admin/$1"
+    },
+    {
+      "source": "/",
+      "destination": "/api/"
+    },
+    {
+      "source": "/((?!api).+)",
+      "destination": "/api/$1"
+    }
   ]
 }

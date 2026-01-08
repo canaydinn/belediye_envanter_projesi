@@ -50,14 +50,17 @@ app.use(cookieParser());
 // Root path için basit yönlendirme / bilgi mesajı
 // Vercel'de "Cannot GET /" almamak için
 app.get('/', (req, res) => {
-  // İstersen burada admin login'e yönlendirebilirsin
-  return res.redirect('/admin/login');
+  // Absolute path ile redirect (Vercel için gerekli)
+  const protocol = req.protocol || 'https';
+  const host = req.get('host') || req.hostname;
+  return res.redirect(`${protocol}://${host}/admin/login`);
 });
 
-// Eğer Vercel tüm istekleri /api'ye rewrite ediyorsa,
-// /api için de basit bir cevap verelim
-app.get('/api', (req, res) => {
-  return res.json({ status: 'ok', message: 'API çalışıyor' });
+// Vercel'de / → /api/ rewrite edildiği için /api ve /api/ route'larını da handle et
+app.get(['/api', '/api/'], (req, res) => {
+  const protocol = req.protocol || 'https';
+  const host = req.get('host') || req.hostname;
+  return res.redirect(`${protocol}://${host}/admin/login`);
 });
 
 // Assets klasörü herkese açık (CSS, JS, resimler vb.)
