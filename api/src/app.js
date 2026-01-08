@@ -66,15 +66,17 @@ app.get(['/', '/api', '/api/'], (req, res) => {
 app.use('/api', routes);
 
 // Assets klasörü herkese açık (CSS, JS, resimler vb.)
-app.use('/api/admin/assets', express.static(path.join(adminPath, 'assets')));
+// Hem /admin/assets/* hem de /api/admin/assets/* path'lerini handle et
+app.use(['/admin/assets', '/api/admin/assets'], express.static(path.join(adminPath, 'assets')));
 
 // Login sayfası herkese açık
-app.get(['/api/admin/login', '/api/admin/login.html'], (req, res) => {
+// Hem /admin/login hem de /api/admin/login path'lerini handle et
+app.get(['/admin/login', '/admin/login.html', '/api/admin/login', '/api/admin/login.html'], (req, res) => {
   return res.sendFile(path.join(adminPath, 'login.html'));
 });
 
 // Admin root: cookie varsa dashboard'a, yoksa login'e yönlendir
-app.get('/api/admin', (req, res) => {
+app.get(['/admin', '/api/admin'], (req, res) => {
   const token = req.cookies?.token;
   if (token) {
     try {
@@ -90,6 +92,7 @@ app.get('/api/admin', (req, res) => {
 
 // Diğer tüm admin sayfaları için authentication gerekli
 // Bu route EN SONDA olmalı (çünkü geniş bir pattern)
-app.use('/api/admin', requireAuthPage, express.static(adminPath));
+// Hem /admin/* hem de /api/admin/* path'lerini handle et
+app.use(['/admin', '/api/admin'], requireAuthPage, express.static(adminPath));
 
 module.exports = app;
