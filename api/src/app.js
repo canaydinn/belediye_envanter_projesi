@@ -47,28 +47,26 @@ const projectRoot = path.resolve(__dirname, '..','..'); // ✅ köke çık
 const adminPath = path.join(projectRoot, 'admin');
 app.use(cookieParser());
 
-// Root path için basit yönlendirme / bilgi mesajı
-// Vercel'de "Cannot GET /" almamak için
-// Vercel'de / → /api/ rewrite edildiği için hem / hem de /api/ handle et
-app.get(['/', '/api', '/api/'], (req, res) => {
-  // Absolute path ile redirect (Vercel için gerekli)
+// Vercel'de tüm istekler /api/* formatına rewrite edilir
+// Bu yüzden route'ları /api prefix'i ile handle etmeliyiz
+
+// Root path için yönlendirme
+app.get(['/api', '/api/'], (req, res) => {
   const protocol = req.protocol || 'https';
   const host = req.get('host') || req.hostname;
-  // Vercel'de /admin/* → /api/admin/* rewrite edildiği için /api/admin/login kullan
   return res.redirect(`${protocol}://${host}/api/admin/login`);
 });
 
 // Assets klasörü herkese açık (CSS, JS, resimler vb.)
-// Vercel'de tüm istekler /api/* formatına rewrite edildiği için hem /admin/* hem de /api/admin/* handle et
-app.use(['/admin/assets', '/api/admin/assets'], express.static(path.join(adminPath, 'assets')));
+app.use('/api/admin/assets', express.static(path.join(adminPath, 'assets')));
 
 // Login sayfası herkese açık
-app.get(['/admin/login', '/admin/login.html', '/api/admin/login', '/api/admin/login.html'], (req, res) => {
+app.get(['/api/admin/login', '/api/admin/login.html'], (req, res) => {
   return res.sendFile(path.join(adminPath, 'login.html'));
 });
 
 // Admin root: cookie varsa dashboard'a, yoksa login'e yönlendir
-app.get(['/admin', '/api/admin'], (req, res) => {
+app.get('/api/admin', (req, res) => {
   const token = req.cookies?.token;
   if (token) {
     try {
@@ -83,8 +81,7 @@ app.get(['/admin', '/api/admin'], (req, res) => {
 });
 
 // Diğer tüm admin sayfaları için authentication gerekli
-// Vercel'de /admin/* → /api/admin/* rewrite edildiği için her ikisini de handle et
-app.use(['/admin', '/api/admin'], requireAuthPage, express.static(adminPath));
+app.use('/api/admin', requireAuthPage, express.static(adminPath));
 
 app.use(express.json());
 
