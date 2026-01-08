@@ -4,16 +4,32 @@ require('dotenv').config();
 function getConnection() {
   // Eğer connection string varsa onu kullan
   if (process.env.SUPABASE_DB_CONNECTION_STRING) {
-    const connString = process.env.SUPABASE_DB_CONNECTION_STRING;
+    const connString = process.env.SUPABASE_DB_CONNECTION_STRING.trim();
+    
+    // Connection string validation
+    if (!connString.startsWith('postgresql://') && !connString.startsWith('postgres://')) {
+      console.error('❌ SUPABASE_DB_CONNECTION_STRING geçersiz format!');
+      console.error('❌ Connection String (masked):', connString.replace(/:[^:@]+@/, ':****@'));
+      throw new Error('SUPABASE_DB_CONNECTION_STRING postgresql:// veya postgres:// ile başlamalı');
+    }
+    
     // Connection string içinde "host=host" veya "@host:" gibi yanlış değerler olabilir, kontrol et
     if (connString.includes('host=host') || 
         connString.includes('hostname=host') || 
         connString.includes('@host:') ||
         connString.includes('@host/')) {
       console.error('❌ SUPABASE_DB_CONNECTION_STRING içinde geçersiz host değeri tespit edildi!');
-      console.error('❌ Connection String:', connString.replace(/:[^:@]+@/, ':****@')); // Password'u gizle
-      throw new Error('SUPABASE_DB_CONNECTION_STRING içinde geçersiz host değeri ("host" kelimesi). Lütfen Vercel environment variables\'da connection string\'i düzeltin. Format: postgresql://user:password@db.xxxxx.supabase.co:5432/dbname');
+      console.error('❌ Connection String (masked):', connString.replace(/:[^:@]+@/, ':****@'));
+      throw new Error('SUPABASE_DB_CONNECTION_STRING içinde geçersiz host değeri ("host" kelimesi). Lütfen Vercel environment variables\'da connection string\'i düzeltin.');
     }
+    
+    // Debug log (production'da da görünür)
+    if (process.env.NODE_ENV === 'production') {
+      const maskedString = connString.replace(/:[^:@]+@/, ':****@');
+      console.log('🔍 Using Connection String (masked):', maskedString);
+      console.log('🔍 Connection String length:', connString.length);
+    }
+    
     return connString;
   }
   
