@@ -46,7 +46,7 @@ app.use(
   })
 );
 const projectRoot = path.resolve(__dirname, '..','..'); // ✅ köke çık
-const adminPath = path.join(process.cwd(), 'admin');
+const adminPath = path.join(projectRoot, 'admin');
 app.use(cookieParser());
 app.use(express.json());
 
@@ -62,7 +62,7 @@ app.get(['/', '/api', '/api/'], (req, res) => {
 });
 
 // Assets klasörü herkese açık (CSS, JS, resimler vb.)
-app.use('/api/admin/assets', express.static(path.join(process.cwd(), 'admin/assets')));
+app.use('/api/admin/assets', express.static(path.join(adminPath, 'assets')));
 
 // Login sayfası herkese açık
 app.get(['/api/admin/login', '/api/admin/login.html'], (req, res) => {
