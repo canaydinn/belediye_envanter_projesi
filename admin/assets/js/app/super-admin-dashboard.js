@@ -148,7 +148,7 @@ if (!municipalityTableBody) {
 
   // 1) Toplam belediye sayısı
   if (totalLink) {
-    fetchJson('http://localhost:4000/api/superadmin/municipalities/count')
+    fetchJson('/api/superadmin/municipalities/count')
       .then((data) => {
         // Backend: { totalMunicipalities: 3 } veya { count: 3 }
         const total =
@@ -167,7 +167,7 @@ if (!municipalityTableBody) {
 
   // 2) Aktif belediye sayısı
   if (activeLink) {
-    fetchJson('http://localhost:4000/api/superadmin/municipalities/active/count')
+    fetchJson('/api/superadmin/municipalities/active/count')
       .then((data) => {
         // Örnek: { activeMunicipalities: 2 } veya { count: 2 }
 
@@ -188,7 +188,7 @@ if (!municipalityTableBody) {
 
 // 3) Onay Bekleyen belediye sayısı
   if (pendingLink) {
-    fetchJson('http://localhost:4000/api/superadmin/municipalities/pending/count')
+    fetchJson('/api/superadmin/municipalities/pending/count')
       .then((data) => {
         // Backend: { totalMunicipalities: 3 } veya { count: 3 }
         const total =
@@ -207,7 +207,7 @@ if (!municipalityTableBody) {
   
 // 3) Toplam Kullanıcı sayısı
   if (totalUserLink) {
-    fetchJson('http://localhost:4000/api/superadmin/users/count')
+    fetchJson('/api/superadmin/users/count')
       .then((data) => {
         // Backend: { totalMunicipalities: 3 } veya { count: 3 }
 
@@ -226,7 +226,7 @@ if (!municipalityTableBody) {
   }
 
     if (municipalityTableBody) {
-    fetchJson('http://localhost:4000/api/superadmin/municipalities')
+    fetchJson('/api/superadmin/municipalities')
       .then((data) => {
         renderMunicipalityRows(data);
       })
@@ -243,7 +243,7 @@ if (!municipalityTableBody) {
   }
  // 3) Standart plan belediye sayısı
   if (standardPlanBadge) {
-    fetchJson('http://localhost:4000/api/superadmin/municipalities/plan/standard')
+    fetchJson('/api/superadmin/municipalities/plan/standard')
       .then((data) => {
         const standardCount = Array.isArray(data) ? data.length : data?.count ?? 0;
         standardPlanBadge.textContent = `${standardCount} belediye`;
@@ -256,7 +256,7 @@ if (!municipalityTableBody) {
   }
   // 3) Pro plan belediye sayısı
   if (proPlanBadge) {
-    fetchJson('http://localhost:4000/api/superadmin/municipalities/plan/pro')
+    fetchJson('/api/superadmin/municipalities/plan/pro')
       .then((data) => {
         const proCount = Array.isArray(data) ? data.length : data?.count ?? 0;
         proPlanBadge.textContent = `${proCount} belediye`;
@@ -267,9 +267,9 @@ if (!municipalityTableBody) {
   } else {
     console.warn('Pro plan badge öğesi bulunamadı');
   }
-  // 3) Pro plan belediye sayısı
+  // 3) Deneme plan belediye sayısı
   if (denemePlanBadge) {
-    fetchJson('http://localhost:4000/api/superadmin/municipalities/plan/deneme')
+    fetchJson('/api/superadmin/municipalities/plan/deneme')
       .then((data) => {
         const denemeCount = Array.isArray(data) ? data.length : data?.count ?? 0;
         denemePlanBadge.textContent = `${denemeCount} belediye`;
@@ -382,7 +382,7 @@ if (!municipalityTableBody) {
   }
 
   if (recentLogsContainer) {
-    fetchJson('http://localhost:4000/api/superadmin/logs/recent')
+    fetchJson('/api/superadmin/logs/recent')
       .then(renderRecentLogs)
       .catch((err) => {
         console.error('Son aktiviteler alınamadı:', err);

@@ -207,7 +207,7 @@
   attachMunicipalityFilters();
 
   if (municipalityTableBody) {
-    fetchJson('http://localhost:4000/api/superadmin/municipalities')
+    fetchJson('/api/superadmin/municipalities')
       .then((data) => {
         municipalityCache = Array.isArray(data)
           ? data
