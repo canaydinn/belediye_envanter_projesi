@@ -20,9 +20,26 @@
     console.warn('Dashboard: token bulunamadı, sayaçlar güncellenemiyor.');
   }
 
+  // API base URL'ini dinamik olarak belirle
+  const isLocal =
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1';
+  const API_BASE_URL = isLocal ? 'http://localhost:4000' : '';
+
+  // Mevcut path'ten base path'i belirle (/admin veya /api/admin)
+  const currentPath = window.location.pathname;
+  const basePath = currentPath.startsWith('/api/admin') 
+    ? '/api/admin' 
+    : currentPath.startsWith('/admin') 
+    ? '/admin' 
+    : '/admin';
+
   // Ortak fetch helper
   function fetchJson(url) {
-    return fetch(url, {
+    // Eğer URL zaten tam URL ise (http:// ile başlıyorsa), olduğu gibi kullan
+    // Değilse, API_BASE_URL ile birleştir
+    const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
+    return fetch(fullUrl, {
       method: 'GET',
       headers,
       credentials: 'include',
@@ -92,13 +109,16 @@ if (!municipalityTableBody) {
         } = municipality;
 
         const location = [province, district].filter(Boolean).join(' / ') || '-';
-const detailHref = `http://localhost:5500/admin/super-admin-municipalities-detail.html?id=${id}`;
-      console.log('Detay linki:', detailHref);
+        const detailHref = `${basePath}/super-admin-municipalities-detail.html?id=${id}`;
+        console.log('Detay linki:', detailHref);
         const detailLink = id
         ? `<a href="${detailHref}" class="btn btn-sm btn-outline-primary">Detay</a>`
         : '';
+        const usersLink = id
+          ? `<a href="${basePath}/super-admin-users.html?municipality_id=${id}" class="btn btn-sm btn-outline-info">Kullanıcılar</a>`
+          : '';
         const editLink = id
-          ? `<a href="/super-admin-municipality-edit.html?id=${id}" class="btn btn-sm btn-outline-secondary">Düzenle</a>`
+          ? `<a href="${basePath}/super-admin-municipalities-edit.html?id=${id}" class="btn btn-sm btn-outline-secondary">Düzenle</a>`
           : '';
 
         const deactivateButton = id
@@ -384,7 +404,7 @@ const detailHref = `http://localhost:5500/admin/super-admin-municipalities-detai
 
     try {
       const response = await fetch(
-        `http://localhost:4000/api/superadmin/municipalities/${municipalityId}/deactivate`,
+        `${API_BASE_URL}/api/superadmin/municipalities/${municipalityId}/deactivate`,
         {
           method: 'PATCH',
           headers,

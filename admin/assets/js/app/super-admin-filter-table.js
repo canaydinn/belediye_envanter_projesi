@@ -8,8 +8,25 @@
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
-  const fetchJson = (url) =>
-    fetch(url, {
+  // API base URL'ini dinamik olarak belirle
+  const isLocal =
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1';
+  const API_BASE_URL = isLocal ? 'http://localhost:4000' : '';
+
+  // Mevcut path'ten base path'i belirle (/admin veya /api/admin)
+  const currentPath = window.location.pathname;
+  const basePath = currentPath.startsWith('/api/admin') 
+    ? '/api/admin' 
+    : currentPath.startsWith('/admin') 
+    ? '/admin' 
+    : '/admin';
+
+  const fetchJson = (url) => {
+    // Eğer URL zaten tam URL ise (http:// ile başlıyorsa), olduğu gibi kullan
+    // Değilse, API_BASE_URL ile birleştir
+    const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
+    return fetch(fullUrl, {
       method: 'GET',
       headers,
       credentials: 'include',
@@ -19,6 +36,7 @@
       }
       return response.json();
     });
+  };
 
   const formatDate = (value) => {
     if (!value) return '-';
@@ -78,15 +96,15 @@
         const location = [province, district].filter(Boolean).join(' / ') || '-';
 
         const detailLink = id
-          ? `<a href="/admin/super-admin-municipalities-detail.html?id=${id}" class="btn btn-sm btn-outline-primary">Detay</a>`
+          ? `<a href="${basePath}/super-admin-municipalities-detail.html?id=${id}" class="btn btn-sm btn-outline-primary">Detay</a>`
           : '';
 
         const usersLink = id
-          ? `<a href="/super-admin-users.html?municipality_id=${id}" class="btn btn-sm btn-outline-info">Kullanıcılar</a>`
+          ? `<a href="${basePath}/super-admin-users.html?municipality_id=${id}" class="btn btn-sm btn-outline-info">Kullanıcılar</a>`
           : '';
 
         const editLink = id
-          ? `<a href="/admin/super-admin-municipalities-edit.html?id=${id}" class="btn btn-sm btn-outline-secondary">Düzenle</a>`
+          ? `<a href="${basePath}/super-admin-municipalities-edit.html?id=${id}" class="btn btn-sm btn-outline-secondary">Düzenle</a>`
           : '';
 
         const deactivateButton = id
