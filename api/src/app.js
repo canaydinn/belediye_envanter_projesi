@@ -61,6 +61,10 @@ app.get(['/', '/api', '/api/'], (req, res) => {
   }
 });
 
+// API routes ÖNCE (çünkü /api/auth/* gibi endpoint'ler var)
+// Bu route'lar /api/admin/* route'undan önce gelmeli
+app.use('/api', routes);
+
 // Assets klasörü herkese açık (CSS, JS, resimler vb.)
 app.use('/api/admin/assets', express.static(path.join(adminPath, 'assets')));
 
@@ -85,9 +89,7 @@ app.get('/api/admin', (req, res) => {
 });
 
 // Diğer tüm admin sayfaları için authentication gerekli
+// Bu route EN SONDA olmalı (çünkü geniş bir pattern)
 app.use('/api/admin', requireAuthPage, express.static(adminPath));
-
-// API routes (en sonda, çünkü /api/* pattern'i geniş)
-app.use('/api', routes);
 
 module.exports = app;
