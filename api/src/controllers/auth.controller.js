@@ -44,6 +44,16 @@ const signAccessToken = (user) => {
 // POST /api/auth/login
 async function login(req, res) {
   try {
+    // Debug: DB connection bilgilerini logla (production'da da görünür)
+    console.log('🔍 Login attempt - DB Config Check:', {
+      hasConnectionString: !!process.env.SUPABASE_DB_CONNECTION_STRING,
+      host: process.env.SUPABASE_DB_HOST || 'NOT SET',
+      user: process.env.SUPABASE_DB_USER || 'NOT SET',
+      database: process.env.SUPABASE_DB_NAME || 'NOT SET',
+      hasPassword: !!process.env.SUPABASE_DB_PASSWORD,
+      nodeEnv: process.env.NODE_ENV
+    });
+    
     const email = (req.body?.email || '').trim().toLowerCase();
     const password = req.body?.password;
 

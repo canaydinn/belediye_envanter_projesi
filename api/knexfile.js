@@ -4,12 +4,41 @@ require('dotenv').config();
 function getConnection() {
   // Eğer connection string varsa onu kullan
   if (process.env.SUPABASE_DB_CONNECTION_STRING) {
-    return process.env.SUPABASE_DB_CONNECTION_STRING;
+    const connString = process.env.SUPABASE_DB_CONNECTION_STRING;
+    // Connection string içinde "host=host" veya "@host:" gibi yanlış değerler olabilir, kontrol et
+    if (connString.includes('host=host') || 
+        connString.includes('hostname=host') || 
+        connString.includes('@host:') ||
+        connString.includes('@host/')) {
+      console.error('❌ SUPABASE_DB_CONNECTION_STRING içinde geçersiz host değeri tespit edildi!');
+      console.error('❌ Connection String:', connString.replace(/:[^:@]+@/, ':****@')); // Password'u gizle
+      throw new Error('SUPABASE_DB_CONNECTION_STRING içinde geçersiz host değeri ("host" kelimesi). Lütfen Vercel environment variables\'da connection string\'i düzeltin. Format: postgresql://user:password@db.xxxxx.supabase.co:5432/dbname');
+    }
+    return connString;
   }
   
   // Aksi halde connection object kullan
+  const host = process.env.SUPABASE_DB_HOST || 'db.qdmyveocfdjvpqziswxk.supabase.co';
+  
+  // Host değerini validate et
+  if (!host || host === 'host' || host.trim() === '') {
+    console.error('❌ SUPABASE_DB_HOST geçersiz:', host);
+    throw new Error(`SUPABASE_DB_HOST geçersiz: "${host}". Lütfen Vercel environment variables\'da SUPABASE_DB_HOST değerini kontrol edin.`);
+  }
+  
+  // Debug log (production'da da görünür Vercel logs'da)
+  if (process.env.NODE_ENV === 'production') {
+    console.log('🔍 DB Connection Config:', {
+      host: host,
+      port: process.env.SUPABASE_DB_PORT || '5432',
+      user: process.env.SUPABASE_DB_USER || 'postgres',
+      database: process.env.SUPABASE_DB_NAME || 'postgres',
+      hasPassword: !!process.env.SUPABASE_DB_PASSWORD
+    });
+  }
+  
   return {
-    host: process.env.SUPABASE_DB_HOST || 'qdmyveocfdjvpqziswxk.supabase.co',
+    host: host,
     port: parseInt(process.env.SUPABASE_DB_PORT || '5432'),
     user: process.env.SUPABASE_DB_USER || 'postgres',
     password: process.env.SUPABASE_DB_PASSWORD,
