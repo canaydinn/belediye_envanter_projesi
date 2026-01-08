@@ -8,12 +8,14 @@ const path = require('path');
 
 const app = express();
 // CORS ayarları: Local ve production domain'leri
+// NOT: VERCEL_URL Vercel tarafından otomatik sağlanır, .env'de olması gerekmez
 const allowedOrigins = [
   'http://127.0.0.1:5500',
   'http://localhost:5500',
   'http://localhost:4000',
   'https://envanter360.vercel.app',
-  // Preview deployments için de ekle (Vercel otomatik preview URL'leri oluşturur)
+  // Preview deployments için Vercel otomatik olarak VERCEL_URL environment variable'ını sağlar
+  // Local development'ta bu değişken olmayabilir, bu yüzden optional olarak ekliyoruz
   ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : [])
 ];
 
@@ -46,15 +48,18 @@ app.use(
 const projectRoot = path.resolve(__dirname, '..','..'); // ✅ köke çık
 const adminPath = path.join(projectRoot, 'admin');
 app.use(cookieParser());
+app.use(express.json());
 
 // Vercel'de tüm istekler /api/* formatına rewrite edilir
-// Bu yüzden route'ları /api prefix'i ile handle etmeliyiz
-
-// Root path için yönlendirme
+// Root path'i EN ÖNCE handle et (diğer route'lardan önce)
+// Hem trailing slash ile hem de olmadan handle et
 app.get(['/api', '/api/'], (req, res) => {
-  const protocol = req.protocol || 'https';
-  const host = req.get('host') || req.hostname;
-  return res.redirect(`${protocol}://${host}/api/admin/login`);
+  try {
+    return res.sendFile(path.join(adminPath, 'login.html'));
+  } catch (error) {
+    console.error('Error serving login.html:', error);
+    return res.status(500).send('Error loading login page');
+  }
 });
 
 // Assets klasörü herkese açık (CSS, JS, resimler vb.)
@@ -83,8 +88,7 @@ app.get('/api/admin', (req, res) => {
 // Diğer tüm admin sayfaları için authentication gerekli
 app.use('/api/admin', requireAuthPage, express.static(adminPath));
 
-app.use(express.json());
-
+// API routes (en sonda, çünkü /api/* pattern'i geniş)
 app.use('/api', routes);
 
 module.exports = app;
