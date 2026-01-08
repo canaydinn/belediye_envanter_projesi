@@ -5,8 +5,7 @@ const path = require('path');
 
 // Vercel serverless ortamında path çözümlemesi için __dirname kullan
 // require() modül çözümlemesi yapar, .js uzantısı gerekmez
-const appPath = path.join(__dirname, 'src', 'app');
-const app = require(appPath);
+const app = require('../src/app');
 
 // Vercel Serverless Function için export
 // Vercel Express app'i otomatik olarak handle eder

@@ -46,14 +46,13 @@ app.use(
   })
 );
 const projectRoot = path.resolve(__dirname, '..','..'); // ✅ köke çık
-const adminPath = path.join(projectRoot, 'admin');
+const adminPath = path.join(process.cwd(), 'admin');
 app.use(cookieParser());
 app.use(express.json());
 
-// Vercel'de tüm istekler /api/* formatına rewrite edilir
-// Root path'i EN ÖNCE handle et (diğer route'lardan önce)
-// Hem trailing slash ile hem de olmadan handle et
-app.get(['/api', '/api/'], (req, res) => {
+// Root path'i handle et - hem / hem de /api/ formatında
+// Vercel'de / → /api/ rewrite edilir ama bazen çalışmayabilir
+app.get(['/', '/api', '/api/'], (req, res) => {
   try {
     return res.sendFile(path.join(adminPath, 'login.html'));
   } catch (error) {
@@ -63,7 +62,7 @@ app.get(['/api', '/api/'], (req, res) => {
 });
 
 // Assets klasörü herkese açık (CSS, JS, resimler vb.)
-app.use('/api/admin/assets', express.static(path.join(adminPath, 'assets')));
+app.use('/api/admin/assets', express.static(path.join(process.cwd(), 'admin/assets')));
 
 // Login sayfası herkese açık
 app.get(['/api/admin/login', '/api/admin/login.html'], (req, res) => {
