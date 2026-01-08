@@ -103,8 +103,38 @@ async function login(req, res) {
       },
     });
   } catch (err) {
-    console.error('auth.login hatası:', err);
-    return res.status(500).json({ message: 'Sunucu hatası' });
+    console.error('❌ auth.login hatası:', {
+      message: err.message,
+      stack: err.stack,
+      code: err.code,
+      errno: err.errno,
+      syscall: err.syscall,
+      hostname: err.hostname,
+      nodeEnv: process.env.NODE_ENV
+    });
+    
+    // Database bağlantı hatası için özel mesaj
+    if (err.code === 'ECONNREFUSED' || err.code === 'ETIMEDOUT' || err.code === 'ENOTFOUND') {
+      console.error('❌ Database bağlantı hatası tespit edildi!');
+      return res.status(500).json({ 
+        message: 'Veritabanı bağlantı hatası. Lütfen yöneticiye başvurun.',
+        error: process.env.NODE_ENV === 'development' ? err.message : undefined
+      });
+    }
+    
+    // Knex query hatası
+    if (err.message && err.message.includes('timeout')) {
+      console.error('❌ Database query timeout hatası!');
+      return res.status(500).json({ 
+        message: 'Veritabanı sorgusu zaman aşımına uğradı.',
+        error: process.env.NODE_ENV === 'development' ? err.message : undefined
+      });
+    }
+    
+    return res.status(500).json({ 
+      message: 'Sunucu hatası',
+      error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
   }
 }
 

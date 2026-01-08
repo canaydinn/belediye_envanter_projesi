@@ -17,11 +17,18 @@ const allowedOrigins = [
   ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : [])
 ];
 
+// Vercel preview ve production URL'leri için pattern matching
+const isVercelUrl = (origin) => {
+  if (!origin) return false;
+  // Tüm *.vercel.app domain'lerini kabul et
+  return /^https:\/\/.*\.vercel\.app$/.test(origin);
+};
+
 app.use(
   cors({
     origin: function (origin, callback) {
       // Same-origin istekler (örneğin aynı domain'den) veya origin yoksa (Postman gibi) izin ver
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.includes(origin) || isVercelUrl(origin)) {
         callback(null, true);
       } else {
         // Production'da sadece log, development'ta hata göster
