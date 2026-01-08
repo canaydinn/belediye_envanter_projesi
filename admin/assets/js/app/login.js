@@ -49,14 +49,23 @@
       if (data.token) {
         localStorage.setItem('token', data.token);
       }
+      
+      // Mevcut path'ten base path'i belirle (/admin veya /api/admin)
+      const currentPath = window.location.pathname;
+      const basePath = currentPath.startsWith('/api/admin') 
+        ? '/api/admin' 
+        : currentPath.startsWith('/admin') 
+        ? '/admin' 
+        : '/admin';
+      
       const roleId = Number(data?.user?.role_id);
       if (roleId === 1) {
-        window.location.href = 'super-admin-dashboard.html';
+        window.location.href = `${basePath}/super-admin-dashboard.html`;
       } else if (roleId === 3) {
-        window.location.href = 'dashboard.html';
+        window.location.href = `${basePath}/dashboard.html`;
       } 
       else if (roleId === 2) {
-        window.location.href = 'dashboard.html';
+        window.location.href = `${basePath}/dashboard.html`;
       } else {
         showError('Yetkiniz için uygun bir yönlendirme bulunamadı.');
       }
