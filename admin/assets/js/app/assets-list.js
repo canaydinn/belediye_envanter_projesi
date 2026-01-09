@@ -1,9 +1,14 @@
 // Assets list - Load and filter assets
 // Tüm varlıkları saklamak için global değişken
 let allAssets = [];
+let currentUserRoleId = null;
 
 // Filtrele butonuna event listener ekle
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  // Kullanıcı rolünü al
+  if (typeof getCurrentUserRole === 'function') {
+    currentUserRoleId = await getCurrentUserRole();
+  }
   const filterForm = document.querySelector('form.row.g-3');
   const filterButton = filterForm?.querySelector('button.btn-primary');
   const resetButton = filterForm?.querySelector('button[type="reset"]');
@@ -42,6 +47,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const buildRow = (asset) => {
       const updatedAt = formatDate(asset?.updated_at || asset?.created_at);
+      const approvalBadge = typeof renderApprovalStatusBadge === 'function' 
+        ? renderApprovalStatusBadge(asset?.approval_status) 
+        : '';
+      const approvalButtons = typeof renderApprovalButtons === 'function'
+        ? renderApprovalButtons(asset, currentUserRoleId)
+        : '';
+      
       return `
         <tr data-asset-id="${asset.id}">
           <td>${asset?.asset_code || '-'}</td>
@@ -51,9 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
           <td>${asset?.location_name || '-'}</td>
           <td>${asset?.assigned_user_name || '-'}</td>
           <td>${renderStatus(asset?.status)}</td>
+          <td>${approvalBadge}</td>
           <td>${updatedAt}</td>
           <td class="text-center">
             <div class="d-inline-flex gap-1">
+              ${approvalButtons}
               <a href="/admin/asset-detail.html?id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
               <a href="/admin/asset-edit.html?id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
               <a href="/admin/create-assets-movements.html?asset_id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
@@ -66,13 +80,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // İlk yüklemede tüm varlıkları al
     if (allAssets.length === 0) {
-      tableBody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">Varlıklar yükleniyor...</td></tr>';
+      tableBody.innerHTML = '<tr><td colspan="10" class="text-center text-muted">Varlıklar yükleniyor...</td></tr>';
       try {
-        allAssets = await apiFetch('/assets', { method: 'GET' });
+        // approval_status filtresi varsa ekle
+        const queryParams = filters.approval_status 
+          ? `?approval_status=${filters.approval_status}`
+          : '';
+        allAssets = await apiFetch(`/assets${queryParams}`, { method: 'GET' });
         if (!Array.isArray(allAssets)) allAssets = [];
       } catch (err) {
         console.error('Varlıklar yüklenemedi:', err);
-        tableBody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">Varlık listesi yüklenirken hata oluştu.</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="10" class="text-center text-danger">Varlık listesi yüklenirken hata oluştu.</td></tr>';
         if (summary) summary.textContent = 'Gösterilen: 0 / 0';
         return;
       }
@@ -147,9 +165,16 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // Onay durumu filtresi (client-side)
+    if (filters.approval_status) {
+      filteredAssets = filteredAssets.filter(asset => 
+        asset.approval_status === filters.approval_status
+      );
+    }
+
     // Sonuçları göster
     if (!filteredAssets.length) {
-      tableBody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">Filtre kriterlerine uygun varlık bulunamadı.</td></tr>';
+      tableBody.innerHTML = '<tr><td colspan="10" class="text-center text-muted">Filtre kriterlerine uygun varlık bulunamadı.</td></tr>';
       if (summary) summary.textContent = 'Gösterilen: 0 / 0';
       return;
     }
@@ -157,6 +182,9 @@ document.addEventListener('DOMContentLoaded', () => {
     tableBody.innerHTML = filteredAssets.map(buildRow).join('');
     if (summary) summary.textContent = `Gösterilen: ${filteredAssets.length} / ${allAssets.length}`;
   };
+
+  // Global loadAssets fonksiyonunu export et (onay işlemlerinden sonra yenileme için)
+  window.loadAssets = loadAssets;
 
   // İlk yükleme
   loadAssets();
@@ -172,6 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
       department_id: document.getElementById('filterDepartment')?.value || null,
       location_id: document.getElementById('filterLocation')?.value || null,
       status: document.getElementById('filterStatus')?.value || null,
+      approval_status: document.getElementById('filterApprovalStatus')?.value || null,
       date_from: document.getElementById('filterDateFrom')?.value || null,
       date_to: document.getElementById('filterDateTo')?.value || null
     };

@@ -229,6 +229,15 @@
                         <option>Bakımda</option>
                       </select>
                     </div>
+                    <div class="col-12 col-md-3">
+                      <label for="filterApprovalStatus" class="form-label">Onay Durumu</label>
+                      <select id="filterApprovalStatus" class="form-select">
+                        <option value="">Tümü</option>
+                        <option value="pending">Beklemede</option>
+                        <option value="approved">Onaylandı</option>
+                        <option value="rejected">Reddedildi</option>
+                      </select>
+                    </div>
                     <div class="col-12 col-md-4">
                       <label class="form-label">Oluşturulma Tarihi</label>
                       <div class="row g-2">
@@ -276,13 +285,14 @@
                             <th>Lokasyon</th>
                             <th>Sorumlu Kullanıcı</th>
                             <th>Durum</th>
+                            <th>Onay Durumu</th>
                             <th>Son Güncelleme</th>
                             <th class="text-center">İşlemler</th>
                           </tr>
                         </thead>
                         <tbody data-role="assets-table-body">
                           <tr>
-                            <td colspan="9" class="text-center text-muted">Varlıklar yükleniyor...</td>
+                            <td colspan="10" class="text-center text-muted">Varlıklar yükleniyor...</td>
                           </tr>
                         </tbody>
                       </table>
@@ -395,6 +405,7 @@
   
   <!-- Page JS -->
   <script src="/admin/assets/js/app/api.js"></script>
+  <script src="/admin/assets/js/app/assets-approval.js"></script>
   <script src="/admin/assets/js/app/assets-filters.js"></script>
   <script src="/admin/assets/js/app/assets-list.js"></script>
   <script src="/admin/assets/js/app/assets-status.js"></script>

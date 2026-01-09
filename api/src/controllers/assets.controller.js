@@ -41,6 +41,9 @@ const ASSET_SELECT_COLUMNS = [
   'e.hurda_degeri',
   'e.current_value',
   'e.is_movable',
+  'e.approval_status',
+  'e.approved_by_user_id',
+  'e.approved_at',
   'c.name as category_name',
   'd.name as department_name',
   'l.name as location_name',
@@ -82,8 +85,9 @@ async function validateAssetRefs({ municipalityId, category_id, department_id, l
 exports.listAssets = async (req, res) => {
   try {
     const municipalityId = req.tenantMunicipalityId; // ✅ tenantScope set eder
+    const { approval_status } = req.query; // Onay durumu filtresi
 
-    const assets = await knex('assets as e')
+    const query = knex('assets as e')
       .leftJoin('asset_categories as c', function () {
         this.on('e.category_id', 'c.id').andOn('e.municipality_id', 'c.municipality_id');
       })
@@ -96,7 +100,14 @@ exports.listAssets = async (req, res) => {
       .leftJoin('users as u', function () {
         this.on('e.assigned_user_id', 'u.id').andOn('e.municipality_id', 'u.municipality_id');
       })
-      .where('e.municipality_id', municipalityId)
+      .where('e.municipality_id', municipalityId);
+
+    // Onay durumu filtresi
+    if (approval_status && ['pending', 'approved', 'rejected'].includes(approval_status)) {
+      query.andWhere('e.approval_status', approval_status);
+    }
+
+    const assets = await query
       .select(ASSET_SELECT_COLUMNS)
       .orderBy('e.id', 'asc');
 
@@ -262,6 +273,7 @@ exports.createAsset = async (req, res) => {
           created_by_user_id: currentUserId,
           updated_by_user_id: currentUserId,
           municipality_id: municipalityId,
+          approval_status: 'pending', // Yeni eklenen envanterler pending durumunda
           qrcode: qrcode ? String(qrcode).trim() : null,
           brand: brand ? String(brand).trim() : null,
           model: model ? String(model).trim() : null,
@@ -633,6 +645,105 @@ exports.getAssetByQRCode = async (req, res) => {
     return res.json(asset);
   } catch (err) {
     console.error('assets.getAssetByQRCode hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
+/**
+ * POST /api/assets/:id/approve
+ * Envanteri onaylar (sadece TASINIR_KONTROL yetkilisi veya ADMIN)
+ */
+exports.approveAsset = async (req, res) => {
+  try {
+    const municipalityId = req.tenantMunicipalityId;
+    const currentUserId = req.user?.id;
+    const { id } = req.params;
+    const { notes } = req.body || {};
+
+    // Envanteri bul
+    const asset = await knex('assets')
+      .where({ id, municipality_id: municipalityId })
+      .first();
+
+    if (!asset) {
+      return res.status(404).json({ message: 'Varlık bulunamadı veya bu belediyeye ait değil' });
+    }
+
+    // Sadece pending durumundaki envanterler onaylanabilir
+    if (asset.approval_status !== 'pending') {
+      return res.status(400).json({ 
+        message: `Bu envanter zaten ${asset.approval_status === 'approved' ? 'onaylanmış' : 'reddedilmiş'} durumda` 
+      });
+    }
+
+    // Onayla
+    const [updated] = await knex('assets')
+      .where({ id, municipality_id: municipalityId })
+      .update({
+        approval_status: 'approved',
+        approved_by_user_id: currentUserId,
+        approved_at: knex.fn.now(),
+        updated_by_user_id: currentUserId,
+        updated_at: knex.fn.now(),
+      })
+      .returning('*');
+
+    return res.json({
+      message: 'Envanter başarıyla onaylandı',
+      asset: updated,
+    });
+  } catch (err) {
+    console.error('assets.approveAsset hatası:', err);
+    return res.status(500).json({ message: 'Sunucu hatası' });
+  }
+};
+
+/**
+ * POST /api/assets/:id/reject
+ * Envanteri reddeder (sadece TASINIR_KONTROL yetkilisi veya ADMIN)
+ */
+exports.rejectAsset = async (req, res) => {
+  try {
+    const municipalityId = req.tenantMunicipalityId;
+    const currentUserId = req.user?.id;
+    const { id } = req.params;
+    const { reason } = req.body || {};
+
+    // Envanteri bul
+    const asset = await knex('assets')
+      .where({ id, municipality_id: municipalityId })
+      .first();
+
+    if (!asset) {
+      return res.status(404).json({ message: 'Varlık bulunamadı veya bu belediyeye ait değil' });
+    }
+
+    // Sadece pending durumundaki envanterler reddedilebilir
+    if (asset.approval_status !== 'pending') {
+      return res.status(400).json({ 
+        message: `Bu envanter zaten ${asset.approval_status === 'approved' ? 'onaylanmış' : 'reddedilmiş'} durumda` 
+      });
+    }
+
+    // Reddet
+    const [updated] = await knex('assets')
+      .where({ id, municipality_id: municipalityId })
+      .update({
+        approval_status: 'rejected',
+        approved_by_user_id: currentUserId,
+        approved_at: knex.fn.now(),
+        updated_by_user_id: currentUserId,
+        updated_at: knex.fn.now(),
+      })
+      .returning('*');
+
+    return res.json({
+      message: 'Envanter reddedildi',
+      asset: updated,
+      reason: reason || null,
+    });
+  } catch (err) {
+    console.error('assets.rejectAsset hatası:', err);
     return res.status(500).json({ message: 'Sunucu hatası' });
   }
 };

@@ -1,0 +1,41 @@
+Endpoint Kategorisi	READ (Görüntüleme)	WRITE (Ekleme/Düzenleme)	DELETE (Silme)	Özel Notlar
+Assets (Envanter)				
+GET /api/assets	Tüm roller (1-6)	-	-	Herkes görebilir
+POST /api/assets	-	ADMIN, TASINIR_KAYIT	-	Sadece kayıt yapanlar ekleyebilir
+PUT /api/assets/:id	-	ADMIN, TASINIR_KAYIT, TASINIR_KONTROL	-	Kontrol yetkilisi düzeltebilir
+DELETE /api/assets/:id	-	-	ADMIN	Sadece admin silebilir
+Asset Movements (Hareketler)				
+GET /api/asset-movements	Tüm roller (1-6)	-	-	Herkes görebilir
+POST /api/asset-movements	-	ADMIN, TASINIR_KAYIT, BIRIM_SORUMLUSU	-	Birim sorumlusu zimmet verebilir
+Asset Categories				
+GET /api/asset-categories	Tüm roller (1-6)	-	-	Herkes görebilir
+POST /api/asset-categories	-	ADMIN	-	Sadece admin kategori ekleyebilir
+PUT/DELETE /api/asset-categories/:id	-	-	ADMIN	Sadece admin
+Departments (Birimler)				
+GET /api/departments	Tüm roller (1-6)	-	-	Herkes görebilir
+POST/PUT/DELETE /api/departments	-	-	ADMIN	Sadece admin
+Locations (Lokasyonlar)				
+GET /api/locations	Tüm roller (1-6)	-	-	Herkes görebilir
+POST/PUT/DELETE /api/locations	-	-	ADMIN	Sadece admin
+Users (Kullanıcılar)				
+GET /api/users/*	ADMIN	-	-	Sadece admin görebilir
+POST /api/users	-	ADMIN	-	Sadece admin oluşturabilir
+PUT/PATCH /api/users/:id	-	ADMIN	-	Sadece admin
+Maintenance (Bakım)				
+GET /api/maintenance	Tüm roller (1-6)	-	-	Herkes görebilir
+POST /api/maintenance	-	ADMIN, TASINIR_KAYIT, KULLANICI	-	Kullanıcı arıza bildirebilir
+PATCH /api/maintenance/:id	-	ADMIN, TASINIR_KONTROL	-	Kontrol yetkilisi onaylayabilir
+DELETE /api/maintenance/:id	-	-	ADMIN	Sadece admin
+Inventory				
+GET /api/inventory	Tüm roller (1-6)	-	-	Herkes görebilir
+POST /api/inventory	-	ADMIN, TASINIR_KAYIT	-	Kayıt yetkilisi ekleyebilir
+PATCH /api/inventory/:id	-	ADMIN, TASINIR_KAYIT, TASINIR_KONTROL	-	Kontrol yetkilisi düzeltebilir
+DELETE /api/inventory/:id	-	-	ADMIN	Sadece admin
+Dashboard				
+GET /api/dashboard/*	Tüm roller (1-6)	-	-	Herkes görebilir
+Audit (Loglar)				
+GET /api/audit	ADMIN, TASINIR_KONTROL	-	-	Sadece admin ve kontrol yetkilisi
+Reports				
+GET /api/reports/*	ADMIN, TASINIR_KONTROL, BIRIM_SORUMLUSU	-	-	Rapor yetkisi
+Profile				
+GET/PUT /api/profile	Tüm roller (1-6)	-	-	Herkes kendi profilini görebilir
