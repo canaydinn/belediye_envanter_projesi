@@ -110,48 +110,69 @@ function hasPermission(userRoleId, allowedRoles) {
 function applyMenuPermissions(userRoleId) {
   if (!userRoleId) return;
 
-  // Menü öğelerini bul ve kontrol et
-  Object.keys(MENU_PERMISSIONS).forEach(menuKey => {
-    const allowedRoles = MENU_PERMISSIONS[menuKey];
-    const hasAccess = hasPermission(userRoleId, allowedRoles);
-
-    // Menü linklerini bul (href içinde menuKey geçen)
-    // Farklı URL formatlarını destekle: /admin/users.html, users.html, ../admin/users.html
-    const menuLinks = document.querySelectorAll('a.menu-link');
-    menuLinks.forEach(link => {
-      const href = link.getAttribute('href') || '';
-      
-      // URL'den sayfa anahtarını çıkar
-      let matches = false;
-      if (menuKey === 'dashboard' && (href.includes('dashboard') || href.includes('index'))) {
-        matches = true;
-      } else if (menuKey === 'assets' && (href.includes('assets.html') || href.includes('asset-'))) {
-        matches = true;
-      } else if (menuKey === 'assets-movements' && href.includes('assets-movements')) {
-        matches = true;
-      } else if (menuKey === 'locations' && (href.includes('locations') || href.includes('location-'))) {
-        matches = true;
-      } else if (menuKey === 'categories' && (href.includes('categories') || href.includes('category-'))) {
-        matches = true;
-      } else if (menuKey === 'users' && (href.includes('users.html') || href.includes('user-'))) {
-        matches = true;
-      } else if (menuKey === 'profile' && href.includes('profile')) {
-        matches = true;
-      } else if (menuKey === 'settings' && href.includes('settings')) {
-        matches = true;
+  // Tüm menü linklerini bul
+  const menuLinks = document.querySelectorAll('a.menu-link');
+  
+  menuLinks.forEach(link => {
+    const href = link.getAttribute('href') || '';
+    const menuText = link.textContent?.trim() || '';
+    const lowerHref = href.toLowerCase();
+    const lowerText = menuText.toLowerCase();
+    
+    // URL'den sayfa anahtarını çıkar
+    let menuKey = null;
+    
+    // Dashboard kontrolü
+    if (lowerHref.includes('dashboard') || lowerHref.includes('index.html') || lowerText.includes('dashboard')) {
+      menuKey = 'dashboard';
+    }
+    // Assets Movements kontrolü (önce kontrol et, çünkü assets.html'den önce gelmeli)
+    else if (lowerHref.includes('assets-movements') || lowerText.includes('hareket')) {
+      menuKey = 'assets-movements';
+    }
+    // Assets kontrolü (assets-movements hariç)
+    else if (lowerHref.includes('assets.html') || (lowerHref.includes('asset') && !lowerHref.includes('movements'))) {
+      menuKey = 'assets';
+    }
+    // Locations kontrolü
+    else if (lowerHref.includes('locations') || lowerHref.includes('location-') || lowerText.includes('lokasyon')) {
+      menuKey = 'locations';
+    }
+    // Categories kontrolü
+    else if (lowerHref.includes('categories') || lowerHref.includes('category-') || lowerText.includes('kategori')) {
+      menuKey = 'categories';
+    }
+    // Users kontrolü - Sadece users.html veya "Kullanıcılar" metni (profile hariç)
+    else if ((lowerHref.includes('users.html') || (lowerHref.includes('/users') && !lowerHref.includes('profile'))) || lowerText.includes('kullanıcı')) {
+      menuKey = 'users';
+    }
+    // Profile kontrolü
+    else if (lowerHref.includes('profile') || lowerText.includes('profil')) {
+      menuKey = 'profile';
+    }
+    // Settings kontrolü
+    else if (lowerHref.includes('settings') || lowerText.includes('ayar')) {
+      menuKey = 'settings';
+    }
+    
+    // Eğer menuKey bulunduysa, yetki kontrolü yap
+    if (menuKey) {
+      const allowedRoles = MENU_PERMISSIONS[menuKey];
+      if (!allowedRoles) {
+        return;
       }
       
-      if (matches) {
-        const menuItem = link.closest('.menu-item');
-        if (menuItem) {
-          if (!hasAccess) {
-            menuItem.style.display = 'none';
-          } else {
-            menuItem.style.display = '';
-          }
+      const hasAccess = hasPermission(userRoleId, allowedRoles);
+      const menuItem = link.closest('.menu-item');
+      
+      if (menuItem) {
+        if (!hasAccess) {
+          menuItem.style.display = 'none';
+        } else {
+          menuItem.style.display = '';
         }
       }
-    });
+    }
   });
 }
 
@@ -353,11 +374,20 @@ async function initRoleBasedUI() {
 }
 
 // Sayfa yüklendiğinde çalıştır
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initRoleBasedUI);
-} else {
-  initRoleBasedUI();
+// DOM tamamen yüklendikten sonra çalıştır (menü öğelerinin render edilmesi için)
+function runWhenReady() {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      // Menü render edildikten sonra çalıştır
+      setTimeout(initRoleBasedUI, 100);
+    });
+  } else {
+    // Sayfa zaten yüklü, kısa bir gecikme ile çalıştır
+    setTimeout(initRoleBasedUI, 100);
+  }
 }
+
+runWhenReady();
 
 // Global fonksiyonlar
 window.getCurrentUserRole = getCurrentUserRole;
