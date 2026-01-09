@@ -20,6 +20,7 @@
       console.error('Çıkış işlemi sırasında bir hata oluştu:', error);
     } finally {
       localStorage.removeItem('token');
+      localStorage.removeItem('user_role_id'); // Rol cache'ini temizle
       window.location.href = 'login.html';
     }
   };

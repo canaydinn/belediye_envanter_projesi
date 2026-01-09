@@ -69,8 +69,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="d-inline-flex gap-1">
               ${approvalButtons}
               <a href="/admin/asset-detail.html?id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-eye"></i></a>
-              <a href="/admin/asset-edit.html?id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-edit"></i></a>
-              <a href="/admin/create-assets-movements.html?asset_id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-repeat"></i></a>
+              <a href="/admin/asset-edit.html?id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary" data-role="edit-asset"><i class="ti ti-edit"></i></a>
+              <a href="/admin/create-assets-movements.html?asset_id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary" data-role="create-movement"><i class="ti ti-repeat"></i></a>
               <a href="/admin/asset-qr.html?id=${asset.id}" class="btn btn-sm btn-icon btn-text-secondary"><i class="ti ti-maximize"></i></a>
             </div>
           </td>
