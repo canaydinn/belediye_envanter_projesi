@@ -417,16 +417,25 @@
 <script src="assets/vendor/js/bootstrap.js"></script>
 <script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 <script src="assets/vendor/libs/node-waves/node-waves.js"></script>
-<script src="../admin/assets/js/app/logout.js"></script>
 
 <!-- Vuexy core JS -->
+<script src="assets/vendor/js/helpers.js"></script>
+<script src="assets/js/config.js"></script>
 <script src="assets/vendor/js/menu.js"></script>
 <script src="assets/js/main.js"></script>
+
+<!-- Uygulama JS -->
+<script src="assets/js/app/config.js"></script> <!-- varsa ortak config -->
+<script src="../admin/assets/js/app/logout.js"></script>
 <script>
     /************************************************************
      * 0) ORTAK AYARLAR + YARDIMCI FONKSİYONLAR
      ************************************************************/
-    const API_BASE_URL = 'https://envanter360.vercel.app/ ';
+     const API_BASE_URL =
+      window.location.hostname === 'localhost'
+      ? 'http://localhost:4000'   // lokal
+      : 'https://envanter360.vercel.app'; 
+    
 
     // Cookie standardı: credentials include.
     // Eğer illa Bearer token da olsun isterseniz alttaki fallback aktif.
