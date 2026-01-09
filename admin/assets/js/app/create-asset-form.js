@@ -103,12 +103,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      successMessage.textContent = `${
-        data?.asset_code || payload.asset_code || 'Varlık'
-      } başarıyla kaydedildi.`;
+      successMessage.textContent = 'Varlık kaydı başarılı bir şekilde oluşturuldu.';
       successMessage.classList.remove('d-none');
       assetCreateForm.reset();
       assetCreateForm.classList.remove('was-validated');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error) {
       console.error('Varlık kaydı hatası:', error);
       errorMessage.textContent =
