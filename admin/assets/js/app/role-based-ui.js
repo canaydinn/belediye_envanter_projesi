@@ -108,50 +108,77 @@ function hasPermission(userRoleId, allowedRoles) {
  * @param {number} userRoleId - Kullanıcının rol ID'si
  */
 function applyMenuPermissions(userRoleId) {
-  if (!userRoleId) return;
+  if (!userRoleId) {
+    console.warn('applyMenuPermissions: userRoleId yok');
+    return;
+  }
 
-  // Tüm menü linklerini bul
-  const menuLinks = document.querySelectorAll('a.menu-link');
+  // Tüm menü linklerini bul (sadece sidebar menü içindekiler)
+  const menuContainer = document.querySelector('#layout-menu, .menu-inner, .navigation-main');
+  const menuLinks = menuContainer 
+    ? menuContainer.querySelectorAll('a.menu-link')
+    : document.querySelectorAll('a.menu-link');
   
-  menuLinks.forEach(link => {
+  if (menuLinks.length === 0) {
+    console.warn('applyMenuPermissions: Menü linkleri bulunamadı');
+    return;
+  }
+  
+  console.log(`[RBAC] ${menuLinks.length} menü linki bulundu, kontroller uygulanıyor...`);
+  
+  menuLinks.forEach((link, index) => {
     const href = link.getAttribute('href') || '';
-    const menuText = link.textContent?.trim() || '';
+    // Text içeriğini hem link'ten hem de içindeki div'den al
+    const menuText = (link.textContent?.trim() || '').toLowerCase();
     const lowerHref = href.toLowerCase();
-    const lowerText = menuText.toLowerCase();
+    
+    // Debug: Her menü linkini logla
+    if (lowerHref.includes('user') || menuText.includes('kullanıcı')) {
+      console.log(`[RBAC Debug] Menü linki ${index + 1}:`, {
+        href: href,
+        text: menuText,
+        lowerHref: lowerHref,
+        element: link
+      });
+    }
     
     // URL'den sayfa anahtarını çıkar
     let menuKey = null;
     
     // Dashboard kontrolü
-    if (lowerHref.includes('dashboard') || lowerHref.includes('index.html') || lowerText.includes('dashboard')) {
+    if (lowerHref.includes('dashboard') || lowerHref.includes('index.html') || menuText.includes('dashboard')) {
       menuKey = 'dashboard';
     }
     // Assets Movements kontrolü (önce kontrol et, çünkü assets.html'den önce gelmeli)
-    else if (lowerHref.includes('assets-movements') || lowerText.includes('hareket')) {
+    else if (lowerHref.includes('assets-movements') || menuText.includes('hareket')) {
       menuKey = 'assets-movements';
     }
     // Assets kontrolü (assets-movements hariç)
-    else if (lowerHref.includes('assets.html') || (lowerHref.includes('asset') && !lowerHref.includes('movements'))) {
+    else if (lowerHref.includes('assets.html') || (lowerHref.includes('asset') && !lowerHref.includes('movements') && !lowerHref.includes('profile'))) {
       menuKey = 'assets';
     }
     // Locations kontrolü
-    else if (lowerHref.includes('locations') || lowerHref.includes('location-') || lowerText.includes('lokasyon')) {
+    else if (lowerHref.includes('locations') || lowerHref.includes('location-') || menuText.includes('lokasyon')) {
       menuKey = 'locations';
     }
     // Categories kontrolü
-    else if (lowerHref.includes('categories') || lowerHref.includes('category-') || lowerText.includes('kategori')) {
+    else if (lowerHref.includes('categories') || lowerHref.includes('category-') || menuText.includes('kategori')) {
       menuKey = 'categories';
     }
-    // Users kontrolü - Sadece users.html veya "Kullanıcılar" metni (profile hariç)
-    else if ((lowerHref.includes('users.html') || (lowerHref.includes('/users') && !lowerHref.includes('profile'))) || lowerText.includes('kullanıcı')) {
+    // Users kontrolü - En spesifik kontrol (profile ve user-check gibi şeyleri hariç tut)
+    else if (
+      (lowerHref.includes('users.html') || 
+       (lowerHref.includes('/users') && !lowerHref.includes('profile') && !lowerHref.includes('user-check'))) ||
+      (menuText.includes('kullanıcı') && !menuText.includes('profil'))
+    ) {
       menuKey = 'users';
     }
     // Profile kontrolü
-    else if (lowerHref.includes('profile') || lowerText.includes('profil')) {
+    else if (lowerHref.includes('profile') || menuText.includes('profil')) {
       menuKey = 'profile';
     }
     // Settings kontrolü
-    else if (lowerHref.includes('settings') || lowerText.includes('ayar')) {
+    else if (lowerHref.includes('settings') || menuText.includes('ayar')) {
       menuKey = 'settings';
     }
     
@@ -159,6 +186,7 @@ function applyMenuPermissions(userRoleId) {
     if (menuKey) {
       const allowedRoles = MENU_PERMISSIONS[menuKey];
       if (!allowedRoles) {
+        console.warn(`MENU_PERMISSIONS'de ${menuKey} bulunamadı`);
         return;
       }
       
@@ -167,9 +195,14 @@ function applyMenuPermissions(userRoleId) {
       
       if (menuItem) {
         if (!hasAccess) {
+          console.log(`[RBAC] ${menuKey} menüsü gizleniyor (rol: ${userRoleId}, href: ${href})`);
           menuItem.style.display = 'none';
+          // !important ekle (CSS override için)
+          menuItem.setAttribute('style', 'display: none !important;');
         } else {
+          console.log(`[RBAC] ${menuKey} menüsü gösteriliyor (rol: ${userRoleId})`);
           menuItem.style.display = '';
+          menuItem.removeAttribute('style');
         }
       }
     }
@@ -376,14 +409,48 @@ async function initRoleBasedUI() {
 // Sayfa yüklendiğinde çalıştır
 // DOM tamamen yüklendikten sonra çalıştır (menü öğelerinin render edilmesi için)
 function runWhenReady() {
+  const runInit = () => {
+    // Menü linklerinin render edilip edilmediğini kontrol et
+    const menuLinks = document.querySelectorAll('a.menu-link');
+    if (menuLinks.length > 0) {
+      console.log(`[RBAC] ${menuLinks.length} menü linki bulundu, kontroller uygulanıyor...`);
+      initRoleBasedUI();
+    } else {
+      // Menü henüz render edilmemiş, tekrar dene
+      console.log('[RBAC] Menü linkleri henüz render edilmemiş, tekrar deneniyor...');
+      setTimeout(runInit, 200);
+    }
+  };
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-      // Menü render edildikten sonra çalıştır
-      setTimeout(initRoleBasedUI, 100);
+      setTimeout(runInit, 100);
     });
   } else {
     // Sayfa zaten yüklü, kısa bir gecikme ile çalıştır
-    setTimeout(initRoleBasedUI, 100);
+    setTimeout(runInit, 100);
+  }
+
+  // MutationObserver ile menü değişikliklerini izle (dinamik menü render için)
+  const observer = new MutationObserver((mutations) => {
+    const menuLinks = document.querySelectorAll('a.menu-link');
+    if (menuLinks.length > 0) {
+      // Menü render edildi, kontrolleri uygula
+      getCurrentUserRole().then(roleId => {
+        if (roleId) {
+          applyMenuPermissions(roleId);
+        }
+      });
+    }
+  });
+
+  // Menü container'ını izle
+  const menuContainer = document.querySelector('#layout-menu, .menu-inner, .navigation-main');
+  if (menuContainer) {
+    observer.observe(menuContainer, {
+      childList: true,
+      subtree: true
+    });
   }
 }
 
