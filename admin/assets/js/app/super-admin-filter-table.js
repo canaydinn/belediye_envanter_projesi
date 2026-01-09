@@ -8,11 +8,10 @@
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
-  // API base URL'ini dinamik olarak belirle
-  const isLocal =
-    window.location.hostname === 'localhost' ||
-    window.location.hostname === '127.0.0.1';
-  const API_BASE_URL = isLocal ? 'http:// ' : '';
+  const API_BASE_URL =
+  window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:4000/api'   // Lokal
+    : window.location.origin + '/api';
 
   // Mevcut path'ten base path'i belirle (/admin veya /api/admin)
   const currentPath = window.location.pathname;

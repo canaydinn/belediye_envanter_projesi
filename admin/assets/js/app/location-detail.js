@@ -1,5 +1,8 @@
 // Location detail page - Load and display location details
-const LOCATION_API_BASE_URL = window.API_BASE_URL || 'http:// /api';
+ const API_BASE_URL =
+window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:4000/api'   // Lokal
+  : window.location.origin + '/api';  
 
 document.addEventListener('DOMContentLoaded', () => {
   // URL parametrelerinden lokasyon ID'sini al
@@ -50,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadLocationDetail() {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${LOCATION_API_BASE_URL}/locations/${locationId}`, {
+      const response = await fetch(`${API_BASE_URL}/locations/${locationId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${LOCATION_API_BASE_URL}/departments`, {
+      const response = await fetch(`${API_BASE_URL}/departments`, {
         headers: {
           'Content-Type': 'application/json',
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
