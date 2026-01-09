@@ -74,7 +74,7 @@
     }
 
     setLoading(true);
-    fetch(`http://localhost:4000/api/superadmin/municipalities/${municipalityId}`, {
+    fetch(`http:// /api/superadmin/municipalities/${municipalityId}`, {
       method: 'GET',
       headers,
       credentials: 'include',
@@ -124,7 +124,7 @@
     };
 
     setLoading(true);
-    fetch(`http://localhost:4000/api/superadmin/municipalities/${municipalityId}`, {
+    fetch(`http:// /api/superadmin/municipalities/${municipalityId}`, {
       method: 'PUT',
       headers,
       credentials: 'include',

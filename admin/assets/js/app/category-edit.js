@@ -1,5 +1,5 @@
 // Category edit page - Load and update category
-const API_BASE = window.API_BASE_URL || 'http://localhost:4000/api';
+const API_BASE = window.API_BASE_URL || 'http:// /api';
 
 document.addEventListener('DOMContentLoaded', () => {
   // URL parametrelerinden kategori ID'sini al

@@ -36,7 +36,7 @@
   const loadMunicipalities = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:4000/api/superadmin/municipalities', {
+      const response = await fetch('http:// /api/superadmin/municipalities', {
         credentials: 'include',
         headers: token
           ? {

@@ -58,7 +58,7 @@
     console.log('Belediye create payload:', payload);
 
     try {
-      const response = await fetch('http://localhost:4000/api/superadmin/municipalities/create', {
+      const response = await fetch('http:// /api/superadmin/municipalities/create', {
         method: 'POST',
         headers,
         credentials: 'include',

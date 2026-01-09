@@ -1,5 +1,5 @@
 (() => {
-  const API_URL = 'http://localhost:4000/api/superadmin/users/all';
+  const API_URL = 'http:// /api/superadmin/users/all';
   const tableBody = document.getElementById('users-table-body');
   const totalBadge = document.getElementById('users-total');
   const paginationInfo = document.getElementById('users-pagination-info');

@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Belediyeleri çek
-  fetch('http://localhost:4000/api/superadmin/municipalities', {
+  fetch('http:// /api/superadmin/municipalities', {
     method: 'GET',
     headers,
     credentials: 'include',

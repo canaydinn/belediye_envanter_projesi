@@ -128,7 +128,7 @@
     try {
       const endpoint = action === 'deactivate' ? 'deactivate' : 'activate';
       const response = await fetch(
-        `http://localhost:4000/api/superadmin/municipalities/${municipalityId}/${endpoint}`,
+        `http:// /api/superadmin/municipalities/${municipalityId}/${endpoint}`,
         {
           method: 'PATCH',
           headers,

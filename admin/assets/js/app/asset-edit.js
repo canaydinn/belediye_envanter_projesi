@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:4000';
+const API_BASE = 'http:// ';
 
 document.addEventListener('DOMContentLoaded', () => {
   // URL parametrelerinden varlık ID'sini al
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadAsset() {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_BASE}/api/assets/${assetId}`, {
+      const response = await fetch(`/api/assets/${assetId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_BASE}/api/asset-categories`, {
+      const response = await fetch(`/api/asset-categories`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_BASE}/api/departments`, {
+      const response = await fetch(`/api/departments`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!locationSelect) return;
 
     try {
-      const response = await fetch(`${API_BASE}/api/locations?is_active=true`, {
+      const response = await fetch(`/api/locations?is_active=true`, {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_BASE}/api/users`, {
+      const response = await fetch(`/api/users`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateButton.textContent = 'Güncelleniyor...';
       }
 
-      const response = await fetch(`${API_BASE}/api/assets/${assetId}`, {
+      const response = await fetch(`/api/assets/${assetId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

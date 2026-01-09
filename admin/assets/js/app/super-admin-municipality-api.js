@@ -1,7 +1,7 @@
 // admin/assets/js/app/super-admin-municipality-api.js
 // Belediye API işlemleri
 
-const API_BASE_URL = 'http://localhost:4000/api';
+const API_BASE_URL = 'http:// /api';
 
 /**
  * Belediye detayını getirir

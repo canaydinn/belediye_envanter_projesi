@@ -106,7 +106,7 @@
       disableSubmit(true);
       const token = localStorage.getItem('token');
 
-      const response = await fetch('http://localhost:4000/api/superadmin/users', {
+      const response = await fetch('http:// /api/superadmin/users', {
         credentials: 'include',
         method: 'POST',
         headers: {

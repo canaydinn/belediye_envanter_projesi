@@ -1,5 +1,5 @@
 // API_BASE_URL zaten api.js'de tanımlı olabilir, bu yüzden kontrol ediyoruz
-const LOCATION_API_BASE_URL = window.API_BASE_URL || 'http://localhost:4000/api';
+const LOCATION_API_BASE_URL = window.API_BASE_URL || 'http:// /api';
 
 document.addEventListener('DOMContentLoaded', () => {
   // URL parametrelerinden lokasyon ID'sini al

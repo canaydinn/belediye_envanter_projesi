@@ -1,7 +1,7 @@
 (() => {
   const logoutIcon = document.querySelector('.ti-logout');
   const logoutLink = logoutIcon?.closest('a.dropdown-item');
-  const API_BASE_URL = 'http://localhost:4000/api';
+  const API_BASE_URL = 'http:// /api';
 
   if (!logoutLink) return;
 

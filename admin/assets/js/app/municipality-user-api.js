@@ -1,7 +1,7 @@
 // admin/assets/js/app/municipality-user-api.js
 // Municipality User API işlemleri
 
-const API_BASE_URL = 'http://localhost:4000/api';
+const API_BASE_URL = 'http:// /api';
 
 /**
  * Kullanıcı detayını getirir

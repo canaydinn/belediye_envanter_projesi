@@ -201,8 +201,8 @@ function applyFilters() {
 
   // 🔹 İlk yükleme: istatistik + son loglar
   Promise.all([
-    fetchJson('http://localhost:4000/api/superadmin/logs/stats'),
-    fetchJson('http://localhost:4000/api/superadmin/logs/recent?limit=50'),
+    fetchJson('http:// /api/superadmin/logs/stats'),
+    fetchJson('http:// /api/superadmin/logs/recent?limit=50'),
   ])
     .then(([stats, logs]) => {
       renderStats(stats);

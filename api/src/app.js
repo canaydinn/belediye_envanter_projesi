@@ -12,7 +12,7 @@ const app = express();
 const allowedOrigins = [
   'http://127.0.0.1:5500',
   'http://localhost:5500',
-  'http://localhost:4000',
+  'http:// ',
   'https://envanter360.vercel.app',
   // Preview deployments için Vercel otomatik olarak VERCEL_URL environment variable'ını sağlar
   // Local development'ta bu değişken olmayabilir, bu yüzden optional olarak ekliyoruz
