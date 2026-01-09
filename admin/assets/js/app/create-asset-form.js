@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:4000';
+const API_BASE = '';
 
 document.addEventListener('DOMContentLoaded', () => {
   const assetCreateForm = document.getElementById('assetCreateForm');

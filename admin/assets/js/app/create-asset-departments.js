@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const departmentSelect = document.getElementById('department_id');
-  const API_URL = 'http://localhost:4000/api/departments';
+  const API_URL = '/api/departments';
 
   const setLoadingState = () => {
     departmentSelect.innerHTML = '';

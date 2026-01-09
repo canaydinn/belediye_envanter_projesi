@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const locationSelect = document.getElementById('location_id');
   if (!locationSelect) return;
 
-  const API_BASE_URL = 'http://localhost:4000';
+  const API_BASE_URL = '';
 
   const defaultOption = document.createElement('option');
   defaultOption.value = '';
