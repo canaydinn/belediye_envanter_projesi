@@ -82,11 +82,9 @@ const populateRoles = async () => {
   placeholderOption.textContent = 'Rol seçin';
   roleSelect.appendChild(placeholderOption);
 
-  // Sadece id 2 ve 3 olan rolleri göster (Yönetici ve Kullanıcı)
-  // Superadmin rolü (id: 1) gösterilmez
-  const allowedRoleIds = [2, 3];
+  // Superadmin rolü (id: 1) hariç tüm rolleri göster
   const filteredRoles = Array.isArray(data) 
-    ? data.filter(role => allowedRoleIds.includes(role.id))
+    ? data.filter((role) => role.id !== 1)
     : [];
 
   filteredRoles.forEach((role) => {
