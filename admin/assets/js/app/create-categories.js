@@ -1,4 +1,8 @@
-const API_BASE_URL = 'https://envanter360.vercel.app/api';
+// Ortam bazlı API adresi
+const API_BASE_URL =
+  window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:4000/api'   // Lokal geliştirme
+    : window.location.origin + '/api';   // Prod: https://envanter360.vercel.app/api
 
 const selectElements = () => ({
   form: document.getElementById('createCategoryForm'),
@@ -65,7 +69,13 @@ const submitCategory = async (payload, elements) => {
   const data = await parseJsonSafe(response);
 
   if (!response.ok) {
-    const errorMessage = data?.message || 'Kategori kaydedilirken bir hata oluştu.';
+    // 409 Conflict durumunda daha açıklayıcı mesaj
+    if (response.status === 409) {
+      const conflictMessage = data?.message || 
+        'Bu kategori kodu veya adı zaten kullanılıyor. Lütfen farklı bir kod veya ad girin.';
+      throw new Error(conflictMessage);
+    }
+    const errorMessage = data?.message || `Kategori kaydedilirken bir hata oluştu. (${response.status})`;
     throw new Error(errorMessage);
   }
 
