@@ -2,12 +2,17 @@
 const API_BASE_URL = '/api';
 
 async function apiFetch(path, options = {}) {
+  // Token'ı localStorage'dan al (cookie yedek olarak)
+  const token = localStorage.getItem('token');
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(options.headers || {})
+  };
+
   const res = await fetch(`${API_BASE_URL}${path}`, {
     credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {})
-    },
+    headers,
     ...options
   });
 

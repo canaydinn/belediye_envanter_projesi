@@ -6,9 +6,14 @@
     const name = data?.name || 'Belediye';
     const location = [data?.province, data?.district].filter(Boolean).join(' / ') || '—';
 
-    document.getElementById('municipalityName')?.textContent = name;
-    document.getElementById('navbarMunicipalityName')?.textContent = name;
-    document.getElementById('municipalityLocation')?.textContent = location;
+    const municipalityNameEl = document.getElementById('municipalityName');
+    if (municipalityNameEl) municipalityNameEl.textContent = name;
+    
+    const navbarMunicipalityNameEl = document.getElementById('navbarMunicipalityName');
+    if (navbarMunicipalityNameEl) navbarMunicipalityNameEl.textContent = name;
+    
+    const municipalityLocationEl = document.getElementById('municipalityLocation');
+    if (municipalityLocationEl) municipalityLocationEl.textContent = location;
   } catch (err) {
     console.error('Belediye bilgisi alınamadı:', err);
   }
