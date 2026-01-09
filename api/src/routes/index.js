@@ -83,6 +83,15 @@ router.use(
  */
 
 /**
+ * Roller (sistem geneli - tenant scope yok)
+ */
+router.use(
+  '/roles',
+  auth,                // Kullanıcı doğrulama
+  require('./roles.routes')
+);
+
+/**
  * Kullanıcı yönetimi (belediye içi)
  */
 router.use(

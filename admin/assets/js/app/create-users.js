@@ -58,14 +58,23 @@ const parseJsonSafe = async (response) => {
   }
 };
 
-const populateRoles = () => {
-  const { roleSelect } = selectElements();
+const populateRoles = async () => {
+  const { roleSelect, errorAlert } = selectElements();
   if (!roleSelect) return;
 
-  const roles = [
-    { id: 2, name: 'Yönetici' },
-    { id: 3, name: 'Kullanıcı' },
-  ];
+  const response = await fetch(`${API_BASE_URL}/roles`, {
+    method: 'GET',
+    headers: buildHeaders(),
+    credentials: 'include',
+  });
+
+  const data = await parseJsonSafe(response);
+
+  if (!response.ok) {
+    const message = data?.message || 'Roller yüklenemedi. Varsayılan seçenek kullanılacak.';
+    toggleAlert(errorAlert, message);
+    return;
+  }
 
   roleSelect.replaceChildren();
   const placeholderOption = document.createElement('option');
@@ -73,7 +82,15 @@ const populateRoles = () => {
   placeholderOption.textContent = 'Rol seçin';
   roleSelect.appendChild(placeholderOption);
 
-  roles.forEach((role) => {
+  // Sadece id 2 ve 3 olan rolleri göster (Yönetici ve Kullanıcı)
+  // Superadmin rolü (id: 1) gösterilmez
+  const allowedRoleIds = [2, 3];
+  const filteredRoles = Array.isArray(data) 
+    ? data.filter(role => allowedRoleIds.includes(role.id))
+    : [];
+
+  filteredRoles.forEach((role) => {
+    if (!role?.id || !role?.name) return;
     const option = document.createElement('option');
     option.value = role.id;
     option.textContent = role.name;
@@ -200,7 +217,9 @@ const initPage = () => {
   }
   initialized = true;
 
-  populateRoles();
+  populateRoles().catch((error) => {
+    console.warn('Rol listesi yüklenirken hata:', error);
+  });
   populateMunicipalities().catch((error) => {
     console.warn('Belediye listesi yüklenirken hata:', error);
   });
