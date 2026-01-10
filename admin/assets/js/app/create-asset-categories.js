@@ -38,10 +38,7 @@
     try {
 
       const response = await fetch('/api/asset-categories', {
-        headers: token
-          ? {
-            }
-          : {},
+        headers: {},
       });
 
       if (!response.ok) {

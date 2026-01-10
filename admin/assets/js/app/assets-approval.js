@@ -12,9 +12,6 @@ const API_BASE_URL =
  */
 async function getCurrentUserRole() {
   try {
-
-    if (!token) return null;
-
     const response = await fetch(`${API_BASE_URL}/auth/me`, {
       method: 'GET',
       headers: {
