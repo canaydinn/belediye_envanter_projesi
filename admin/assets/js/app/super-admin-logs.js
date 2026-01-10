@@ -23,16 +23,11 @@
   // Bellekte tutulacak ana dizi
   let allLogs = [];
  // global erişim için
-  const token = localStorage.getItem('token');
+
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
-
-  if (!token) {
-    console.warn('Super admin loglar: token bulunamadı, istekler yetkisiz olabilir.');
-  }
-
+  const API_BASE_URL = window.APP_CONFIG?.API_BASE_URL || '/api';
   function formatDate(value) {
     if (!value) return '-';
     const date = new Date(value);
@@ -198,11 +193,10 @@ function applyFilters() {
   renderLogs(filtered);
 }
 
-
   // 🔹 İlk yükleme: istatistik + son loglar
   Promise.all([
-    fetchJson('http:// /api/superadmin/logs/stats'),
-    fetchJson('http:// /api/superadmin/logs/recent?limit=50'),
+    fetchJson(`${API_BASE_URL}/superadmin/logs/stats`),
+    fetchJson(`${API_BASE_URL}/superadmin/logs/recent?limit=50`),
   ])
     .then(([stats, logs]) => {
       renderStats(stats);

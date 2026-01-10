@@ -2,9 +2,10 @@
 // Rol bazlı UI kontrolü - Menü öğeleri ve butonları rol bazlı gösterir/gizler
 
 const API_BASE_URL =
-  window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  window.APP_CONFIG?.API_BASE_URL ||
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:4000/api'
-    : window.location.origin + '/api';
+    : window.location.origin + '/api');
 
 // Rol sabitleri (backend ile aynı)
 const ROLES = {
@@ -57,9 +58,6 @@ const BUTTON_PERMISSIONS = {
  */
 async function getCurrentUserRole() {
   try {
-    const token = localStorage.getItem('token');
-    if (!token) return null;
-
     // Önce localStorage'dan kontrol et (cache)
     const cachedRole = localStorage.getItem('user_role_id');
     if (cachedRole) {
@@ -68,10 +66,7 @@ async function getCurrentUserRole() {
 
     const response = await fetch(`${API_BASE_URL}/auth/me`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     });
 

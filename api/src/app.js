@@ -5,14 +5,41 @@ const requireAuthPage = require('./middleware/requireAuthPage');
 const routes = require('./routes');
 const cors = require('cors');
 const path = require('path');
+const helmet = require('helmet');
 
 const app = express();
+app.set('trust proxy', 1);
+
+// Security headers (Helmet)
+// CSP is enabled in Report-Only mode first; tighten/enforce after observing reports.
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
+
+app.use(
+  helmet.contentSecurityPolicy({
+    reportOnly: true,
+    directives: {
+      defaultSrc: ["'self'"],
+      baseUri: ["'self'"],
+      objectSrc: ["'none'"],
+      frameAncestors: ["'self'"],
+      imgSrc: ["'self'", 'data:', 'blob:'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+      scriptSrc: ["'self'"],
+      connectSrc: ["'self'"],
+      upgradeInsecureRequests: [],
+    },
+  })
+);
 // CORS ayarları: Local ve production domain'leri
 // NOT: VERCEL_URL Vercel tarafından otomatik sağlanır, .env'de olması gerekmez
 const allowedOrigins = [
   'http://127.0.0.1:5500',
   'http://localhost:5500',
-  'http:// ',
   'https://envanter360.vercel.app',
   // Preview deployments için Vercel otomatik olarak VERCEL_URL environment variable'ını sağlar
   // Local development'ta bu değişken olmayabilir, bu yüzden optional olarak ekliyoruz

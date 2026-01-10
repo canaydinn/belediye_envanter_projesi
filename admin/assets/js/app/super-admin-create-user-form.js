@@ -2,6 +2,7 @@
   const form = document.getElementById('create-user-form');
   const submitButton = document.getElementById('submit-create-user');
   const feedback = document.getElementById('create-user-feedback');
+  const API_BASE_URL = window.APP_CONFIG?.API_BASE_URL || '/api';
 
   const setFeedback = (type, message) => {
     if (!feedback) return;
@@ -104,14 +105,12 @@
       };
 
       disableSubmit(true);
-      const token = localStorage.getItem('token');
 
-      const response = await fetch('http:// /api/superadmin/users', {
+      const response = await fetch(`${API_BASE_URL}/superadmin/users`, {
         credentials: 'include',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify(payload),
       });

@@ -15,6 +15,7 @@
     "dotenv": "^17.2.3",
     "exceljs": "^4.4.0",
     "express": "^5.1.0",
+    "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "jszip": "^3.10.1",
     "knex": "^3.1.0",
@@ -41,5 +42,8 @@
     "migrate:fix": "node scripts/fix_migrations.js",
     "migrate:municipality": "node scripts/run_municipality_migration.js",
     "seed": "knex seed:run --knexfile knexfile.js"
+  },
+  "engines": {
+    "node": ">=20 <21"
   }
 }

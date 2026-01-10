@@ -6,15 +6,12 @@
   const feedbackEl = document.querySelector('[data-role="municipality-create-feedback"]');
   const submitBtn = document.querySelector('[data-role="municipality-create-submit"]');
 
-
-
-
 //yeni belediye oluşturma
-  const token = localStorage.getItem('token');
+
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
+  const API_BASE_URL = window.APP_CONFIG?.API_BASE_URL || '/api';
 
   const showFeedback = (type, message) => {
     if (!feedbackEl) return;
@@ -58,7 +55,7 @@
     console.log('Belediye create payload:', payload);
 
     try {
-      const response = await fetch('http:// /api/superadmin/municipalities/create', {
+      const response = await fetch(`${API_BASE_URL}/superadmin/municipalities/create`, {
         method: 'POST',
         headers,
         credentials: 'include',
@@ -90,7 +87,5 @@
 ///tablo filtreleme
 
 ///////
-
-
 
 })();

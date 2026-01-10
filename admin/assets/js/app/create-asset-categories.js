@@ -36,11 +36,10 @@
 
   const loadCategories = async () => {
     try {
-      const token = localStorage.getItem('token');
+
       const response = await fetch('/api/asset-categories', {
         headers: token
           ? {
-              Authorization: `Bearer ${token}`,
             }
           : {},
       });

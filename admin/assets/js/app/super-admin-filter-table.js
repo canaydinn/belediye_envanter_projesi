@@ -2,10 +2,9 @@
   const municipalitySearchInput = document.getElementById('municipalitySearch');
   const municipalityStatusFilter = document.getElementById('statusFilter');
   const municipalityFilterButton = document.querySelector('[data-role="municipality-filter"]');
- const token = localStorage.getItem('token');
+
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
   const API_BASE_URL =

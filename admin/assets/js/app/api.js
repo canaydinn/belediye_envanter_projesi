@@ -1,12 +1,17 @@
 // API utility functions
-const API_BASE_URL = '/api';
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+// Local dev fallback: API often runs on :4000 (when frontend is served elsewhere or via file://)
+const API_ORIGIN = isLocal && window.location.port !== '4000' ? 'http://localhost:4000' : '';
+const API_BASE_URL = `${API_ORIGIN}/api`;
+
+// Expose a single source of truth for other scripts (optional use)
+window.APP_CONFIG = window.APP_CONFIG || {};
+window.APP_CONFIG.API_ORIGIN = API_ORIGIN;
+window.APP_CONFIG.API_BASE_URL = API_BASE_URL;
 
 async function apiFetch(path, options = {}) {
-  // Token'ı localStorage'dan al (cookie yedek olarak)
-  const token = localStorage.getItem('token');
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(options.headers || {})
   };
 

@@ -1,5 +1,5 @@
 // API_BASE_URL zaten api.js'de tanımlı olabilir, bu yüzden kontrol ediyoruz
-const LOCATION_API_BASE_URL = window.API_BASE_URL || 'http:// /api';
+const LOCATION_API_BASE_URL = window.APP_CONFIG?.API_BASE_URL || '/api';
 
 document.addEventListener('DOMContentLoaded', () => {
   // URL parametrelerinden lokasyon ID'sini al
@@ -44,12 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadLocation() {
     try {
       console.log('Lokasyon yükleniyor, ID:', locationId);
-      const token = localStorage.getItem('token');
+
       const response = await fetch(`${LOCATION_API_BASE_URL}/locations/${locationId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         credentials: 'include',
       });
@@ -129,14 +128,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const select = document.getElementById('department_id');
     if (!select) return;
 
-    const token = localStorage.getItem('token');
-
     try {
       console.log('Departmanlar yükleniyor...');
       const response = await fetch(`${LOCATION_API_BASE_URL}/departments`, {
         headers: {
           'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         credentials: 'include',
       });
@@ -214,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('Güncelleme için form verisi:', formData);
 
       try {
-        const token = localStorage.getItem('token');
+
         const updateButton = document.querySelector('[data-role="update-button"]');
         if (updateButton) {
           updateButton.disabled = true;
@@ -226,7 +222,6 @@ document.addEventListener('DOMContentLoaded', () => {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
           credentials: 'include',
           body: JSON.stringify(formData),

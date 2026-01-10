@@ -1,5 +1,4 @@
 // api/src/controllers/auth.controller.js
-console.log('LOGIN HANDLER HIT: auth.controller.js');
 const knex = require('../config/knex');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -92,7 +91,6 @@ async function login(req, res) {
     // Cookie kullandığın için token'ı response body'de döndürmüyoruz
     return res.json({
       message: 'Giriş başarılı',
-      token,
       user: {
         id: user.id,
         email: user.email,

@@ -1,5 +1,5 @@
 // Category edit page - Load and update category
-const API_BASE = window.API_BASE_URL || 'http:// /api';
+const API_BASE = window.APP_CONFIG?.API_BASE_URL || '/api';
 
 document.addEventListener('DOMContentLoaded', () => {
   // URL parametrelerinden kategori ID'sini al
@@ -43,12 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Kategori detayını yükle
   async function loadCategory() {
     try {
-      const token = localStorage.getItem('token');
+
       const response = await fetch(`${API_BASE}/asset-categories/${categoryId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         credentials: 'include',
       });
@@ -120,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       try {
-        const token = localStorage.getItem('token');
+
         const updateButton = document.querySelector('[data-role="update-button"]');
         if (updateButton) {
           updateButton.disabled = true;
@@ -131,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
           credentials: 'include',
           body: JSON.stringify(formData),

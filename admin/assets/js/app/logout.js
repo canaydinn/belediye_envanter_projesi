@@ -1,27 +1,25 @@
 (() => {
   const logoutIcon = document.querySelector('.ti-logout');
   const logoutLink = logoutIcon?.closest('a.dropdown-item');
-  const API_BASE_URL = 'http:// /api';
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const apiOrigin = isLocal ? 'http://localhost:4000' : '';
 
   if (!logoutLink) return;
 
   const handleLogout = async (event) => {
     event.preventDefault();
 
-    const token = localStorage.getItem('token');
-
     try {
-      await fetch(`${API_BASE_URL}/auth/logout`, {
+      await fetch(`${apiOrigin}/api/auth/logout`, {
         method: 'POST',
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: {},
         credentials: 'include',
       });
     } catch (error) {
       console.error('Çıkış işlemi sırasında bir hata oluştu:', error);
     } finally {
-      localStorage.removeItem('token');
       localStorage.removeItem('user_role_id'); // Rol cache'ini temizle
-      window.location.href = 'login.html';
+      window.location.href = '/admin/login.html';
     }
   };
 

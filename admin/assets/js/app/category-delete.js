@@ -172,12 +172,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const token = localStorage.getItem('token');
+
       const response = await fetch(`/api/asset-categories/${categoryId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         credentials: 'include',
       });

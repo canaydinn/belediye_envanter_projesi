@@ -20,12 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const planCountBadges = document.querySelectorAll('[data-plan-count]');
-  const token = localStorage.getItem('token');
 
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
+  const API_BASE_URL = window.APP_CONFIG?.API_BASE_URL || '/api';
 
   function setText(element, value) {
     if (!element) return;
@@ -186,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Belediyeleri çek
-  fetch('http:// /api/superadmin/municipalities', {
+  fetch(`${API_BASE_URL}/superadmin/municipalities`, {
     method: 'GET',
     headers,
     credentials: 'include',

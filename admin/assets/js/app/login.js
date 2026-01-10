@@ -24,14 +24,12 @@
       password: passwordInput.value
     };
 
-    const isLocal =
-      window.location.hostname === 'localhost' ||
-      window.location.hostname === '127.0.0.1';
-
-    const API_BASE_URL = isLocal ? 'http:// ' : '';
+    // Local dev fallback: backend often runs on :4000
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const apiOrigin = isLocal ? 'http://localhost:4000' : '';
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      const response = await fetch(`${apiOrigin}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -45,9 +43,6 @@
       if (!response.ok) {
         showError(data.message || 'Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
         return;
-      }
-      if (data.token) {
-        localStorage.setItem('token', data.token);
       }
       
       // Mevcut path'ten base path'i belirle (/admin veya /api/admin)
@@ -67,7 +62,8 @@
       else if (roleId === 2) {
         window.location.href = `${basePath}/dashboard.html`;
       } else {
-        showError('Yetkiniz için uygun bir yönlendirme bulunamadı.');
+        // Default: send to dashboard for other roles as well
+        window.location.href = `${basePath}/dashboard.html`;
       }
     } catch (error) {
       console.error('Login error:', error);

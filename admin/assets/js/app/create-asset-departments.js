@@ -44,9 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setLoadingState();
 
     try {
-      const token = localStorage.getItem('token');
+
       const response = await fetch(API_URL, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: {},
       });
 
       if (!response.ok) {

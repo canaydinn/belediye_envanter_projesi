@@ -41,8 +41,6 @@ const submitLocationForm = async (event) => {
   const submitBtn = document.getElementById('submitBtn');
   disableButton(submitBtn);
 
-  const token = localStorage.getItem('token');
-
   const formData = {
     code: document.getElementById('code').value.trim(),
     name: document.getElementById('name').value.trim(),
@@ -64,7 +62,6 @@ const submitLocationForm = async (event) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       credentials: 'include',
       body: JSON.stringify(formData),
@@ -106,12 +103,9 @@ const loadDepartments = async () => {
   const select = document.getElementById('department_id');
   if (!select) return;
 
-  const token = localStorage.getItem('token');
-
   try {
     const response = await fetch(`${API_BASE_URL}/departments`, {
       headers: {
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       credentials: 'include',
     });

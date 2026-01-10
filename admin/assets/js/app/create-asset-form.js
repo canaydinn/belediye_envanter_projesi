@@ -55,13 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     try {
-      const token = localStorage.getItem('token');
 
       const response = await fetch(`${API_BASE}/api/assets`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify(payload),
       });
@@ -82,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
             },
             body: JSON.stringify(payload),
           });

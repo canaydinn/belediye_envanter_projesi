@@ -1,5 +1,3 @@
-const API_BASE = 'http:// ';
-
 document.addEventListener('DOMContentLoaded', () => {
   // URL parametrelerinden varlık ID'sini al
   const params = new URLSearchParams(window.location.search);
@@ -43,12 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Varlık detayını yükle
   async function loadAsset() {
     try {
-      const token = localStorage.getItem('token');
+
       const response = await fetch(`/api/assets/${assetId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
       });
 
@@ -127,9 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!categorySelect) return;
 
     try {
-      const token = localStorage.getItem('token');
+
       const response = await fetch(`/api/asset-categories`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: {},
       });
 
       if (!response.ok) {
@@ -157,9 +154,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!departmentSelect) return;
 
     try {
-      const token = localStorage.getItem('token');
+
       const response = await fetch(`/api/departments`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: {},
       });
 
       if (!response.ok) {
@@ -227,9 +224,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!userSelect) return;
 
     try {
-      const token = localStorage.getItem('token');
+
       const response = await fetch(`/api/users`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: {},
       });
 
       if (!response.ok) {
@@ -294,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     try {
-      const token = localStorage.getItem('token');
+
       const updateButton = document.querySelector('[data-role="update-button"]');
       if (updateButton) {
         updateButton.disabled = true;
@@ -305,7 +302,6 @@ document.addEventListener('DOMContentLoaded', () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify(payload),
       });

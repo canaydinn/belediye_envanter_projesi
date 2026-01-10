@@ -123,12 +123,11 @@ async function handleDeleteLocation(event) {
   }
 
   try {
-    const token = localStorage.getItem('token');
+
     const response = await fetch(`/api/locations/${locationId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       credentials: 'include',
     });

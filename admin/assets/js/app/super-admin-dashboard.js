@@ -10,20 +10,14 @@
   const denemePlanBadge = document.querySelector('[data-role="deneme-plan-count"]');
   const recentLogsContainer = document.querySelector('[data-role="recent-logs"]');
 
-  const token = localStorage.getItem('token');
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
-
-  if (!token) {
-    console.warn('Dashboard: token bulunamadı, sayaçlar güncellenemiyor.');
-  }
-
   const API_BASE_URL =
-  window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:4000/api'   // Lokal
-    : window.location.origin + '/api';
+    window.APP_CONFIG?.API_BASE_URL ||
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:4000/api' // Lokal
+      : window.location.origin + '/api');
 
   // Mevcut path'ten base path'i belirle (/admin veya /api/admin)
   const currentPath = window.location.pathname;
@@ -184,7 +178,6 @@ if (!municipalityTableBody) {
     console.warn('Aktif belediye sayısı öğesi bulunamadı');
   }
 
-
 // 3) Onay Bekleyen belediye sayısı
   if (pendingLink) {
     fetchJson('/api/superadmin/municipalities/pending/count')
@@ -279,8 +272,6 @@ if (!municipalityTableBody) {
   } else {
     console.warn('Deneme plan badge öğesi bulunamadı');
   }
-
-
 
   
   // 3) Son aktiviteler
@@ -423,7 +414,5 @@ if (!municipalityTableBody) {
     }
   });
 
-
 })();
-
 

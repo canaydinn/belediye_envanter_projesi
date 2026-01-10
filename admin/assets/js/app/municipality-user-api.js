@@ -12,10 +12,9 @@ const API_BASE_URL =
  * @returns {Promise<Object>} Kullanıcı detay verisi
  */
 async function getUserDetail(userId) {
-  const token = localStorage.getItem('token');
+
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
   // Normal belediye kullanıcıları için /users endpoint'ini kullan
@@ -44,10 +43,9 @@ async function getUserDetail(userId) {
  * @returns {Promise<Object>} Belediye detay verisi
  */
 async function getMunicipalityDetail(municipalityId) {
-  const token = localStorage.getItem('token');
+
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
   const response = await fetch(
@@ -74,10 +72,9 @@ async function getMunicipalityDetail(municipalityId) {
  * @returns {Promise<Object>} Rol detay verisi
  */
 async function getRoleDetail(roleId) {
-  const token = localStorage.getItem('token');
+
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
   // Not: Rol endpoint'i yoksa, basit bir mapping kullanabiliriz

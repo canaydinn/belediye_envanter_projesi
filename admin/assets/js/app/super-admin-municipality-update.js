@@ -8,11 +8,10 @@
   const params = new URLSearchParams(window.location.search);
   const municipalityId = params.get('id');
 
-  const token = localStorage.getItem('token');
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
+  const API_BASE_URL = window.APP_CONFIG?.API_BASE_URL || '/api';
 
   function setLoading(isLoading) {
     if (updateButton) {
@@ -74,7 +73,7 @@
     }
 
     setLoading(true);
-    fetch(`http:// /api/superadmin/municipalities/${municipalityId}`, {
+    fetch(`${API_BASE_URL}/superadmin/municipalities/${municipalityId}`, {
       method: 'GET',
       headers,
       credentials: 'include',
@@ -124,7 +123,7 @@
     };
 
     setLoading(true);
-    fetch(`http:// /api/superadmin/municipalities/${municipalityId}`, {
+    fetch(`${API_BASE_URL}/superadmin/municipalities/${municipalityId}`, {
       method: 'PUT',
       headers,
       credentials: 'include',

@@ -3,11 +3,11 @@
   'use strict';
 
   // Token ve headers
-  const token = localStorage.getItem('token');
+
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
+  const API_BASE_URL = window.APP_CONFIG?.API_BASE_URL || '/api';
 
   // DOM elementleri
   const filterNameInput = document.getElementById('filter-name');
@@ -128,7 +128,7 @@
     try {
       const endpoint = action === 'deactivate' ? 'deactivate' : 'activate';
       const response = await fetch(
-        `http:// /api/superadmin/municipalities/${municipalityId}/${endpoint}`,
+        `${API_BASE_URL}/superadmin/municipalities/${municipalityId}/${endpoint}`,
         {
           method: 'PATCH',
           headers,

@@ -1,6 +1,7 @@
 (() => {
   const municipalitySelect = document.getElementById('municipality');
   if (!municipalitySelect) return;
+  const API_BASE_URL = window.APP_CONFIG?.API_BASE_URL || '/api';
 
   const setOptions = (options = []) => {
     municipalitySelect.innerHTML = '';
@@ -35,12 +36,11 @@
 
   const loadMunicipalities = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http:// /api/superadmin/municipalities', {
+
+      const response = await fetch(`${API_BASE_URL}/superadmin/municipalities`, {
         credentials: 'include',
         headers: token
           ? {
-              Authorization: `Bearer ${token}`,
             }
           : {},
       });

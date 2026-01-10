@@ -52,12 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Lokasyon detayını yükle
   async function loadLocationDetail() {
     try {
-      const token = localStorage.getItem('token');
+
       const response = await fetch(`${API_BASE_URL}/locations/${locationId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         credentials: 'include',
       });
@@ -91,11 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!departmentId) return '-';
 
     try {
-      const token = localStorage.getItem('token');
+
       const response = await fetch(`${API_BASE_URL}/departments`, {
         headers: {
           'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         credentials: 'include',
       });

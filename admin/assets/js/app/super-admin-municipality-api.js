@@ -12,10 +12,9 @@ const API_BASE_URL =
  * @returns {Promise<Object>} Belediye detay verisi
  */
 async function getMunicipalityDetail(municipalityId) {
-  const token = localStorage.getItem('token');
+
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
   const response = await fetch(

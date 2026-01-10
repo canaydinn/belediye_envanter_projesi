@@ -12,14 +12,13 @@ const API_BASE_URL =
  */
 async function getCurrentUserRole() {
   try {
-    const token = localStorage.getItem('token');
+
     if (!token) return null;
 
     const response = await fetch(`${API_BASE_URL}/auth/me`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
       },
       credentials: 'include',
     });
@@ -40,12 +39,11 @@ async function getCurrentUserRole() {
  * @returns {Promise<Object>}
  */
 async function approveAsset(assetId) {
-  const token = localStorage.getItem('token');
+
   const response = await fetch(`${API_BASE_URL}/assets/${assetId}/approve`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
     },
     credentials: 'include',
     body: JSON.stringify({}),
@@ -67,12 +65,11 @@ async function approveAsset(assetId) {
  * @returns {Promise<Object>}
  */
 async function rejectAsset(assetId, reason = '') {
-  const token = localStorage.getItem('token');
+
   const response = await fetch(`${API_BASE_URL}/assets/${assetId}/reject`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
     },
     credentials: 'include',
     body: JSON.stringify({ reason }),
