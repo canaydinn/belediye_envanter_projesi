@@ -329,22 +329,30 @@ function applyButtonPermissions(userRoleId) {
     if (href.includes('asset-edit')) {
       const hasAccess = hasPermission(userRoleId, BUTTON_PERMISSIONS['edit-asset']);
       if (!hasAccess) {
-        button.style.display = 'none';
+        disableElement(button);
+      } else {
+        enableElement(button);
       }
     } else if (href.includes('category-edit')) {
       const hasAccess = hasPermission(userRoleId, BUTTON_PERMISSIONS['edit-category']);
       if (!hasAccess) {
-        button.style.display = 'none';
+        disableElement(button);
+      } else {
+        enableElement(button);
       }
     } else if (href.includes('location-edit')) {
       const hasAccess = hasPermission(userRoleId, BUTTON_PERMISSIONS['edit-location']);
       if (!hasAccess) {
-        button.style.display = 'none';
+        disableElement(button);
+      } else {
+        enableElement(button);
       }
     } else if (href.includes('user-edit') || href.includes('municipality-user-edit')) {
       const hasAccess = hasPermission(userRoleId, BUTTON_PERMISSIONS['edit-user']);
       if (!hasAccess) {
-        button.style.display = 'none';
+        disableElement(button);
+      } else {
+        enableElement(button);
       }
     }
     
@@ -362,7 +370,9 @@ function applyButtonPermissions(userRoleId) {
       }
       
       if (!hasAccess) {
-        button.style.display = 'none';
+        disableElement(button);
+      } else {
+        enableElement(button);
       }
     }
   });
