@@ -23,6 +23,22 @@ app.use(
 const isVercelPreview = process.env.VERCEL_ENV === 'preview';
 const vercelLiveOrigins = ['https://vercel.live'];
 
+// `upgrade-insecure-requests` is ignored in Report-Only policies.
+// To avoid the console warning (and keep behavior safe), send it as a tiny *enforced*
+// CSP header only on Vercel deployments (HTTPS).
+const isVercelDeployment = !!process.env.VERCEL;
+if (isVercelDeployment) {
+  app.use(
+    helmet.contentSecurityPolicy({
+      reportOnly: false,
+      useDefaults: false,
+      directives: {
+        upgradeInsecureRequests: [],
+      },
+    })
+  );
+}
+
 app.use(
   helmet.contentSecurityPolicy({
     reportOnly: true,
@@ -39,7 +55,6 @@ app.use(
       // If you later enforce CSP, consider swapping those bundles to non-eval builds instead of allowing unsafe-eval.
       scriptSrc: ["'self'", "'unsafe-eval'", ...(isVercelPreview ? vercelLiveOrigins : [])],
       connectSrc: ["'self'", ...(isVercelPreview ? vercelLiveOrigins : [])],
-      // `upgrade-insecure-requests` is ignored in Report-Only policies, so don't include it here.
     },
   })
 );
