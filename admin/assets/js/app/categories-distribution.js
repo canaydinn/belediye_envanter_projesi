@@ -13,7 +13,7 @@
   const formatCountLabel = (count) => {
     const safeCount = Number.isFinite(count) ? count : 0;
     const formatted = new Intl.NumberFormat('tr-TR').format(safeCount);
-    return `${formatted} kategori`;
+    return `${formatted} varlık`;
   };
 
   const getBadgeClass = (index) => badgeClasses[index % badgeClasses.length];
@@ -80,7 +80,8 @@
     const { distributionList, alertBox } = selectElements();
     if (!distributionList) return;
 
-    distributionList.replaceChildren(createStatusItem('Kategori türleri yükleniyor...'));
+    distributionList.replaceChildren(createStatusItem('Kategori dağılımı yükleniyor...'));
+    // NOTE: Endpoint returns asset_count per category (not "category types").
 
     try {
       const data = await apiFetch('/asset-categories/distribution');
