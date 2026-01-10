@@ -33,6 +33,9 @@ if (isVercelDeployment) {
       reportOnly: false,
       useDefaults: false,
       directives: {
+        // Helmet v8 requires a default-src unless explicitly disabled.
+        // We want an "upgrade-insecure-requests"-only policy here.
+        defaultSrc: helmet.contentSecurityPolicy.dangerouslyDisableDefaultSrc,
         upgradeInsecureRequests: [],
       },
     })
