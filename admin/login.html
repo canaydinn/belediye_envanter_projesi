@@ -28,7 +28,7 @@
 
     <!-- Helpers -->
     <script src="assets/vendor/js/helpers.js"></script>
-    <script src="assets/vendor/js/template-customizer.js"></script>
+    <!-- <script src="assets/vendor/js/template-customizer.js"></script>-->
     <script src="assets/js/config.js"></script>
   </head>
 
@@ -140,82 +140,18 @@
     <script src="assets/vendor/libs/popper/popper.js"></script>
     <script src="assets/vendor/js/bootstrap.js"></script>
     <script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="assets/vendor/libs/node-waves/node-waves.js"></script>
+    <!-- <script src="assets/vendor/libs/node-waves/node-waves.js"></script>-->
 
     <script src="assets/vendor/libs/hammer/hammer.js"></script>
     <script src="assets/vendor/libs/i18n/i18n.js"></script>
     <script src="assets/vendor/libs/typeahead-js/typeahead.js"></script>
 
     <script src="assets/vendor/js/menu.js"></script>
-<script type="module" src="assets/js/app/logout.js"></script>
+    <script type="module" src="assets/js/app/logout.js"></script>
     <!-- Main JS -->
     <script src="assets/js/main.js"></script>
     <script type="module" src="assets/js/app/login.js"></script>
-<!--  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('formLogin');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const errorAlert = document.getElementById('loginError');
 
-    const showError = (message) => {
-      if (!errorAlert) return;
-      errorAlert.textContent = message || 'Giriş sırasında bir hata oluştu.';
-      errorAlert.classList.remove('d-none');
-    };
-
-    if (!form) {
-      console.error('formLogin bulunamadı');
-      return;
-    }
-
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault(); // ✅ refresh’i kesin keser
-      errorAlert?.classList.add('d-none');
-
-      // Basit doğrulama
-      const email = (emailInput?.value || '').trim();
-      const password = passwordInput?.value || '';
-
-      if (!email || !password) {
-        showError('E-posta ve şifre zorunludur.');
-        return;
-      }
-
-      try {
-        const response = await fetch('/api/auth/login', {   // ✅ relative kullanın
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ email, password }),
-        });
-
-        const data = await response.json().catch(() => ({}));
-
-        if (!response.ok) {
-          showError(data?.message || `Giriş başarısız (HTTP ${response.status}).`);
-          return;
-        }
-
-        // ✅ cookie tabanlı auth kullanıyorsanız token’ı localStorage’a yazmayın
-        const roleId = Number(data?.user?.role_id);
-
-        if (roleId === 1) {
-          window.location.href = '/admin/super-admin-dashboard.html';
-        } else if (roleId === 3) {
-          window.location.href = '/admin/dashboard.html';
-        } else if (roleId === 2) {
-          window.location.href = '/admin/dashboard.html';
-        } else {
-          showError('Yetkiniz için uygun bir yönlendirme bulunamadı.');
-        }
-      } catch (error) {
-        console.error('Login error:', error);
-        showError('Sunucuya bağlanırken bir hata oluştu.');
-      }
-    });
-  });
-</script> -->
 
   </body>
 </html>
