@@ -45,6 +45,16 @@
         return;
       }
       
+      // Rol cache'ini güncelle (hesap değişimlerinde stale kalmasın)
+      const roleId = Number(data?.user?.role_id);
+      if (Number.isFinite(roleId)) {
+        localStorage.setItem('user_role_id', String(roleId));
+      } else {
+        localStorage.removeItem('user_role_id');
+      }
+      // auth-guard ile aynı cache key'ini de temizle (sayfalar yeniden dolduracak)
+      localStorage.removeItem('currentUser');
+
       // Mevcut path'ten base path'i belirle (/admin veya /api/admin)
       const currentPath = window.location.pathname;
       const basePath = currentPath.startsWith('/api/admin') 
@@ -53,7 +63,6 @@
         ? '/admin' 
         : '/admin';
       
-      const roleId = Number(data?.user?.role_id);
       if (roleId === 1) {
         window.location.href = `${basePath}/super-admin-dashboard.html`;
       } else if (roleId === 3) {
