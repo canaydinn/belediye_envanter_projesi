@@ -96,9 +96,18 @@ app.use('/api', routes);
 // Hem /admin/assets/* hem de /api/admin/assets/* path'lerini handle et
 app.use(['/admin/assets', '/api/admin/assets'], express.static(path.join(adminPath, 'assets')));
 
+// Root'tan servis edilen sayfalar (örn: / veya /login.html) "assets/..." şeklinde referans verdiği için
+// /assets/* path'ini de statik olarak servis et (Vercel'de aksi halde 404 → HTML döner → MIME hataları).
+app.use(['/assets', '/api/assets'], express.static(path.join(adminPath, 'assets')));
+
 // Login sayfası herkese açık
 // Hem /admin/login hem de /api/admin/login path'lerini handle et
 app.get(['/admin/login', '/admin/login.html', '/api/admin/login', '/api/admin/login.html'], (req, res) => {
+  return res.sendFile(path.join(adminPath, 'login.html'));
+});
+
+// Eski/kolay erişim: /login.html veya /login
+app.get(['/login', '/login.html', '/api/login', '/api/login.html'], (req, res) => {
   return res.sendFile(path.join(adminPath, 'login.html'));
 });
 
