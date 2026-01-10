@@ -7,16 +7,50 @@ const authorize = require('../middleware/authorize');
 const ROLES = require('../constants/roles');
 
 /**
- * READ (Superadmin + Municipality Admin + User)
+ * READ (Tüm roller)
  */
-router.get('/', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER), inventoryController.listInventory);
-router.get('/:id', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER), inventoryController.getInventoryById);
+router.get(
+  '/',
+  authorize(
+    ROLES.SUPERADMIN,
+    ROLES.ADMIN,
+    ROLES.TASINIR_KAYIT,
+    ROLES.TASINIR_KONTROL,
+    ROLES.BIRIM_SORUMLUSU,
+    ROLES.KULLANICI
+  ),
+  inventoryController.listInventory
+);
+router.get(
+  '/:id',
+  authorize(
+    ROLES.SUPERADMIN,
+    ROLES.ADMIN,
+    ROLES.TASINIR_KAYIT,
+    ROLES.TASINIR_KONTROL,
+    ROLES.BIRIM_SORUMLUSU,
+    ROLES.KULLANICI
+  ),
+  inventoryController.getInventoryById
+);
 
 /**
- * WRITE (Superadmin + Municipality Admin + User)
+ * WRITE (ADMIN, TASINIR_KAYIT, TASINIR_KONTROL)
  */
-router.post('/', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER), inventoryController.createInventoryItem);
-router.patch('/:id', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER), inventoryController.updateInventory);
-router.delete('/:id', authorize(ROLES.SUPERADMIN, ROLES.MUNICIPALITY_ADMIN, ROLES.USER), inventoryController.deleteInventory);
+router.post(
+  '/',
+  authorize(ROLES.SUPERADMIN, ROLES.ADMIN, ROLES.TASINIR_KAYIT),
+  inventoryController.createInventoryItem
+);
+router.patch(
+  '/:id',
+  authorize(ROLES.SUPERADMIN, ROLES.ADMIN, ROLES.TASINIR_KAYIT, ROLES.TASINIR_KONTROL),
+  inventoryController.updateInventory
+);
+router.delete(
+  '/:id',
+  authorize(ROLES.SUPERADMIN, ROLES.ADMIN),
+  inventoryController.deleteInventory
+);
 
 module.exports = router;
