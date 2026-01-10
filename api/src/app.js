@@ -18,6 +18,11 @@ app.use(
   })
 );
 
+// Vercel preview deployments inject "vercel.live" feedback tooling (iframe + script).
+// In Report-Only mode this can spam the console; allow it only for preview.
+const isVercelPreview = process.env.VERCEL_ENV === 'preview';
+const vercelLiveOrigins = ['https://vercel.live'];
+
 app.use(
   helmet.contentSecurityPolicy({
     reportOnly: true,
@@ -26,12 +31,15 @@ app.use(
       baseUri: ["'self'"],
       objectSrc: ["'none'"],
       frameAncestors: ["'self'"],
+      frameSrc: ["'self'", ...(isVercelPreview ? vercelLiveOrigins : [])],
       imgSrc: ["'self'", 'data:', 'blob:'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
       styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-      scriptSrc: ["'self'"],
-      connectSrc: ["'self'"],
-      upgradeInsecureRequests: [],
+      // NOTE: Some bundled vendor files in `admin/assets/vendor/**` use `eval()` for sourcemaps/UMD wrappers.
+      // If you later enforce CSP, consider swapping those bundles to non-eval builds instead of allowing unsafe-eval.
+      scriptSrc: ["'self'", "'unsafe-eval'", ...(isVercelPreview ? vercelLiveOrigins : [])],
+      connectSrc: ["'self'", ...(isVercelPreview ? vercelLiveOrigins : [])],
+      // `upgrade-insecure-requests` is ignored in Report-Only policies, so don't include it here.
     },
   })
 );
