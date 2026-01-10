@@ -190,3 +190,6 @@ async function handleDeleteLocation(event) {
   }
 }
 
+// Expose for module-to-module coordination (init/filters)
+window.loadLocations = loadLocations;
+

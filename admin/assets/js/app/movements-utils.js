@@ -34,3 +34,8 @@ function getMovementTypeBadgeClass(type) {
   return classes[type] || 'bg-label-secondary';
 }
 
+// Expose for module-to-module coordination (movements-list.js template rendering)
+window.formatDate = formatDate;
+window.getMovementTypeLabel = getMovementTypeLabel;
+window.getMovementTypeBadgeClass = getMovementTypeBadgeClass;
+

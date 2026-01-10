@@ -74,3 +74,7 @@ function wireLocationFilters() {
   });
 }
 
+// Expose for module-to-module coordination (init)
+window.initDepartmentFilter = initDepartmentFilter;
+window.wireLocationFilters = wireLocationFilters;
+

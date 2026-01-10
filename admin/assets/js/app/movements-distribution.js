@@ -45,3 +45,6 @@ function renderDistribution(distribution, totalMovements) {
   container.innerHTML = html;
 }
 
+// Expose for module-to-module coordination (init file)
+window.initMovementDistribution = initMovementDistribution;
+

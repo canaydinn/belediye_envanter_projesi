@@ -2,6 +2,8 @@
 // Tüm varlıkları saklamak için global değişken
 let allAssets = [];
 let currentUserRoleId = null;
+let currentPage = 1;
+let lastFilters = {};
 
 // Filtrele butonuna event listener ekle
 document.addEventListener('DOMContentLoaded', async () => {
@@ -20,8 +22,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Varlık listesini yükleyen fonksiyonu parametreli hale getir
   const loadAssets = async (filters = {}) => {
+    lastFilters = filters || {};
     const tableBody = document.querySelector('[data-role="assets-table-body"]');
     const summary = document.querySelector('[data-role="assets-table-summary"]');
+    const pageInfo = document.querySelector('[data-role="assets-page-info"]');
+    const pagination = document.querySelector('[data-role="assets-pagination"]');
     if (!tableBody) return;
 
     const statusMap = {
@@ -176,11 +181,73 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!filteredAssets.length) {
       tableBody.innerHTML = '<tr><td colspan="10" class="text-center text-muted">Filtre kriterlerine uygun varlık bulunamadı.</td></tr>';
       if (summary) summary.textContent = 'Gösterilen: 0 / 0';
+      if (pageInfo) pageInfo.textContent = 'Sayfa 0 / 0';
+      if (pagination) pagination.innerHTML = '';
       return;
     }
 
-    tableBody.innerHTML = filteredAssets.map(buildRow).join('');
-    if (summary) summary.textContent = `Gösterilen: ${filteredAssets.length} / ${allAssets.length}`;
+    // Pagination (client-side)
+    const pageSizeEl = document.getElementById('pageSize');
+    const pageSize = Math.max(1, Number(pageSizeEl?.value || 25));
+    const totalItems = filteredAssets.length;
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = Math.min(startIndex + pageSize, totalItems);
+    const pageItems = filteredAssets.slice(startIndex, endIndex);
+
+    tableBody.innerHTML = pageItems.map(buildRow).join('');
+
+    if (summary) {
+      const shownFrom = totalItems === 0 ? 0 : startIndex + 1;
+      const shownTo = endIndex;
+      summary.textContent = `Gösterilen: ${shownFrom}–${shownTo} / ${totalItems}`;
+    }
+
+    if (pageInfo) pageInfo.textContent = `Sayfa ${currentPage} / ${totalPages}`;
+
+    if (pagination) {
+      const buildPageItem = (label, page, { disabled = false, active = false } = {}) => {
+        const liClass = ['page-item', disabled ? 'disabled' : '', active ? 'active' : ''].filter(Boolean).join(' ');
+        const dataAttr = disabled ? '' : ` data-page="${page}"`;
+        const href = 'javascript:void(0);';
+        return `<li class="${liClass}"><a class="page-link"${dataAttr} href="${href}">${label}</a></li>`;
+      };
+
+      const buildEllipsis = () =>
+        '<li class="page-item disabled"><a class="page-link" href="javascript:void(0);">…</a></li>';
+
+      const parts = [];
+      parts.push(buildPageItem('Önceki', currentPage - 1, { disabled: currentPage === 1 }));
+
+      // pages window
+      const windowSize = 2;
+      const firstPage = 1;
+      const lastPage = totalPages;
+      const start = Math.max(firstPage, currentPage - windowSize);
+      const end = Math.min(lastPage, currentPage + windowSize);
+
+      if (start > firstPage) {
+        parts.push(buildPageItem(String(firstPage), firstPage, { active: currentPage === firstPage }));
+        if (start > firstPage + 1) parts.push(buildEllipsis());
+      }
+
+      for (let p = start; p <= end; p++) {
+        parts.push(buildPageItem(String(p), p, { active: currentPage === p }));
+      }
+
+      if (end < lastPage) {
+        if (end < lastPage - 1) parts.push(buildEllipsis());
+        parts.push(buildPageItem(String(lastPage), lastPage, { active: currentPage === lastPage }));
+      }
+
+      parts.push(buildPageItem('Sonraki', currentPage + 1, { disabled: currentPage === totalPages }));
+
+      pagination.innerHTML = parts.join('');
+    }
   };
 
   // Global loadAssets fonksiyonunu export et (onay işlemlerinden sonra yenileme için)
@@ -189,9 +256,31 @@ document.addEventListener('DOMContentLoaded', async () => {
   // İlk yükleme
   loadAssets();
 
+  // Sayfa boyutu değişince pagination'ı güncelle
+  const pageSizeEl = document.getElementById('pageSize');
+  pageSizeEl?.addEventListener('change', async () => {
+    currentPage = 1;
+    await loadAssets(lastFilters);
+  });
+
+  // Sayfalama tıklamaları
+  const pagination = document.querySelector('[data-role="assets-pagination"]');
+  pagination?.addEventListener('click', async (e) => {
+    const target = e.target;
+    if (!(target instanceof HTMLElement)) return;
+    const link = target.closest('a.page-link');
+    if (!link) return;
+    const page = Number(link.getAttribute('data-page'));
+    if (!Number.isFinite(page)) return;
+    e.preventDefault();
+    currentPage = page;
+    await loadAssets(lastFilters);
+  });
+
   // Filtrele butonuna tıklama olayı
   filterButton.addEventListener('click', async (e) => {
     e.preventDefault();
+    currentPage = 1;
     
     // Form değerlerini topla
     const filters = {
@@ -221,6 +310,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     resetButton.addEventListener('click', async (e) => {
       e.preventDefault();
       filterForm.reset();
+      currentPage = 1;
       await loadAssets();
     });
   }

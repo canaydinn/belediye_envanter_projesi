@@ -48,3 +48,7 @@ async function loadLocationTypeDistribution() {
   }
 }
 
+// Expose for module-to-module coordination (init)
+window.loadLocationStats = loadLocationStats;
+window.loadLocationTypeDistribution = loadLocationTypeDistribution;
+

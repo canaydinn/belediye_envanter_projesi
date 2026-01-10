@@ -71,3 +71,6 @@ function renderMovements(movements) {
   }).join('');
 }
 
+// Expose for module-to-module coordination (filters/init files)
+window.loadMovements = loadMovements;
+
