@@ -464,6 +464,26 @@ async function initRoleBasedUI() {
 // Sayfa yüklendiğinde çalıştır
 // DOM tamamen yüklendikten sonra çalıştır (menü öğelerinin render edilmesi için)
 function runWhenReady() {
+  let applyTimer = null;
+  let applying = false;
+
+  const scheduleApplyAll = () => {
+    if (applyTimer) clearTimeout(applyTimer);
+    applyTimer = setTimeout(async () => {
+      if (applying) return;
+      applying = true;
+      try {
+        const roleId = await getCurrentUserRole();
+        if (roleId) {
+          applyMenuPermissions(roleId);
+          applyButtonPermissions(roleId);
+        }
+      } finally {
+        applying = false;
+      }
+    }, 80);
+  };
+
   const runInit = () => {
     // Menü linklerinin render edilip edilmediğini kontrol et
     const menuLinks = document.querySelectorAll('a.menu-link');
@@ -490,12 +510,8 @@ function runWhenReady() {
   const observer = new MutationObserver((mutations) => {
     const menuLinks = document.querySelectorAll('a.menu-link');
     if (menuLinks.length > 0) {
-      // Menü render edildi, kontrolleri uygula
-      getCurrentUserRole().then(roleId => {
-        if (roleId) {
-          applyMenuPermissions(roleId);
-        }
-      });
+      // Menü veya dinamik içerik render edildi, kontrolleri uygula (debounced)
+      scheduleApplyAll();
     }
   });
 
@@ -507,6 +523,12 @@ function runWhenReady() {
       subtree: true
     });
   }
+
+  // Dinamik tablolar/aksiyonlar sonradan eklendiği için body'yi de izle
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
 }
 
 runWhenReady();
