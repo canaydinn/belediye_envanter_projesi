@@ -58,11 +58,9 @@ const BUTTON_PERMISSIONS = {
  */
 async function getCurrentUserRole() {
   try {
-    // Önce localStorage'dan kontrol et (cache)
+    // Not: localStorage cache'i hesap değişimlerinde stale kalabiliyor.
+    // Bu yüzden öncelikle /auth/me ile doğrula; başarısız olursa cache'e düş.
     const cachedRole = localStorage.getItem('user_role_id');
-    if (cachedRole) {
-      return Number(cachedRole);
-    }
 
     const response = await fetch(`${API_BASE_URL}/auth/me`, {
       method: 'GET',
@@ -70,20 +68,22 @@ async function getCurrentUserRole() {
       credentials: 'include',
     });
 
-    if (!response.ok) return null;
+    if (!response.ok) {
+      return cachedRole ? Number(cachedRole) : null;
+    }
 
     const data = await response.json();
     const roleId = data?.user?.role_id || null;
-    
-    // Cache'e kaydet
+
     if (roleId) {
-      localStorage.setItem('user_role_id', roleId);
+      localStorage.setItem('user_role_id', String(roleId));
     }
-    
-    return roleId;
+
+    return roleId || (cachedRole ? Number(cachedRole) : null);
   } catch (error) {
     console.error('Kullanıcı rolü alınamadı:', error);
-    return null;
+    const cachedRole = localStorage.getItem('user_role_id');
+    return cachedRole ? Number(cachedRole) : null;
   }
 }
 
@@ -211,6 +211,66 @@ function applyMenuPermissions(userRoleId) {
 function applyButtonPermissions(userRoleId) {
   if (!userRoleId) return;
 
+  const disableElement = (element) => {
+    if (!element) return;
+
+    const mode = element.getAttribute('data-rbac-mode') || 'hide';
+
+    if (mode === 'disable') {
+      // Görünür kalsın ama tıklanamaz olsun
+      element.classList.add('disabled');
+      element.setAttribute('aria-disabled', 'true');
+      element.setAttribute('tabindex', '-1');
+      element.setAttribute('title', 'Bu işlem için yetkiniz yok');
+
+      if (element.tagName === 'A') {
+        const href = element.getAttribute('href');
+        if (href && !element.dataset.originalHref) {
+          element.dataset.originalHref = href;
+        }
+        element.setAttribute('href', 'javascript:void(0);');
+      } else if ('disabled' in element) {
+        element.disabled = true;
+      }
+
+      // Anchor'lar için (bootstrap) tıklanmayı tamamen kes
+      element.style.pointerEvents = 'none';
+      element.style.opacity = '0.6';
+      return;
+    }
+
+    // default: hide
+    element.style.display = 'none';
+    const parent = element.parentElement;
+    if (parent && parent.children.length === 1 && parent.classList.contains('d-flex')) {
+      parent.style.display = 'none';
+    }
+  };
+
+  const enableElement = (element) => {
+    if (!element) return;
+
+    // restore visibility
+    element.style.display = '';
+
+    // restore disabled state if any
+    element.classList.remove('disabled');
+    element.removeAttribute('aria-disabled');
+    element.removeAttribute('tabindex');
+    element.removeAttribute('title');
+    element.style.pointerEvents = '';
+    element.style.opacity = '';
+
+    if (element.tagName === 'A') {
+      if (element.dataset.originalHref) {
+        element.setAttribute('href', element.dataset.originalHref);
+        delete element.dataset.originalHref;
+      }
+    } else if ('disabled' in element) {
+      element.disabled = false;
+    }
+  };
+
   // data-role attribute'u olan elementleri kontrol et
   Object.keys(BUTTON_PERMISSIONS).forEach(buttonRole => {
     const allowedRoles = BUTTON_PERMISSIONS[buttonRole];
@@ -220,14 +280,9 @@ function applyButtonPermissions(userRoleId) {
     const elements = document.querySelectorAll(`[data-role="${buttonRole}"]`);
     elements.forEach(element => {
       if (!hasAccess) {
-        element.style.display = 'none';
-        // Parent container'ı da gizle (eğer tek çocuksa)
-        const parent = element.parentElement;
-        if (parent && parent.children.length === 1 && parent.classList.contains('d-flex')) {
-          parent.style.display = 'none';
-        }
+        disableElement(element);
       } else {
-        element.style.display = '';
+        enableElement(element);
       }
     });
   });
@@ -259,12 +314,7 @@ function applyButtonPermissions(userRoleId) {
       
       if (pattern.test(href)) {
         if (!hasAccess) {
-          link.style.display = 'none';
-          // Eğer parent bir buton grubu içindeyse, tüm grubu gizle (eğer tek çocuksa)
-          const parent = link.closest('.btn-group, .d-flex, .d-inline-flex');
-          if (parent && Array.from(parent.children).filter(c => c.style.display !== 'none').length === 1) {
-            parent.style.display = 'none';
-          }
+          disableElement(link);
         }
       }
     });
@@ -279,22 +329,30 @@ function applyButtonPermissions(userRoleId) {
     if (href.includes('asset-edit')) {
       const hasAccess = hasPermission(userRoleId, BUTTON_PERMISSIONS['edit-asset']);
       if (!hasAccess) {
-        button.style.display = 'none';
+        disableElement(button);
+      } else {
+        enableElement(button);
       }
     } else if (href.includes('category-edit')) {
       const hasAccess = hasPermission(userRoleId, BUTTON_PERMISSIONS['edit-category']);
       if (!hasAccess) {
-        button.style.display = 'none';
+        disableElement(button);
+      } else {
+        enableElement(button);
       }
     } else if (href.includes('location-edit')) {
       const hasAccess = hasPermission(userRoleId, BUTTON_PERMISSIONS['edit-location']);
       if (!hasAccess) {
-        button.style.display = 'none';
+        disableElement(button);
+      } else {
+        enableElement(button);
       }
     } else if (href.includes('user-edit') || href.includes('municipality-user-edit')) {
       const hasAccess = hasPermission(userRoleId, BUTTON_PERMISSIONS['edit-user']);
       if (!hasAccess) {
-        button.style.display = 'none';
+        disableElement(button);
+      } else {
+        enableElement(button);
       }
     }
     
@@ -312,7 +370,9 @@ function applyButtonPermissions(userRoleId) {
       }
       
       if (!hasAccess) {
-        button.style.display = 'none';
+        disableElement(button);
+      } else {
+        enableElement(button);
       }
     }
   });
@@ -404,6 +464,26 @@ async function initRoleBasedUI() {
 // Sayfa yüklendiğinde çalıştır
 // DOM tamamen yüklendikten sonra çalıştır (menü öğelerinin render edilmesi için)
 function runWhenReady() {
+  let applyTimer = null;
+  let applying = false;
+
+  const scheduleApplyAll = () => {
+    if (applyTimer) clearTimeout(applyTimer);
+    applyTimer = setTimeout(async () => {
+      if (applying) return;
+      applying = true;
+      try {
+        const roleId = await getCurrentUserRole();
+        if (roleId) {
+          applyMenuPermissions(roleId);
+          applyButtonPermissions(roleId);
+        }
+      } finally {
+        applying = false;
+      }
+    }, 80);
+  };
+
   const runInit = () => {
     // Menü linklerinin render edilip edilmediğini kontrol et
     const menuLinks = document.querySelectorAll('a.menu-link');
@@ -430,12 +510,8 @@ function runWhenReady() {
   const observer = new MutationObserver((mutations) => {
     const menuLinks = document.querySelectorAll('a.menu-link');
     if (menuLinks.length > 0) {
-      // Menü render edildi, kontrolleri uygula
-      getCurrentUserRole().then(roleId => {
-        if (roleId) {
-          applyMenuPermissions(roleId);
-        }
-      });
+      // Menü veya dinamik içerik render edildi, kontrolleri uygula (debounced)
+      scheduleApplyAll();
     }
   });
 
@@ -447,6 +523,12 @@ function runWhenReady() {
       subtree: true
     });
   }
+
+  // Dinamik tablolar/aksiyonlar sonradan eklendiği için body'yi de izle
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
 }
 
 runWhenReady();

@@ -148,10 +148,7 @@
     try {
 
       const response = await fetch(API_URL, {
-        headers: token
-          ? {
-            }
-          : {},
+        headers: {},
       });
 
       if (!response.ok) {

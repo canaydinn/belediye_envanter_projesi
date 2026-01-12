@@ -1,10 +1,10 @@
 // Locations initialization - Initialize all location page components
 
 document.addEventListener('DOMContentLoaded', async () => {
-  await loadLocations();
-  initDepartmentFilter();
-  loadLocationStats();
-  loadLocationTypeDistribution();
-  wireLocationFilters(); 
+  await window.loadLocations?.();
+  await window.initDepartmentFilter?.();
+  await window.loadLocationStats?.();
+  await window.loadLocationTypeDistribution?.();
+  window.wireLocationFilters?.();
 });
 

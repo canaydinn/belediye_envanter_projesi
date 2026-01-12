@@ -46,10 +46,10 @@ async function loadLocations(params = new URLSearchParams()) {
             <a href="location-detail.html?id=${loc.id}" class="btn btn-sm btn-icon btn-text-info" title="Detaylar">
               <i class="ti ti-eye"></i>
             </a>
-            <a href="location-edit.html?id=${loc.id}" class="btn btn-sm btn-icon btn-text-secondary" title="Düzenle">
+            <a href="location-edit.html?id=${loc.id}" class="btn btn-sm btn-icon btn-text-secondary" title="Düzenle" data-role="edit-location" data-rbac-mode="disable">
               <i class="ti ti-edit"></i>
             </a>
-            <a href="location-delete.html?id=${loc.id}" class="btn btn-sm btn-icon btn-text-secondary" title="Düzenle">
+            <a href="location-delete.html?id=${loc.id}" class="btn btn-sm btn-icon btn-text-danger" title="Sil" data-role="delete-location" data-rbac-mode="disable">
               <i class="ti ti-trash"></i>
             </a>
           </div>
@@ -189,4 +189,7 @@ async function handleDeleteLocation(event) {
     }
   }
 }
+
+// Expose for module-to-module coordination (init/filters)
+window.loadLocations = loadLocations;
 

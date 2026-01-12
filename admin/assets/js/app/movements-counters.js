@@ -25,3 +25,6 @@ async function loadMovementCounters() {
   });
 }
 
+// Expose for module-to-module coordination (init file)
+window.loadMovementCounters = loadMovementCounters;
+

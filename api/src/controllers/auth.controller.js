@@ -299,13 +299,13 @@ async function municipalitySignup(req, res) {
 
     const passwordHash = await bcrypt.hash(admin_password, 10);
 
-    // ✅ İlk admin kullanıcı: SUPERADMIN değil, MUNICIPALITY_ADMIN
-    const adminRoleId = ROLES.MUNICIPALITY_ADMIN;
+    // ✅ İlk admin kullanıcı: SUPERADMIN değil, ADMIN
+    const adminRoleId = ROLES.ADMIN;
 
     if (!adminRoleId) {
       await trx.rollback();
       return res.status(500).json({
-        message: 'Rol tanımı eksik: ROLES.MUNICIPALITY_ADMIN bulunamadı',
+        message: 'Rol tanımı eksik: ROLES.ADMIN bulunamadı',
       });
     }
 

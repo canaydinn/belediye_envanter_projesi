@@ -19,6 +19,7 @@
       console.error('Çıkış işlemi sırasında bir hata oluştu:', error);
     } finally {
       localStorage.removeItem('user_role_id'); // Rol cache'ini temizle
+      localStorage.removeItem('currentUser'); // Kullanıcı cache'ini temizle
       window.location.href = '/admin/login.html';
     }
   };

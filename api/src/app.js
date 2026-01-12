@@ -18,6 +18,30 @@ app.use(
   })
 );
 
+// Vercel preview deployments inject "vercel.live" feedback tooling (iframe + script).
+// In Report-Only mode this can spam the console; allow it only for preview.
+const isVercelPreview = process.env.VERCEL_ENV === 'preview';
+const vercelLiveOrigins = ['https://vercel.live'];
+
+// `upgrade-insecure-requests` is ignored in Report-Only policies.
+// To avoid the console warning (and keep behavior safe), send it as a tiny *enforced*
+// CSP header only on Vercel deployments (HTTPS).
+const isVercelDeployment = !!process.env.VERCEL;
+if (isVercelDeployment) {
+  app.use(
+    helmet.contentSecurityPolicy({
+      reportOnly: false,
+      useDefaults: false,
+      directives: {
+        // Helmet v8 requires a default-src unless explicitly disabled.
+        // We want an "upgrade-insecure-requests"-only policy here.
+        defaultSrc: helmet.contentSecurityPolicy.dangerouslyDisableDefaultSrc,
+        upgradeInsecureRequests: [],
+      },
+    })
+  );
+}
+
 app.use(
   helmet.contentSecurityPolicy({
     reportOnly: true,
@@ -26,12 +50,14 @@ app.use(
       baseUri: ["'self'"],
       objectSrc: ["'none'"],
       frameAncestors: ["'self'"],
+      frameSrc: ["'self'", ...(isVercelPreview ? vercelLiveOrigins : [])],
       imgSrc: ["'self'", 'data:', 'blob:'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
       styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-      scriptSrc: ["'self'"],
-      connectSrc: ["'self'"],
-      upgradeInsecureRequests: [],
+      // NOTE: Some bundled vendor files in `admin/assets/vendor/**` use `eval()` for sourcemaps/UMD wrappers.
+      // If you later enforce CSP, consider swapping those bundles to non-eval builds instead of allowing unsafe-eval.
+      scriptSrc: ["'self'", "'unsafe-eval'", ...(isVercelPreview ? vercelLiveOrigins : [])],
+      connectSrc: ["'self'", ...(isVercelPreview ? vercelLiveOrigins : [])],
     },
   })
 );
@@ -96,9 +122,18 @@ app.use('/api', routes);
 // Hem /admin/assets/* hem de /api/admin/assets/* path'lerini handle et
 app.use(['/admin/assets', '/api/admin/assets'], express.static(path.join(adminPath, 'assets')));
 
+// Root'tan servis edilen sayfalar (örn: / veya /login.html) "assets/..." şeklinde referans verdiği için
+// /assets/* path'ini de statik olarak servis et (Vercel'de aksi halde 404 → HTML döner → MIME hataları).
+app.use(['/assets', '/api/assets'], express.static(path.join(adminPath, 'assets')));
+
 // Login sayfası herkese açık
 // Hem /admin/login hem de /api/admin/login path'lerini handle et
 app.get(['/admin/login', '/admin/login.html', '/api/admin/login', '/api/admin/login.html'], (req, res) => {
+  return res.sendFile(path.join(adminPath, 'login.html'));
+});
+
+// Eski/kolay erişim: /login.html veya /login
+app.get(['/login', '/login.html', '/api/login', '/api/login.html'], (req, res) => {
   return res.sendFile(path.join(adminPath, 'login.html'));
 });
 

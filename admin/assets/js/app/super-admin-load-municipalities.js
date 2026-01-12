@@ -39,10 +39,7 @@
 
       const response = await fetch(`${API_BASE_URL}/superadmin/municipalities`, {
         credentials: 'include',
-        headers: token
-          ? {
-            }
-          : {},
+        headers: {},
       });
 
       if (!response.ok) {

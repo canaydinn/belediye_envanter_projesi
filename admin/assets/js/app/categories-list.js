@@ -83,12 +83,16 @@
       editLink.href = `category-edit.html?id=${category.id}`;
       editLink.className = 'btn btn-sm btn-icon btn-text-secondary';
       editLink.title = 'Düzenle';
+      editLink.setAttribute('data-role', 'edit-category');
+      editLink.setAttribute('data-rbac-mode', 'disable');
       editLink.innerHTML = '<i class="ti ti-edit"></i>';
 
       const deleteLink = document.createElement('a');
       deleteLink.href = `category-delete.html?id=${category.id}`;
       deleteLink.className = 'btn btn-sm btn-icon btn-text-danger';
       deleteLink.title = 'Sil';
+      deleteLink.setAttribute('data-role', 'delete-category');
+      deleteLink.setAttribute('data-rbac-mode', 'disable');
       deleteLink.innerHTML = '<i class="ti ti-trash"></i>';
 
       actionsCell.append(detailLink, editLink, deleteLink);

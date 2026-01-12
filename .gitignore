@@ -1,0 +1,17 @@
+**/node_modules/
+**/.DS_Store
+**/Thumbs.db
+
+# Local env files
+**/.env
+**/.env.*
+!**/.env.example
+
+# Logs
+**/*.log
+
+# Build artifacts
+admin/dist/
+admin/.cache/
+api/.cache/
+

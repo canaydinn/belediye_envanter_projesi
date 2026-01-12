@@ -9,22 +9,21 @@ const ROLES = require('../constants/roles');
 // Tüm belediyeleri listele
 router.get(
   '/',
-  authorize(ROLES.MUNICIPALITY_SUPER_ADMIN,ROLES.MUNICIPALITY_ADMIN, ROLES.USER),           // Şimdilik sistem admin / belediye admin = role_id 1
+  authorize(ROLES.SUPERADMIN, ROLES.ADMIN), // belediyeleri listeleme: superadmin + admin
   municipalitiesController.getAll
 );
 
 // Tek belediyeyi getir
 router.get(
   '/:id',
-  authorize(ROLES.MUNICIPALITY_SUPER_ADMIN,ROLES.MUNICIPALITY_ADMIN, ROLES.USER),
- 
+  authorize(ROLES.SUPERADMIN, ROLES.ADMIN),
   municipalitiesController.getById
 );
 
 // Yeni belediye oluştur
 router.post(
   '/',
-  authorize(ROLES.MUNICIPALITY_SUPER_ADMIN),
+  authorize(ROLES.SUPERADMIN),
   
   municipalitiesController.create
 );
@@ -32,7 +31,7 @@ router.post(
 // Belediye güncelle
 router.put(
   '/:id',
-  authorize(ROLES.MUNICIPALITY_SUPER_ADMIN),
+  authorize(ROLES.SUPERADMIN),
   
   municipalitiesController.update
 );
@@ -40,7 +39,7 @@ router.put(
 // Belediye pasifleştir (soft delete)
 router.patch(
   '/:id/deactivate',
-  authorize(ROLES.MUNICIPALITY_SUPER_ADMIN),
+  authorize(ROLES.SUPERADMIN),
   
   municipalitiesController.deactivate
 );

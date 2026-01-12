@@ -49,3 +49,7 @@ function initFilterButtons() {
   }
 }
 
+// Expose for module-to-module coordination (init file)
+window.initDepartmentFilter = initDepartmentFilter;
+window.initFilterButtons = initFilterButtons;
+
